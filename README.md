@@ -6,8 +6,7 @@
 --
 ## DESCRIPTION
 <p> 
-<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a bus travel planner system. The system stores information about routes, stops, and timetable information for the routes. The aim of this project is to provide users with an easy and efficient way to access bus travel information.
-</em>
+<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. To be continued.
 </p>
 
 ## Authors and acknowledgement
