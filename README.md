@@ -1,4 +1,4 @@
-# CS5031 - Software Engineering Practices - P2
+# CS5031 - Software Engineering Practices - P3
 
 
 ## NAME
@@ -14,9 +14,9 @@
 
 ### Team Members :
 
-            1) 220031985 - Model ,Service Layer and Controllers (Back-end) , Code-Review , Report.
-            2) 220033341 - UI and API (Front-End) & Report , Code -Review.
-            3) 220030476 - Tests (Front-end & Back-end), Code -Review , Report.
+            1) 220031985 - 
+            2) 220033341 - 
+            3) 220030476 - 
 
 
 --- 
@@ -84,7 +84,7 @@
 
 ---
 
-### NO OF TESTS WRITTEN : 81 
+### NO OF TESTS WRITTEN : 
 
 ---
 
