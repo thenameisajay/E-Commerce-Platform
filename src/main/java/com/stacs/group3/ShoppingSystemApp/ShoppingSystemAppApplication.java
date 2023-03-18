@@ -8,6 +8,8 @@ public class ShoppingSystemAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShoppingSystemAppApplication.class, args);
+		// MainApp mainApp = new MainApp();
+		// mainApp.main();
 	}
 
 }

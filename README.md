@@ -6,7 +6,7 @@
 --
 ## DESCRIPTION
 <p> 
-<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. To be continued.
+<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. To be continued.</em>
 </p>
 
 ## Authors and acknowledgement
