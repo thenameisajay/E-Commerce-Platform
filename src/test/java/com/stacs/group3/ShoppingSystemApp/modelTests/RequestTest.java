@@ -12,9 +12,9 @@ public class RequestTest {
 
     @BeforeEach
     public void setup() {
-        request1 = new Request("js123", AccountType.customer);
-        request2 = new Request("mj456", AccountType.admin);
-        request3 = new Request("jj789", AccountType.seller);
+        request1 = new Request("js123", "customer");
+        request2 = new Request("mj456", "admin");
+        request3 = new Request("jj789", "seller");
     }
 
     @Test
@@ -23,9 +23,9 @@ public class RequestTest {
         assertEquals(request2.getUsername(), "mj456");
         assertEquals(request3.getUsername(), "jj789");
 
-        assertEquals(request1.getRequestType(), AccountType.customer);
-        assertEquals(request2.getRequestType(), AccountType.admin);
-        assertEquals(request3.getRequestType(), AccountType.seller);
+        assertEquals(request1.getRequestType(), "customer");
+        assertEquals(request2.getRequestType(), "admin");
+        assertEquals(request3.getRequestType(), "seller");
     }
 
     @Test
@@ -37,12 +37,12 @@ public class RequestTest {
         assertEquals(request2.getUsername(), "jj789");
         assertEquals(request3.getUsername(), "js123");
 
-        request1.setRequestType(AccountType.admin);
-        request2.setRequestType(AccountType.seller);
-        request3.setRequestType(AccountType.customer);
-        assertEquals(request1.getRequestType(), AccountType.admin);
-        assertEquals(request2.getRequestType(), AccountType.seller);
-        assertEquals(request3.getRequestType(), AccountType.customer);
+        request1.setRequestType("admin");
+        request2.setRequestType("seller");
+        request3.setRequestType("customer");
+        assertEquals(request1.getRequestType(), "admin");
+        assertEquals(request2.getRequestType(), "seller");
+        assertEquals(request3.getRequestType(), "customer");
 
     }
 }
