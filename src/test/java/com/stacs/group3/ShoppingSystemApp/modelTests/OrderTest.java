@@ -1,8 +1,11 @@
 package com.stacs.group3.ShoppingSystemApp.modelTests;
 
-import main.java.alphasystem.model.Order;
+
+import com.stacs.group3.ShoppingSystemApp.model.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderTest {
     Order order1;
