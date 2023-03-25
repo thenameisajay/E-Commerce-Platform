@@ -104,7 +104,6 @@ public class UserService implements Serializable {
             throw new IllegalArgumentException("No users in the system");
         }
         // Third Check : If username and password matches
-        // ToDo: Check if the user is a customer or seller or admin or even in the system.
         if (user.containsKey(username.toLowerCase())) {
             // Why is the Map returning null values after loading from the file.
             for (Map.Entry<String, User> entry : user.entrySet()) {
