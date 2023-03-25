@@ -1,5 +1,6 @@
+package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
-
+import com.stacs.group3.ShoppingSystemApp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
