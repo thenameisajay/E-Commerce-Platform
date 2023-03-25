@@ -1,7 +1,5 @@
 package com.stacs.group3.ShoppingSystemApp.modelTests;
 
-import main.java.alphasystem.model.AccountType;
-import main.java.alphasystem.model.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

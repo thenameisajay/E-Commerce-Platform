@@ -1,6 +1,5 @@
 package com.stacs.group3.ShoppingSystemApp.modelTests;
 
-import main.java.alphasystem.model.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
