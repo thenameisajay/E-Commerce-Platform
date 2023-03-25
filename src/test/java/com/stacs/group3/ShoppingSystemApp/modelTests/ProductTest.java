@@ -1,7 +1,10 @@
 package com.stacs.group3.ShoppingSystemApp.modelTests;
 
+import com.stacs.group3.ShoppingSystemApp.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductTest {
     Product product1;
@@ -17,13 +20,13 @@ public class ProductTest {
                         "Harry makes close friends and a few enemies during his first year at the school and with the help of his friends, " +
                         "Ron Weasley and Hermione Granger, he faces an attempted comeback by the dark wizard Lord Voldemort, " +
                         "who killed Harry's parents, but failed to kill Harry when he was just 15 months old.",
-                "J.K. Rowling", "£12.99", "100", "Fantasy", "mj456");
+                "J.K. Rowling", "12.99", "100", "Fantasy", "mj456");
 
         product2 = new Product("2", "A Man Called Ove", "",
-                "Fredrik Backman", "£6.99", "200", "Novel", "mj456");
+                "Fredrik Backman", "6.99", "200", "Novel", "mj456");
 
         product3 = new Product("3", "Educated", "",
-                "Tara Westover", "£9.99", "50", "Nonfiction", "jj789");
+                "Tara Westover", "9.99", "50", "Nonfiction", "jj789");
     }
 
     @Test
@@ -37,7 +40,7 @@ public class ProductTest {
                 "Ron Weasley and Hermione Granger, he faces an attempted comeback by the dark wizard Lord Voldemort, " +
                 "who killed Harry's parents, but failed to kill Harry when he was just 15 months old.");
         assertEquals(product1.getAuthor(), "J.K. Rowling");
-        assertEquals(product1.getPrice(), "£12.99");
+        assertEquals(product1.getPrice(), "12.99");
         assertEquals(product1.getQuantity(), "100");
         assertEquals(product1.getCategory(), "Fantasy");
         assertEquals(product1.getSellerUsername(), "mj456");
@@ -46,7 +49,7 @@ public class ProductTest {
         assertEquals(product2.getName(), "A Man Called Ove");
         assertEquals(product2.getDescription(), "");
         assertEquals(product2.getAuthor(), "Fredrik Backman");
-        assertEquals(product2.getPrice(), "£6.99");
+        assertEquals(product2.getPrice(), "6.99");
         assertEquals(product2.getQuantity(), "200");
         assertEquals(product2.getCategory(), "Novel");
         assertEquals(product2.getSellerUsername(), "mj456");
@@ -55,7 +58,7 @@ public class ProductTest {
         assertEquals(product3.getName(), "Educated");
         assertEquals(product3.getDescription(), "");
         assertEquals(product3.getAuthor(), "Tara Westover");
-        assertEquals(product3.getPrice(), "£9.99");
+        assertEquals(product3.getPrice(), "9.99");
         assertEquals(product3.getQuantity(), "50");
         assertEquals(product3.getCategory(), "Nonfiction");
         assertEquals(product3.getSellerUsername(), "jj789");
@@ -67,7 +70,7 @@ public class ProductTest {
         product1.setName("Harry Potter: Chamber of Secrets");
         product1.setDescription("The second novel in the Harry Potter series");
         product1.setAuthor("Joanne Rowling");
-        product1.setPrice("£11.99");
+        product1.setPrice("11.99");
         product1.setQuantity("150");
         product1.setCategory("Novel");
         product1.setSellerUsername("jj789");
@@ -76,7 +79,7 @@ public class ProductTest {
         assertEquals(product1.getName(), "Harry Potter: Chamber of Secrets");
         assertEquals(product1.getDescription(), "The second novel in the Harry Potter series");
         assertEquals(product1.getAuthor(), "Joanne Rowling");
-        assertEquals(product1.getPrice(), "£11.99");
+        assertEquals(product1.getPrice(), "11.99");
         assertEquals(product1.getQuantity(), "150");
         assertEquals(product1.getCategory(), "Novel");
         assertEquals(product1.getSellerUsername(), "jj789");
