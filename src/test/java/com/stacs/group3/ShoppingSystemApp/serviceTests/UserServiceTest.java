@@ -1,17 +1,17 @@
-package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
+
+import main.java.alphasystem.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest {
-    UserService userService;
+    UserService userService = new UserService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        userService = new UserService(alphaSystemModel);
+
         userService.addUser("James", "Smith", "js123", "js123@gmail.com", "123456789", "admin");
         userService.addUser("Mary", "Jones", "mj456", "mj456@gmail.com", "abcdefgh", "seller");
         userService.addUser("Jack", "Johnson", "jj789", "jj789@gmail.com", "abc123456", "customer");
