@@ -1,5 +1,6 @@
-package com.stacs.group3.ShoppingSystemApp.serviceTests;
+package main.java.alphasystem.test;
 
+import main.java.alphasystem.service.RequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,12 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class
 RequestServiceTest {
-    RequestService requestService;
+    RequestService requestService = new RequestService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        requestService = new RequestService(alphaSystemModel);
+
         requestService.storeRequest("js123", "admin");
         requestService.storeRequest("mj456", "customer");
         requestService.storeRequest("jj789", "seller");
