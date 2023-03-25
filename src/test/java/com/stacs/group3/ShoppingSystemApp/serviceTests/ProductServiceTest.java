@@ -1,17 +1,17 @@
 package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductServiceTest {
-    ProductService productService;
+    ProductService productService = new ProductService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        productService = new ProductService(alphaSystemModel);
+
 
         productService.addProduct("1", "Harry Potter: Philosopher's Stone",
                 "The first novel in the Harry Potter series and Rowling's debut novel, " +
@@ -33,13 +33,13 @@ public class ProductServiceTest {
     public void testAddProduct() {
         assertThrows(IllegalArgumentException.class,
                 () -> productService.addProduct("", "Educated",
-                    "Educated is a memoir by the American author Tara Westover. " +
-                            "Westover recounts overcoming her survivalist Mormon family in order to go to college, " +
-                            "and emphasizes the importance of education in enlarging her world. " +
-                            "She details her journey from her isolated life in the mountains of Idaho to completing a PhD program " +
-                            "in history at Cambridge University. She started college at the age of 17 having had no formal education. " +
-                            "She explores her struggle to reconcile her desire to learn with the world she inhabited with her father.",
-                    "Tara Westover", "9.99", "50", "Nonfiction", "jj789"),
+                        "Educated is a memoir by the American author Tara Westover. " +
+                                "Westover recounts overcoming her survivalist Mormon family in order to go to college, " +
+                                "and emphasizes the importance of education in enlarging her world. " +
+                                "She details her journey from her isolated life in the mountains of Idaho to completing a PhD program " +
+                                "in history at Cambridge University. She started college at the age of 17 having had no formal education. " +
+                                "She explores her struggle to reconcile her desire to learn with the world she inhabited with her father.",
+                        "Tara Westover", "9.99", "50", "Nonfiction", "jj789"),
                 "Product ID cannot be empty");
 
         assertThrows(IllegalArgumentException.class,
