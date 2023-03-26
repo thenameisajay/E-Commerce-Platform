@@ -26,17 +26,17 @@ public class UserService implements Serializable {
             throw new IllegalArgumentException("Username cannot be empty");
         if (email == null || email.isEmpty())
             throw new IllegalArgumentException("Email cannot be empty");
-        if(password == null || password.isEmpty())
+        if (password == null || password.isEmpty())
             throw new IllegalArgumentException("Password cannot be empty");
 
         // Second Check : For validation of first name, last name,email and username
-        if(!firstName.matches("[a-zA-Z]+"))
+        if (!firstName.matches("[a-zA-Z]+"))
             throw new IllegalArgumentException("First name can only contain alphabets");
-        if(!lastName.matches("[a-zA-Z]+"))
+        if (!lastName.matches("[a-zA-Z]+"))
             throw new IllegalArgumentException("Last name can only contain alphabets");
-        if(!email.matches("^(.+)@(.+)$"))
+        if (!email.matches("^(.+)@(.+)$"))
             throw new IllegalArgumentException("Invalid email address");
-        if(!username.matches("[a-zA-Z0-9]+"))
+        if (!username.matches("[a-zA-Z0-9]+"))
             throw new IllegalArgumentException("Username can only contain alphabets and numbers");
         // Third Check : If username already exists in the system.
         if (!user.containsKey(username)) {
@@ -129,8 +129,8 @@ public class UserService implements Serializable {
         f.close();
     }
 
-    public void loadData()  {
-        try{
+    public void loadData() {
+        try {
             FileInputStream fi = new FileInputStream("src/main/resources/data/userData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file

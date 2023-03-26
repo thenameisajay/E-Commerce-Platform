@@ -18,8 +18,8 @@ public class ProductService implements Serializable {
         f.close();
     }
 
-    public void loadData()  {
-        try{
+    public void loadData() {
+        try {
             FileInputStream fi = new FileInputStream("src/main/resources/data/productData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
@@ -56,16 +56,16 @@ public class ProductService implements Serializable {
             throw new IllegalArgumentException("Seller Username cannot be empty");
 
         // Second Check : For unique Name cases
-        if(productQuantity.equalsIgnoreCase("0")){
+        if (productQuantity.equalsIgnoreCase("0")) {
             throw new IllegalArgumentException("Product Quantity cannot be 0");
         }
-        if(author.matches(".*\\d.*"))
+        if (author.matches(".*\\d.*"))
             throw new IllegalArgumentException("Author cannot contain numbers");
         if (productPrice.matches(".*[a-zA-Z]+.*"))
             throw new IllegalArgumentException("Product Price cannot contain letters");
         if (productQuantity.matches(".*[a-zA-Z]+.*"))
             throw new IllegalArgumentException("Product Quantity cannot contain letters");
-        if(productCategory.matches(".*\\d.*"))
+        if (productCategory.matches(".*\\d.*"))
             throw new IllegalArgumentException("Product Category cannot contain numbers");
         // Third Check : For duplicate product ID
         if (product.containsKey(productID)) {
@@ -81,7 +81,7 @@ public class ProductService implements Serializable {
         // First Check : For empty fields
         if (productName == null || productName.isEmpty()) {
             throw new IllegalArgumentException("Product Name cannot be empty");
-        } else  if (product.isEmpty()) {
+        } else if (product.isEmpty()) {
             // Second Check : If product Map is empty
             throw new IllegalArgumentException("No products available");
         } else {
@@ -101,10 +101,10 @@ public class ProductService implements Serializable {
         // First Check : For empty fields
         if (productCategory == null || productCategory.isEmpty()) {
             throw new IllegalArgumentException("Product Category cannot be empty");
-        } else  if (product.isEmpty()) {
+        } else if (product.isEmpty()) {
             // Second Check : If product Map is empty
             throw new IllegalArgumentException("No products available");
-        } else if(productCategory.matches(".*\\d.*")) {
+        } else if (productCategory.matches(".*\\d.*")) {
             throw new IllegalArgumentException("Product Category cannot contain numbers");
         } else {
             for (Map.Entry<String, Product> entry : product.entrySet()) {
@@ -118,15 +118,15 @@ public class ProductService implements Serializable {
         return returnProduct;
     }
 
-    public Map<String,Product> searchProductByAuthor(String productAuthor) {
+    public Map<String, Product> searchProductByAuthor(String productAuthor) {
         Map<String, Product> returnProduct = new HashMap<>();
         // First Check : For empty fields
         if (productAuthor == null || productAuthor.isEmpty()) {
             throw new IllegalArgumentException("Product Author cannot be empty");
-        } else  if (product.isEmpty()) {
+        } else if (product.isEmpty()) {
             // Second Check : If product Map is empty
             throw new IllegalArgumentException("No products available");
-        } else if(productAuthor.matches(".*\\d.*")) {
+        } else if (productAuthor.matches(".*\\d.*")) {
             throw new IllegalArgumentException("Product Author cannot contain numbers");
         } else {
             for (Map.Entry<String, Product> entry : product.entrySet()) {
@@ -160,7 +160,7 @@ public class ProductService implements Serializable {
         // Second Check : Check if Product ID is of the format alphanumeric.
         else if (!productID.matches("^[a-zA-Z0-9]*$")) {
             throw new IllegalArgumentException("Product ID can only contain alpha-numeric characters");
-        } else if(product.isEmpty()){
+        } else if (product.isEmpty()) {
             throw new IllegalArgumentException("No products available");
         } else {
             // Third Check : Check if Product ID exists in the Map.

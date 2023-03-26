@@ -16,19 +16,19 @@ public class OrderService implements Serializable {
         order.put(orderID, new Order(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName));
     }
 
-    public Map<Integer,Order>  getOrderByCustomer(String userName) {
+    public Map<Integer, Order> getOrderByCustomer(String userName) {
         Map<Integer, Order> orderCustomer = new HashMap<>();
         for (Map.Entry<Integer, Order> entry : order.entrySet()) {
-            if(entry.getValue().getCustomerName().equalsIgnoreCase(userName))
+            if (entry.getValue().getCustomerName().equalsIgnoreCase(userName))
                 orderCustomer.put(entry.getKey(), entry.getValue());
         }
         return orderCustomer;
     }
 
-    public Map<Integer,Order>  getOrderBySeller(String sellerUsername) {
+    public Map<Integer, Order> getOrderBySeller(String sellerUsername) {
         Map<Integer, Order> orderSeller = new HashMap<>();
         for (Map.Entry<Integer, Order> entry : order.entrySet()) {
-            if(entry.getValue().getSellerName().equalsIgnoreCase(sellerUsername))
+            if (entry.getValue().getSellerName().equalsIgnoreCase(sellerUsername))
                 orderSeller.put(entry.getKey(), entry.getValue());
         }
 
@@ -43,8 +43,8 @@ public class OrderService implements Serializable {
         f.close();
     }
 
-    public void loadData()  {
-        try{
+    public void loadData() {
+        try {
             FileInputStream fi = new FileInputStream("src/main/resources/data/orderData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
