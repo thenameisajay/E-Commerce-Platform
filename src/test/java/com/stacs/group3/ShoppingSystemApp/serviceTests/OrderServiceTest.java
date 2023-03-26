@@ -1,41 +1,42 @@
 package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
 
+import com.stacs.group3.ShoppingSystemApp.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class OrderServiceTest {
-    OrderService orderService;
+    OrderService orderService = new OrderService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        orderService = new OrderService(alphaSystemModel);
-        orderService.addOrder("1", "1", "Harry Potter: Philosopher's Stone",
+
+        orderService.addOrder(1, "1", "Harry Potter: Philosopher's Stone",
                 12.99f, 1, 12.99f, "mj456", "js123");
-        orderService.addOrder("2", "3", "Educated",
+        orderService.addOrder(2, "3", "Educated",
                 9.99f, 10, 99.9f, "jj789", "js123");
-        orderService.addOrder("3", "2", "A Man Called Ove",
+        orderService.addOrder(3, "2", "A Man Called Ove",
                 6.99f, 100, 699f, "mj456", "hs123");
     }
 
     @Test
     public void testAddOrder() {
-        assertEquals(orderService.viewAllOrders().size(), 3);
+        assertEquals(orderService.viewAllOrders(), 3);
 
-        orderService.addOrder("4", "2", "A Man Called Ove",
+        orderService.addOrder(4, "2", "A Man Called Ove",
                 6.99f, 2, 13.98f, "mj456", "js123");
 
-        assertEquals(orderService.viewAllOrders().size(), 4);
+        assertEquals(orderService.viewAllOrders(), 4);
 
-        orderService.addOrder("5", "2", "A Man Called Ove",
+        orderService.addOrder(5, "2", "A Man Called Ove",
                 6.99f, 2, 13.98f, "mj456", "js123");
-        orderService.addOrder("6", "2", "A Man Called Ove",
+        orderService.addOrder(6, "2", "A Man Called Ove",
                 6.99f, 2, 13.98f, "mj456", "js123");
 
-        assertEquals(orderService.viewAllOrders().size(), 6);
+        assertEquals(orderService.viewAllOrders(), 6);
     }
 
     @Test
@@ -52,11 +53,10 @@ public class OrderServiceTest {
 
     @Test
     public void testViewAllOrders() {
-        assertEquals(orderService.viewAllOrders().size(), 3);
-
+        assertEquals(orderService.viewAllOrders(), 3);
         orderService.wipeAll();
-        assertThrows(IllegalArgumentException.class,
-                () -> orderService.viewAllOrders(),
-                "No order");
+        assertEquals(orderService.viewAllOrders(), 0);
+
+
     }
 }

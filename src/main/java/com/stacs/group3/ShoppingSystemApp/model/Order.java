@@ -12,7 +12,7 @@ public class Order implements Serializable {
 
     private float productPrice;
 
-    private int  productQuantity;
+    private int productQuantity;
 
     private float productTotal;
 

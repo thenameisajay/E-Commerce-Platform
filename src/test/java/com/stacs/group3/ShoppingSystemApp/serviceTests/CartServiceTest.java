@@ -1,32 +1,35 @@
 package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
 
+import com.stacs.group3.ShoppingSystemApp.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class CartServiceTest {
-    CartService cartService;
+
+    CartService cartService = new CartService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        cartService = new CartService(alphaSystemModel);
 
-        cartService.addToCart("100", "1", "js123",
+
+        cartService.addToCart(100, "1", "js123",
                 "Harry Potter: Philosopher's Stone", 12.99f,
                 1, 12.99f, "mj456");
 
-        cartService.addToCart("101", "2", "js123",
+        cartService.addToCart(101, "2", "js123",
                 "A Man Called Ove", 6.99f,
                 2, 13.98f, "mj456");
 
-        cartService.addToCart("102", "3", "js123",
+        cartService.addToCart(102, "3", "js123",
                 "Educated", 9.99f,
                 10, 99.9f, "jj789");
 
-        cartService.addToCart("103", "1", "jh111",
+        cartService.addToCart(103, "1", "jh111",
                 "Harry Potter: Philosopher's Stone", 12.99f,
                 10, 129.9f, "mj456");
     }
@@ -41,18 +44,18 @@ public class CartServiceTest {
     @Test
     public void testAddCart() {
         assertThrows(IllegalArgumentException.class,
-                () -> cartService.addToCart("103", "1", "js123",
+                () -> cartService.addToCart(103, "1", "js123",
                         "Harry Potter: Philosopher's Stone", 12.99f,
                         1, 12.99f, "mj456"),
                 "Product already exists in cart. Please delete the old entry and add the new changes.");
 
         assertThrows(IllegalArgumentException.class,
-                () -> cartService.addToCart("104", "", "js123",
+                () -> cartService.addToCart(104, "", "js123",
                         "Harry Potter: Philosopher's Stone", 12.99f,
                         1, 12.99f, "mj456"),
                 "Product already exists in cart. Please delete the old entry and add the new changes.");
 
-        cartService.addToCart("104", "2", "jh111",
+        cartService.addToCart(104, "2", "jh111",
                 "A Man Called Ove", 6.99f,
                 10, 69.9f, "mj456");
         assertEquals(cartService.viewAllCarts().size(), 5);
@@ -87,10 +90,7 @@ public class CartServiceTest {
     public void testClearCart() {
         assertThrows(IllegalArgumentException.class,
                 () -> cartService.clearCart(""),
-                "User name cannot be empty.");
-
-        cartService.clearCart("js123");
-        assertEquals(cartService.viewCart("js123").size(), 0);
+                "Username cannot be empty.");
 
         cartService.clearCart("jh111");
         assertEquals(cartService.viewCart("jh111").size(), 0);

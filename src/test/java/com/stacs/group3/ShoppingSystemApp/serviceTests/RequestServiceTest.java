@@ -1,18 +1,20 @@
 package com.stacs.group3.ShoppingSystemApp.serviceTests;
 
+
+import com.stacs.group3.ShoppingSystemApp.service.RequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class
 RequestServiceTest {
-    RequestService requestService;
+    RequestService requestService = new RequestService();
 
     @BeforeEach
     public void setup() {
-        AlphaSystemModel alphaSystemModel = new AlphaSystemModel();
-        requestService = new RequestService(alphaSystemModel);
+
         requestService.storeRequest("js123", "admin");
         requestService.storeRequest("mj456", "customer");
         requestService.storeRequest("jj789", "seller");
