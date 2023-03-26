@@ -27,7 +27,7 @@ public class RequestService implements Serializable {
 
 
     public void saveData() throws IOException {
-        FileOutputStream f = new FileOutputStream("src/main/resources/requestData.ser");
+        FileOutputStream f = new FileOutputStream("src/main/resources/data/requestData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(requests);
         o.close();
@@ -36,7 +36,7 @@ public class RequestService implements Serializable {
 
     public void loadData() {
         try {
-            FileInputStream fi = new FileInputStream("src/main/resources/requestData.ser");
+            FileInputStream fi = new FileInputStream("src/main/resources/data/requestData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
             requests = (Map<String, Request>) oi.readObject();

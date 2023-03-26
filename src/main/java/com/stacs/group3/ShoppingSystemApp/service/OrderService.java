@@ -36,7 +36,7 @@ public class OrderService implements Serializable {
     }
 
     public void saveData() throws IOException {
-        FileOutputStream f = new FileOutputStream("src/main/resources/orderData.ser");
+        FileOutputStream f = new FileOutputStream("src/main/resources/data/orderData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(order);
         o.close();
@@ -45,7 +45,7 @@ public class OrderService implements Serializable {
 
     public void loadData()  {
         try{
-            FileInputStream fi = new FileInputStream("src/main/resources/orderData.ser");
+            FileInputStream fi = new FileInputStream("src/main/resources/data/orderData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
             order = (Map<Integer, Order>) oi.readObject();

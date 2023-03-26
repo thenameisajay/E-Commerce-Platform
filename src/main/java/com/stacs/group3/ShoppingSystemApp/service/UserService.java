@@ -122,7 +122,7 @@ public class UserService implements Serializable {
     }
 
     public void saveData() throws IOException {
-        FileOutputStream f = new FileOutputStream("src/main/resources/userData.ser");
+        FileOutputStream f = new FileOutputStream("src/main/resources/data/userData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(user);
         o.close();
@@ -131,7 +131,7 @@ public class UserService implements Serializable {
 
     public void loadData()  {
         try{
-            FileInputStream fi = new FileInputStream("src/main/resources/userData.ser");
+            FileInputStream fi = new FileInputStream("src/main/resources/data/userData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
             user = (Map<String, User>) oi.readObject();

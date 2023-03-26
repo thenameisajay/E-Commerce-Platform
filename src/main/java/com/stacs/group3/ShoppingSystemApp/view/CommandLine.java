@@ -1,14 +1,1612 @@
 package com.stacs.group3.ShoppingSystemApp.view;
 
-public class CommandLine {
+import com.stacs.group3.ShoppingSystemApp.controller.AlphaController;
+import com.stacs.group3.ShoppingSystemApp.model.*;
 
-    public static void main() {
-        run();
+import java.io.Serializable;
+import java.util.*;
+
+public class CommandLine implements Serializable {
+
+
+    // For testing purpose ONLY.
+
+    AlphaController alphaController;
+
+    private Scanner scanner;
+
+    private boolean setLoginStatus = false;
+    private Map<String, User> adminInfo = new HashMap<>();
+
+
+    // Saving the data as local cache for the app , for referencing purpose ONLY.
+    private Map<String, User> userInfo = new HashMap<>();
+    private Map<String, User> sellerInfo = new HashMap<>();
+    private Map<String, Product> productInfo = new HashMap<>();
+    private Map<Integer, Cart> cartInfo = new HashMap<>();
+
+    public CommandLine(AlphaController alphaController) {
+        this.alphaController = alphaController;
     }
 
-    public static void run() {
-        System.out.println("Hello World from CommandLine");
+    public void main(String[] args) {
+        start();
     }
 
+    public void start() {
+        // Generate the admin account if it doesn't exist.
+        alphaController.adminGenerate();
+        messageDisplay();
+        String line;
+        scanner = new Scanner(System.in);
+        try {
+            do {
+                line = scanner.nextLine().trim();
+                if (line.length() == 1) {
+                    switch (line.charAt(0)) {
+                        case '1' -> viewProducts();
+                        case '2' -> adminLogin();
+                        case '3' -> userLogin();
+                        case '4' -> registerUser();
+                        case '5' -> {
+                            System.out.println("*****************************");
+                            System.out.println("*** Saving App Data ***");
+                            try {
+                                alphaController.saveData();
+                                System.out.println("Data saved successfully");
+                                start();
+                            } catch (Exception e) {
+                                System.out.println("Error in saving the file.");
+                            }
+
+                        }
+                        case '6' -> {
+                            System.out.println("*********************");
+                            System.out.println("*** Loading the App Data ***");
+                            try {
+                                alphaController.loadData();
+                                System.out.println("Data loaded successfully");
+                                start();
+                            } catch (Exception e) {
+                                System.out.println("Error in loading the file.");
+                                start();
+                            }
+                        }
+                        case '7' -> {
+                            System.out.println("**** Exiting the program ****");
+                            System.out.println("Thank you for using Alpha System, Goodbye!");
+                            System.out.println("*****************************");
+                            System.exit(0);
+                        }
+                        default -> System.out.println("Invalid input, please try again");
+                    }
+                } else {
+                    System.out.println("Invalid Action\n");
+                    start();
+                }
+            } while (line.charAt(0) != '7' || line.length() != 1);
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("Empty input, Exiting the program.");
+            System.exit(0);
+        }
+    }
+
+    private void registerUser() {
+        System.out.println("*****************************");
+        System.out.println("User Registration Page");
+        System.out.println("*****************************");
+        System.out.println("Please enter your first name: ");
+        String firstName = scanner.nextLine().trim();
+        System.out.println("Please enter your last name: ");
+        String lastName = scanner.nextLine().trim();
+        System.out.println("Please enter your username: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Please enter your email: ");
+        String email = scanner.nextLine().trim();
+        System.out.println("Please enter your password: ");
+        String password = scanner.nextLine().trim();
+        System.out.println("Are you registering as a:");
+        System.out.println("1. Seller");
+        System.out.println("2. Customer");
+        String line = scanner.nextLine().trim();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> {
+                    // Register as a Seller
+                    try {
+                        alphaController.addUser(firstName, lastName, username, email, password, "Seller");
+                        System.out.println("Registration Successful");
+                        start();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        start();
+                    }
+                }
+
+                case '2' -> {
+                    // Register as a Customer
+                    try {
+                        alphaController.addUser(firstName, lastName, username, email, password, "Customer");
+                        System.out.println("Registration Successful");
+                        start();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        start();
+                    }
+                }
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            start();
+        }
+
+    }
+
+    private void userLogin() {
+        System.out.println("*****************************");
+        System.out.println("User Login Page");
+        System.out.println("*****************************");
+        System.out.println("Please enter your username: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Please enter your password: ");
+        String password = scanner.nextLine().trim();
+        try {
+            Map<String, User> userMap;
+            userMap = alphaController.userLogin(username, password);
+            setLoginStatus = true;
+
+            // TO: Display the appropriate menu based on the account type
+            // To check the user type, use the following code:
+            if (!userMap.isEmpty()) {
+                if (userMap.get(username).getAccountType().equalsIgnoreCase("Seller")) {
+                    sellerInfo.putAll(userMap);
+                    System.out.println("Login Successful");
+                    userMap.clear();
+                    sellerMenu();
+                } else if (userMap.get(username).getAccountType().equalsIgnoreCase("Customer")) {
+                    userInfo.putAll(userMap);
+                    System.out.println("Login Successful");
+                    userMap.clear();
+                    customerMenu();
+                } else {
+                    System.out.println("Admin cannot login here. Please login as Admin");
+                    start();
+                }
+            } else {
+                System.out.println("Please register as a user first");
+                start();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            start();
+        }
+    }
+
+    private void customerMenu() {
+        System.out.println("*****************************");
+        System.out.println("Customer Menu");
+        System.out.println("*****************************");
+        System.out.println("Welcome " + userInfo.get(userInfo.keySet().toArray()[0]).getFirstName() + " " + userInfo.get(userInfo.keySet().toArray()[0]).getLastName() + "!");
+        System.out.println("1. View Products");
+        System.out.println("2. Cart Menu and Checkout");
+        System.out.println("3. View Orders");
+        System.out.println("4. Submit a request to Admin to change your account type");
+        System.out.println("5. View my account details");
+        System.out.println("6. Delete my account");
+        System.out.println("7. Logout");
+        System.out.println("*****************************");
+        System.out.println("Please enter your choice: ");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> viewProducts();
+
+                case '2' -> {
+                    cartMenu();
+                }
+                case '3' -> {
+                    viewMyOrders();
+                }
+                case '4' -> submitRequestCustomer();
+                case '5' -> viewMyUserDetails();
+                case '6' -> deleteMyAccount();
+                case '7' -> {
+                    System.out.println("Logging out...");
+                    setLoginStatus = false;
+                    userInfo.clear();
+                    start();
+                }
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            customerMenu();
+        }
+    }
+
+    private void cartMenu() {
+        System.out.println("*****************************");
+        System.out.println("Cart Menu");
+        System.out.println("*****************************");
+        System.out.println("1. View Cart");
+        System.out.println("2. Delete an item from the cart");
+        System.out.println("3. Checkout");
+        System.out.println("4. Go back to Customer Menu");
+        System.out.println("*****************************");
+        System.out.println("Please enter your choice: ");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> viewMyCart();
+                case '2' -> deleteItemFromCart();
+                case '3' -> checkout();
+                case '4' -> customerMenu();
+                default -> {
+                    System.out.println("Invalid input, please try again");
+                    cartMenu();
+                }
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            customerMenu();
+        }
+    }
+
+    private void checkout() {
+        System.out.println("*****************************");
+        System.out.println("Checkout");
+        System.out.println("*****************************");
+        String userName = userInfo.get(userInfo.keySet().toArray()[0]).getUsername();
+        try {
+            cartInfo = alphaController.viewCart(userName);
+            if (cartInfo.isEmpty()) {
+                throw new IllegalArgumentException("Your cart is empty");
+            } else {
+                int totalQuantity = 0;
+                float totalCost = 0;
+                System.out.println("*****************************");
+                System.out.println("Your Cart");
+                System.out.println("*****************************");
+                for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+                    System.out.println("*****************************");
+                    System.out.println(" Cart ID: " + entry.getKey());
+                    System.out.println(" Product ID: " + entry.getValue().getProductId());
+                    System.out.println(" Product Name: " + entry.getValue().getProductName());
+                    System.out.println(" Product Price: " + "£" + entry.getValue().getProductPrice());
+                    System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
+                    System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
+                    System.out.println(" Seller Name: " + entry.getValue().getSellerName());
+                    System.out.println("*****************************");
+                    totalQuantity += entry.getValue().getProductQuantity();
+                    totalCost += entry.getValue().getProductTotal();
+                }
+                System.out.println("Total number of items in your cart: " + totalQuantity);
+                System.out.println("Total cost of your cart: " + "£" + totalCost);
+                System.out.println("*****************************");
+                System.out.println("Do you want to proceed with the checkout? (Y/N)");
+                String line = scanner.nextLine();
+                if (line.length() == 1) {
+                    switch (line.charAt(0)) {
+                        case 'Y' | 'y' -> {
+                            orderPlaced();
+                            System.out.println("Checkout successful");
+                            customerMenu();
+                        }
+                        case 'N' | 'n' -> {
+                            throw new IllegalArgumentException("Checkout cancelled");
+                        }
+                        default -> {
+                            throw new IllegalArgumentException("Invalid input, please try again");
+                        }
+                    }
+                } else {
+                    throw new IllegalArgumentException("Invalid input, please try again");
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            cartMenu();
+        }
+    }
+
+    private void orderPlaced() {
+        // To be called after checkout
+        // Create Random Order ID
+        Random rand = new Random();
+        int orderID = rand.nextInt(1000000);
+        ArrayList<Integer> orderIDList = new ArrayList<>();
+        // Store the order ID in an array list and if the order ID is already in the list, generate a new one.
+        while (orderIDList.contains(orderID)) {
+            orderID = rand.nextInt(1000000);
+        }
+        String userName = "";
+        String productID = "";
+        String productName = "";
+        float productPrice = 0;
+        int productQuantity = 0;
+        float productTotal = 0;
+        String sellerName = "";
+        int cartID = 0;
+        for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+            cartID = entry.getKey();
+            productID = entry.getValue().getProductId();
+            productName = entry.getValue().getProductName();
+            productPrice = entry.getValue().getProductPrice();
+            productQuantity = entry.getValue().getProductQuantity();
+            productTotal = entry.getValue().getProductTotal();
+            sellerName = entry.getValue().getSellerName();
+            userName = entry.getValue().getCustomerName();
+            try {
+                orderID++;
+                alphaController.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
+                alphaController.updateProductAfterOrder(productID, productQuantity);
+                alphaController.deleteItemFromCart(String.valueOf(cartID));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + "\n");
+                cartMenu();
+            }
+        }
+        System.out.println("Order Placed Successfully!");
+        // Clear cache data of cart
+        cartInfo.clear();
+        // Clear cache data of product
+        productInfo.clear();
+        customerMenu();
+    }
+
+    private void deleteItemFromCart() {
+
+        System.out.println("*****************************");
+        System.out.println("Delete an item from the cart");
+        System.out.println("*****************************");
+        System.out.println("Please enter the cart ID (can be seen from View cart) of the item you want to delete: ");
+        String cartID = scanner.nextLine().trim();
+        try {
+            alphaController.deleteItemFromCart(cartID);
+            System.out.println("Item deleted from cart");
+            cartMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            cartMenu();
+        }
+    }
+
+    private void viewOrders() {
+        String sellerUsername = "";
+        Map<Integer, Order> orderInfo = new HashMap<>();
+        System.out.println("*****************************");
+        System.out.println("Orders Placed by Customer");
+        System.out.println("*****************************");
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            sellerUsername = entry.getKey();
+        }
+        try {
+            orderInfo = alphaController.getOrderBySeller(sellerUsername);
+            if (orderInfo.isEmpty()) {
+                throw new IllegalArgumentException("No orders placed by customers");
+            }
+            for (Map.Entry<Integer, Order> entry : orderInfo.entrySet()) {
+                System.out.println("*****************************");
+                System.out.println(" Customer Name: " + entry.getValue().getCustomerName());
+                System.out.println(" Order ID: " + entry.getKey());
+                System.out.println(" Product ID: " + entry.getValue().getProductID());
+                System.out.println(" Product Name: " + entry.getValue().getProductName());
+                System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
+                System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
+                System.out.println("*****************************");
+            }
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+
+    private void submitRequestCustomer() {
+        String customerUsername = "";
+        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+            customerUsername = entry.getKey();
+        }
+        System.out.println("*****************************");
+        System.out.println("Submit Request");
+        System.out.println("*****************************");
+        System.out.println("Please select the type of request you want to submit:");
+        System.out.println("1. Change my account type to Seller");
+        System.out.println("2. Change my account type to Admin");
+        System.out.println("3. Go back to Customer Menu");
+        System.out.println("Please enter your choice: ");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> {
+                    try {
+                        alphaController.storeRequest(customerUsername, "seller");
+                        System.out.println("Request submitted successfully.");
+                        customerMenu();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        customerMenu();
+                    }
+                }
+                case '2' -> {
+                    try {
+                        alphaController.storeRequest(customerUsername, "admin");
+                        System.out.println("Request submitted successfully.");
+                        customerMenu();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        customerMenu();
+                    }
+                }
+                case '3' -> customerMenu();
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            customerMenu();
+        }
+    }
+
+    private void submitRequestSeller() {
+        String sellerUsername = "";
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            sellerUsername = entry.getKey();
+        }
+        System.out.println("*****************************");
+        System.out.println("Submit Request");
+        System.out.println("*****************************");
+        System.out.println("Please select the type of request you want to submit:");
+        System.out.println("1. Change my account type to Customer");
+        System.out.println("2. Change my account type to Admin");
+        System.out.println("3. Go back to Seller Menu");
+        System.out.println("Please enter your choice: ");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> {
+                    try {
+                        alphaController.storeRequest(sellerUsername, "customer");
+                        System.out.println("Request submitted successfully.");
+                        sellerMenu();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        sellerMenu();
+                    }
+                }
+                case '2' -> {
+                    try {
+                        alphaController.storeRequest(sellerUsername, "admin");
+                        System.out.println("Request submitted successfully.");
+                        sellerMenu();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        sellerMenu();
+                    }
+                }
+                case '3' -> sellerMenu();
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            sellerMenu();
+        }
+    }
+
+    private void sellerMenu() {
+        System.out.println("*****************************");
+        System.out.println("Seller Menu");
+        System.out.println("*****************************");
+        System.out.println("Welcome " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).getFirstName() + " " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).getLastName() + "!");
+        System.out.println("1. Add Product");
+        System.out.println("2. Update Product");
+        System.out.println("3. Delete Product");
+        System.out.println("4. View your Products");
+        System.out.println("5. View Customer Orders");
+        System.out.println("6. Submit a request to Admin to change your account");
+        System.out.println("7. View my account details");
+        System.out.println("8. Delete my account");
+        System.out.println("9. Logout");
+        System.out.println("Please enter your choice:");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> addProduct();
+                case '2' -> updateProduct();
+                case '3' -> deleteProduct();
+                case '4' -> viewMyProducts();
+                case '5' -> viewOrders();
+                case '6' -> submitRequestSeller();
+                case '7' -> viewMySellerDetails();
+                case '8' -> deleteMyAccount();
+                case '9' -> {
+                    System.out.println("Logging out...");
+                    setLoginStatus = false;
+                    sellerInfo.clear();
+                    start();
+                }
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            sellerMenu();
+        }
+    }
+
+    private void viewMyOrders() {
+        String username = "";
+        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+            username = entry.getKey();
+        }
+        try {
+            Map<Integer, Order> orders = alphaController.getOrderByCustomer(username);
+            if (orders.isEmpty()) {
+                throw new IllegalArgumentException("You have not placed any orders yet.");
+            } else {
+                float totalCost = 0;
+                int totalQuantity = 0;
+                for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
+                    System.out.println("*****************************");
+                    System.out.println("Order ID: " + entry.getKey());
+                    System.out.println("Product Name: " + entry.getValue().getProductName());
+                    System.out.println("Product Price: " + "£" + entry.getValue().getProductPrice());
+                    System.out.println("Product Quantity: " + entry.getValue().getProductQuantity());
+                    System.out.println("Product Total Price: " + "£" + entry.getValue().getProductTotal());
+                    totalCost += entry.getValue().getProductTotal();
+                    totalQuantity += entry.getValue().getProductQuantity();
+                    System.out.println("*****************************");
+                }
+                System.out.println("Total Quantity: " + totalQuantity);
+                System.out.println("Total Cost: " + "£" + totalCost);
+                System.out.println("*****************************");
+                orders.clear();
+                customerMenu();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            customerMenu();
+        }
+
+    }
+
+    private void viewMyProducts() {
+        System.out.println("*****************************");
+        System.out.println("View My Products");
+        System.out.println("*****************************");
+        String sellerUsername = "";
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            sellerUsername = entry.getKey();
+        }
+        try {
+            Map<String, Product> sellerProducts = alphaController.viewSellerProducts(sellerUsername);
+            if (sellerProducts.isEmpty()) {
+                throw new IllegalArgumentException("You have not added any products yet.");
+            } else {
+                for (Map.Entry<String, Product> entry : sellerProducts.entrySet()) {
+                    System.out.println("*****************************");
+                    System.out.println("Product ID: " + entry.getKey());
+                    System.out.println("Product Name: " + entry.getValue().getName());
+                    System.out.println("Product Price: " + entry.getValue().getPrice());
+                    System.out.println("Product Quantity: " + entry.getValue().getQuantity());
+                    System.out.println("Product Description: " + entry.getValue().getDescription());
+                    System.out.println("Product Category: " + entry.getValue().getCategory());
+                    System.out.println("Product Author: " + entry.getValue().getAuthor());
+                    System.out.println("*****************************");
+                }
+                System.out.println("Search has returned " + sellerProducts.size() + " results.");
+                sellerMenu();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void deleteProduct() {
+
+        System.out.println("*****************************");
+        System.out.println("Delete a Product");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Product ID:");
+        String productID = scanner.nextLine().trim();
+        System.out.println("Are you sure you want to delete this product? (Y/N)");
+        String line = scanner.nextLine().trim();
+        String sellerUsername = "";
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            if (entry.getValue().getUsername().equals(sellerUsername)) {
+                sellerUsername = entry.getKey();
+            }
+        }
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case 'Y' | 'y' -> {
+                    try {
+                        alphaController.deleteProduct(productID, sellerUsername);
+                        System.out.println("Product deleted successfully.");
+                        sellerMenu();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + "\n");
+                        sellerMenu();
+                    }
+                }
+                case 'N' | 'n' -> sellerMenu();
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProduct() {
+        String sellerUsername = "";
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            sellerUsername = entry.getKey();
+        }
+        System.out.println("*****************************");
+        System.out.println("Update a Product");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Product ID:");
+        String productID = scanner.nextLine().trim();
+        try {
+            if (alphaController.checkValidationToUpdate(sellerUsername, productID)) {
+                System.out.println("*************************");
+                System.out.println("Which field would you like to update?");
+                System.out.println("Note : To update the Product-ID , Delete the product and add it again.");
+                System.out.println("1. Product Name");
+                System.out.println("2. Product Description");
+                System.out.println("3. Product Price");
+                System.out.println("4. Product Quantity");
+                System.out.println("5. Product Category");
+                System.out.println("6. Product Author");
+                System.out.println("7. Exit");
+                System.out.println("*************************");
+                String line = scanner.nextLine();
+                if (line.length() == 1) {
+                    switch (line) {
+                        case "1" -> updateProductName(productID);
+                        case "2" -> updateProductDescription(productID);
+                        case "3" -> updateProductPrice(productID);
+                        case "4" -> updateProductQuantity(productID);
+                        case "5" -> updateProductCategory(productID);
+                        case "6" -> updateProductAuthor(productID);
+                        case "7" -> sellerMenu();
+                        default -> System.out.println("Invalid input, please try again");
+                    }
+                } else {
+                    System.out.println("Invalid Action\n");
+                    sellerMenu();
+                }
+
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+
+    }
+
+    private void updateProductAuthor(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Author");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Author:");
+        String productAuthor = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductAuthor(productID, productAuthor);
+            System.out.println("Product Author updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProductCategory(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Category");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Category:");
+        String productCategory = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductCategory(productID, productCategory);
+            System.out.println("Product Category updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProductQuantity(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Quantity");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Quantity:");
+        String productQuantity = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductQuantity(productID, productQuantity);
+            System.out.println("Product Quantity updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProductPrice(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Price");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Price:");
+        String productPrice = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductPrice(productID, productPrice);
+            System.out.println("Product Price updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProductDescription(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Description");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Description:");
+        String productDescription = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductDescription(productID, productDescription);
+            System.out.println("Product Description updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void updateProductName(String productID) {
+        System.out.println("*****************************");
+        System.out.println("Update Product Name");
+        System.out.println("*****************************");
+        System.out.println("Please enter the new Product Name:");
+        String productName = scanner.nextLine().trim();
+        try {
+            alphaController.updateProductName(productID, productName);
+            System.out.println("Product Name updated successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void addProduct() {
+        System.out.println("*****************************");
+        System.out.println("Add Product");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Product ID:");
+        String productID = scanner.nextLine().trim();
+        System.out.println("Please enter the Product Name:");
+        String productName = scanner.nextLine().trim();
+        System.out.println("Please enter the Product Description:");
+        String productDescription = scanner.nextLine().trim();
+        System.out.println("Please enter the author:");
+        String author = scanner.nextLine().trim();
+        System.out.println("Please enter the Product Price:");
+        String productPrice = scanner.nextLine().trim();
+        System.out.println("Please enter the Product Quantity:");
+        String productQuantity = scanner.nextLine().trim();
+        System.out.println("Please enter the Product Category:");
+        String productCategory = scanner.nextLine().trim();
+        String sellerUsername = "";
+        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+            sellerUsername = entry.getKey().trim();
+        }
+        try {
+            alphaController.addProduct(productID, productName, productDescription, author, productPrice, productQuantity, productCategory, sellerUsername);
+            System.out.println("Product added successfully.");
+            sellerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            sellerMenu();
+        }
+    }
+
+    private void viewProducts() {
+        if (!setLoginStatus) {
+            System.out.println("*****************************");
+            System.out.println("You are not logged in. You can view Products but cannot add to cart.");
+            System.out.println("To buy products, please login first or create a user account");
+            System.out.println("*****************************");
+        }
+        System.out.println("*****************************");
+        System.out.println("Viewing Products");
+        System.out.println("*****************************");
+        System.out.println("1. Search by name");
+        System.out.println("2. Search by category");
+        System.out.println("3. Search by author");
+        System.out.println("4. View All Products");
+        System.out.println("5. Main Menu");
+        System.out.println("Please enter your choice:");
+        String line = scanner.nextLine();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> {
+                    searchProductByName();
+                }
+                case '2' -> {
+
+                    searchProductByCategory();
+                }
+                case '3' -> {
+                    searchProductByAuthor();
+                }
+                case '4' -> {
+                    viewAllProducts();
+                }
+                case '5' -> {
+                    start();
+                }
+                default -> {
+                    System.out.println("Invalid input, please try again");
+                    viewProducts();
+                }
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            viewProducts();
+        }
+    }
+
+    private void viewAllProducts() {
+        System.out.println("*****************************");
+        System.out.println("Viewing the Entire Collection..");
+        System.out.println("*****************************");
+        try {
+            productInfo = alphaController.viewAllProducts();
+            for (Map.Entry<String, Product> Entry : productInfo.entrySet()) {
+                System.out.println("*****************************");
+                System.out.println(" Product ID: " + Entry.getKey());
+                System.out.println(" The Product:" + Entry.getValue().getName());
+                System.out.println(" The Product Description:" + Entry.getValue().getDescription());
+                System.out.println(" The Product Price:" + "£" + Entry.getValue().getPrice());
+                System.out.println(" The Product Quantity:" + Entry.getValue().getQuantity());
+                System.out.println(" The Product Category:" + Entry.getValue().getCategory());
+                System.out.println(" The Product Author:" + Entry.getValue().getAuthor());
+                System.out.println(" The Product Seller:" + Entry.getValue().getSellerUsername());
+                System.out.println("*****************************");
+            }
+            if (setLoginStatus) {
+                String accountType = "";
+                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().getAccountType();
+                }
+                if (accountType.equalsIgnoreCase("customer")) {
+                    System.out.println("1. Enter the Product ID of the product you want to buy");
+                    System.out.println("2. View My Cart");
+                    System.out.println("3. Go back to Menu");
+                    System.out.println("Please enter your choice:");
+                    String option = scanner.nextLine().trim();
+                    if (option.length() == 1) {
+                        switch (option) {
+                            case "1" -> {
+                                addToCart();
+
+                            }
+                            case "2" -> {
+                                viewMyCart();
+
+                            }
+                            case "3" -> customerMenu();
+
+                            default -> {
+                                System.out.println("Invalid option");
+                                customerMenu();
+                            }
+                        }
+
+                    } else {
+                        System.out.println("Invalid option");
+                        customerMenu();
+                    }
+                } else {
+                    start();
+                }
+            } else {
+                start();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            if (setLoginStatus) customerMenu();
+            else start();
+        }
+
+    }
+
+    private void searchProductByAuthor() {
+        System.out.println("*****************************");
+        System.out.println("Search Product by Author");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Author's Name:");
+        String productAuthor = scanner.nextLine().trim();
+        try {
+            productInfo = alphaController.searchProductByAuthor(productAuthor);
+            if (productInfo.isEmpty()) {
+                throw new IllegalArgumentException("No Product found with the author " + productAuthor);
+            } else {
+                for (Map.Entry<String, Product> Entry : productInfo.entrySet()) {
+                    System.out.println("*****************************");
+                    System.out.println(" Product ID: " + Entry.getKey());
+                    System.out.println(" The Product:" + Entry.getValue().getName());
+                    System.out.println(" The Product Description:" + Entry.getValue().getDescription());
+                    System.out.println(" The Product Price:" + "£" + Entry.getValue().getPrice());
+                    System.out.println(" The Product Quantity:" + Entry.getValue().getQuantity());
+                    System.out.println(" The Product Category:" + Entry.getValue().getCategory());
+                    System.out.println(" The Product Seller:" + Entry.getValue().getSellerUsername());
+                    System.out.println("*****************************");
+                }
+                System.out.println("Search has returned " + productInfo.size() + " results");
+                if (setLoginStatus) {
+                    String accountType = "";
+                    for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                        accountType = entry.getValue().getAccountType();
+                    }
+                    if (accountType.equalsIgnoreCase("customer")) {
+                        System.out.println("1. Enter the Product ID of the product you want to buy");
+                        System.out.println("2. View My Cart");
+                        System.out.println("3. Go back to Main Menu");
+                        System.out.println("Please enter your choice:");
+                        String option = scanner.nextLine().trim();
+                        if (option.length() == 1) {
+                            switch (option) {
+                                case "1" -> {
+                                    addToCart();
+                                }
+                                case "2" -> {
+                                    viewMyCart();
+                                }
+                                case "3" -> customerMenu();
+
+                                default -> {
+                                    System.out.println("Invalid option");
+                                    customerMenu();
+                                }
+                            }
+
+                        } else {
+                            System.out.println("Invalid option");
+                            customerMenu();
+                        }
+                    } else {
+                        start();
+                    }
+                } else {
+                    start();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            if (setLoginStatus) customerMenu();
+            else start();
+        }
+    }
+
+    private void searchProductByCategory() {
+        System.out.println("*****************************");
+        System.out.println("Search Product by Category");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Product Category:");
+        String productCategory = scanner.nextLine().trim();
+        try {
+            productInfo = alphaController.searchProductByCategory(productCategory);
+            if (productInfo.isEmpty()) {
+                throw new IllegalArgumentException("No Product found with the category " + productCategory);
+            }
+            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+                System.out.println("*****************************");
+                System.out.println(" Product ID: " + entry.getKey());
+                System.out.println(" The Product:" + entry.getValue().getName());
+                System.out.println(" Category: " + entry.getValue().getCategory());
+                System.out.println(" Price: " + "£" + entry.getValue().getPrice());
+                System.out.println(" Quantity: " + entry.getValue().getQuantity());
+                System.out.println(" Seller: " + entry.getValue().getSellerUsername());
+                System.out.println("*****************************");
+            }
+            System.out.println("Search has returned " + productInfo.size() + " results\n");
+            if (setLoginStatus) {
+                String accountType = "";
+                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().getAccountType();
+                }
+                if (accountType.equalsIgnoreCase("customer")) {
+                    System.out.println("1. Enter the Product ID of the product you want to buy");
+                    System.out.println("2. View My Cart");
+                    System.out.println("3. Go back to Menu");
+                    System.out.println("Please enter your choice:");
+                    String option = scanner.nextLine().trim();
+                    if (option.length() == 1) {
+                        switch (option) {
+                            case "1" -> {
+                                addToCart();
+
+                            }
+                            case "2" -> {
+                                viewMyCart();
+
+                            }
+                            case "3" -> customerMenu();
+
+                            default -> {
+                                System.out.println("Invalid option");
+                                customerMenu();
+                            }
+                        }
+
+                    } else {
+                        System.out.println("Invalid option");
+                        customerMenu();
+                    }
+                } else {
+                    start();
+                }
+            } else {
+                start();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            if (setLoginStatus) customerMenu();
+            else start();
+        }
+    }
+
+    private void searchProductByName() {
+        System.out.println("*****************************");
+        System.out.println("Search Product by Name");
+        System.out.println("*****************************");
+        System.out.println("Please enter the Product Name:");
+        String productName = scanner.nextLine().trim();
+        String quantity = String.valueOf(0);
+        try {
+            productInfo = alphaController.searchProductByName(productName);
+            if (productInfo.isEmpty()) {
+                throw new IllegalArgumentException("No Product found with the name " + productName);
+            }
+            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+                System.out.println("*****************************");
+                System.out.println(" Product ID: " + entry.getKey());
+                System.out.println(" The Product:" + entry.getValue().getName());
+                System.out.println(" Category: " + entry.getValue().getCategory());
+                System.out.println(" Price: " + "£" + entry.getValue().getPrice());
+                System.out.println(" Quantity: " + entry.getValue().getQuantity());
+                System.out.println(" Description: " + entry.getValue().getDescription());
+                System.out.println(" Author: " + entry.getValue().getAuthor());
+                System.out.println(" Seller: " + entry.getValue().getSellerUsername());
+                System.out.println("*****************************");
+            }
+            System.out.println("Search returned with " + productInfo.size() + " results");
+            if (setLoginStatus) {
+                String accountType = "";
+                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().getAccountType();
+                }
+                if (accountType.equalsIgnoreCase("customer")) {
+                    System.out.println("1. Enter the Product ID of the product you want to buy");
+                    System.out.println("2. View My Cart");
+                    System.out.println("3. Go back to Menu");
+                    System.out.println("Please enter your choice:");
+                    String option = scanner.nextLine().trim();
+                    if (option.length() == 1) {
+                        switch (option) {
+                            case "1" -> {
+                                addToCart();
+
+                            }
+                            case "2" -> {
+                                viewMyCart();
+
+                            }
+                            case "3" -> customerMenu();
+
+                            default -> {
+                                System.out.println("Invalid option");
+                                customerMenu();
+                            }
+                        }
+
+                    } else {
+                        System.out.println("Invalid option");
+                        customerMenu();
+                    }
+
+                } else {
+                    start();
+                }
+            } else {
+                start();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            if (setLoginStatus) {
+                customerMenu();
+            } else {
+                start();
+            }
+        }
+
+    }
+
+
+    private void addToCart() {
+        // Generate a random number for the cart ID
+        Random random = new Random();
+        int cartID = random.nextInt(1000000);
+        ArrayList<Integer> cartIDList = new ArrayList<>();
+        // Store the cart ID in an array list and if the cart ID is already in the list, generate a new one.
+        while (cartIDList.contains(cartID)) {
+            cartID = random.nextInt(1000000);
+        }
+        cartIDList.add(cartID);
+        String quantity;
+        System.out.println("Please enter the product ID you want to add to cart: ");
+        String productID = scanner.nextLine().trim();
+        try {
+            // To check if product ID is valid
+            if (!productInfo.containsKey(productID)) {
+                throw new IllegalArgumentException("Invalid Product ID");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            searchProductByName();
+        }
+        String userName = "";
+        System.out.println("How much quantity do you want to add to cart?");
+        quantity = scanner.nextLine().trim();
+        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+            userName = entry.getValue().getUsername();
+        }
+        try {
+            String productName = "";
+            float productPrice = 0;
+            float productTotal;
+            int productQuantity = 0;
+            String sellerName = "";
+
+            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+                if (entry.getKey().equalsIgnoreCase(productID)) {
+                    productName = entry.getValue().getName();
+                    productPrice = Float.parseFloat(entry.getValue().getPrice());
+                    sellerName = entry.getValue().getSellerUsername();
+                    productQuantity = Integer.parseInt(entry.getValue().getQuantity());
+                }
+            }
+            if (productQuantity < Integer.parseInt(quantity)) {
+                throw new IllegalArgumentException("Sorry, we don't have enough quantity of this product");
+            }
+            productTotal = productPrice * Integer.parseInt(quantity);
+            cartID++;
+
+            alphaController.addToCart(cartID, productID, userName, productName, productPrice, Integer.parseInt(quantity), productTotal, sellerName);
+            System.out.println("Product added to cart successfully");
+            customerMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            customerMenu();
+        }
+    }
+
+    private void viewMyCart() {
+        String userName = "";
+        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+            userName = entry.getValue().getUsername();
+        }
+        System.out.println("*****************************");
+        System.out.println("Viewing Your Cart");
+        System.out.println("*****************************");
+        try {
+            cartInfo = alphaController.viewCart(userName);
+            if (cartInfo.isEmpty()) {
+                throw new IllegalArgumentException("Your cart is empty");
+            } else {
+                int totalQuantity = 0;
+                float totalCost = 0;
+                System.out.println("*****************************");
+                System.out.println("Your Cart");
+                System.out.println("*****************************");
+                for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+                    System.out.println("*****************************");
+                    System.out.println(" Cart ID: " + entry.getKey());
+                    System.out.println(" Product ID: " + entry.getValue().getProductId());
+                    System.out.println(" Product Name: " + entry.getValue().getProductName());
+                    System.out.println(" Product Price: " + "£" + entry.getValue().getProductPrice());
+                    System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
+                    System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
+                    System.out.println(" Seller Name: " + entry.getValue().getSellerName());
+                    System.out.println("*****************************");
+                    totalQuantity += entry.getValue().getProductQuantity();
+                    totalCost += entry.getValue().getProductTotal();
+                }
+                System.out.println("Total number of items in your cart: " + totalQuantity);
+                System.out.println("Total cost of your cart: " + "£" + totalCost);
+                System.out.println("*****************************");
+                cartMenu();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            customerMenu();
+        }
+    }
+
+    private void adminLogin() {
+        System.out.println("*****************************");
+        System.out.println("Admin Login Page");
+        System.out.println("*****************************");
+        System.out.println("Please enter your username: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Please enter your password: ");
+        String password = scanner.nextLine().trim();
+        Map<String, User> adminMap;
+
+        try {
+            adminMap = alphaController.adminLogin(username, password);
+            adminInfo.putAll(adminMap);
+            setLoginStatus = true;
+            System.out.println("Login Successful");
+            adminMap.clear();
+            adminMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "\n");
+            start();
+        }
+    }
+
+    private void adminMenu() {
+        System.out.println("*****************************");
+        System.out.println("Admin Menu");
+        System.out.println("*****************************");
+        for (String s : Arrays.asList("Welcome " + adminInfo.get("admin").getUsername(), "1. View All Users", "2. Add a new User", "3. Delete a User", "4. Update permission of User", "5. View my Account Details", "6. Delete my Account", "7. Logout", "*****************************", "Please enter your choice: ")) {
+            System.out.println(s);
+        }
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine().trim();
+        if (line.length() == 1) {
+            switch (line.charAt(0)) {
+                case '1' -> viewAllUsers();
+                case '2' -> addUserViaAdmin();
+                case '3' -> deleteUser();
+                case '4' -> updateUserPermission();
+                case '5' -> viewMyAccountDetails();
+                case '6' -> deleteMyAccount();
+                case '7' -> {
+                    System.out.println("Logging out");
+                    setLoginStatus = false;
+                    adminInfo.clear();
+                    start();
+                }
+                default -> System.out.println("Invalid input, please try again");
+            }
+        } else {
+            System.out.println("Invalid Action\n");
+            adminMenu();
+        }
+    }
+
+    private void deleteMyAccount() {
+        // This method can be used by both admin, customer and seller.
+        System.out.println("*****************************");
+        System.out.println("Delete Your Account");
+        System.out.println("*****************************");
+        System.out.println("Enter your username: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Enter your password: ");
+        String password = scanner.nextLine().trim();
+        System.out.println("Are you sure you want to delete your account? (Y/N)");
+        String answer = scanner.nextLine().trim();
+        if (answer.equalsIgnoreCase("Y")) {
+            try {
+                alphaController.deleteSelfAccount(username, password);
+                System.out.println("Your account has been deleted");
+                adminInfo.clear();
+                setLoginStatus = false;
+                start();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                adminMenu();
+            }
+        } else if (answer.equalsIgnoreCase("N")) {
+            adminMenu();
+        } else {
+            System.out.println("Invalid input, please try again");
+            adminMenu();
+        }
+    }
+
+    /**
+     * This method is used to view account details of the admin who is logged in.
+     */
+    private void viewMyAccountDetails() {
+        System.out.println("*****************************");
+        System.out.println("Viewing my Account Details");
+        System.out.println("*****************************");
+        try {
+            if (adminInfo.isEmpty()) {
+                throw new IllegalArgumentException("No admin is logged in");
+            } else {
+                for (Map.Entry<String, User> entry : adminInfo.entrySet()) {
+                    System.out.println("Username:" + entry.getKey());
+                    System.out.println("First Name:" + entry.getValue().getFirstName());
+                    System.out.println("Last Name:" + entry.getValue().getLastName());
+                    System.out.println("Email:" + entry.getValue().getEmail());
+                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("*****************************");
+                    adminMenu();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+
+
+    }
+
+    /**
+     * This method is used for viewing account info of customers.
+     */
+    private void viewMyUserDetails() {
+        // This method can be used now only by customer.
+        System.out.println("*****************************");
+        System.out.println("Viewing my Account Details");
+        System.out.println("*****************************");
+        String accountType = "";
+
+        try {
+            if (userInfo.isEmpty()) {
+                throw new IllegalArgumentException("No user is logged in");
+            } else {
+                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                    System.out.println("Username:" + entry.getKey());
+                    System.out.println("First Name:" + entry.getValue().getFirstName());
+                    System.out.println("Last Name:" + entry.getValue().getLastName());
+                    System.out.println("Email:" + entry.getValue().getEmail());
+                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("*****************************");
+                    accountType = entry.getValue().getAccountType();
+                }
+                if (accountType.equalsIgnoreCase("customer")) {
+                    customerMenu();
+                } else if (accountType.equalsIgnoreCase("seller")) {
+                    sellerMenu();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            if (accountType.equalsIgnoreCase("customer")) {
+                customerMenu();
+            } else if (accountType.equalsIgnoreCase("seller")) {
+                sellerMenu();
+            }
+        }
+
+    }
+
+    private void viewMySellerDetails() {
+        // This method can be used now only by customer.
+        System.out.println("*****************************");
+        System.out.println("Viewing my Account Details");
+        System.out.println("*****************************");
+        String accountType = "";
+        try {
+            if (sellerInfo.isEmpty()) {
+                throw new IllegalArgumentException("No user is logged in");
+            } else {
+                for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+                    System.out.println("Username:" + entry.getKey());
+                    System.out.println("First Name:" + entry.getValue().getFirstName());
+                    System.out.println("Last Name:" + entry.getValue().getLastName());
+                    System.out.println("Email:" + entry.getValue().getEmail());
+                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("*****************************");
+                    accountType = entry.getValue().getAccountType();
+                }
+                if (accountType.equalsIgnoreCase("customer")) {
+                    customerMenu();
+                } else if (accountType.equalsIgnoreCase("seller")) {
+                    sellerMenu();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            if (accountType.equalsIgnoreCase("customer")) {
+                customerMenu();
+            } else if (accountType.equalsIgnoreCase("seller")) {
+                sellerMenu();
+            }
+        }
+
+
+    }
+
+    private void viewAllUsers() {
+        System.out.println("*****************************");
+        System.out.println("Viewing All Users");
+        System.out.println("*****************************");
+        try {
+            Map<String, User> allUsers = alphaController.viewAllUsers();
+            for (Map.Entry<String, User> entry : allUsers.entrySet()) {
+                System.out.println("Username:" + entry.getKey());
+                System.out.println("First Name:" + entry.getValue().getFirstName());
+                System.out.println("Last Name:" + entry.getValue().getLastName());
+                System.out.println("Email:" + entry.getValue().getEmail());
+                System.out.println("Account Type:" + entry.getValue().getAccountType());
+                System.out.println("*****************************");
+            }
+            System.out.println("All users are displayed above");
+            adminMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+    }
+
+    private void addUserViaAdmin() {
+        System.out.println("*****************************");
+        System.out.println("Adding a new User");
+        System.out.println("*****************************");
+        System.out.println("Please enter the first name of the new user: ");
+        String firstName = scanner.nextLine().trim();
+        System.out.println("Please enter the last name of the new user: ");
+        String lastName = scanner.nextLine().trim();
+        System.out.println("Please enter the username of the new user: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Please enter the email of the new user: ");
+        String email = scanner.nextLine().trim();
+        System.out.println("Please enter the password of the new user: ");
+        String password = scanner.nextLine().trim();
+        System.out.println("Please enter the account type of the new user: ");
+        System.out.println("1. Admin");
+        System.out.println("2. Seller");
+        System.out.println("3. Customer");
+        String accountType = scanner.nextLine().trim();
+        try {
+            switch (accountType) {
+                case "1" -> {
+                    alphaController.addUser(firstName, lastName, username, email, password, "admin");
+                    System.out.println("Admin added successfully");
+                    adminMenu();
+                }
+                case "2" -> {
+                    alphaController.addUser(firstName, lastName, username, email, password, "seller");
+                    System.out.println("Seller Account added successfully");
+                    adminMenu();
+                }
+                case "3" -> {
+                    alphaController.addUser(firstName, lastName, username, email, password, "customer");
+                    System.out.println("Customer Account added successfully");
+                    adminMenu();
+                }
+                default -> throw new IllegalArgumentException("Invalid input, please try again");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+    }
+
+    private void updateUserPermission() {
+        System.out.println("*****************************");
+        System.out.println("Updating User Permission");
+        System.out.println("*****************************");
+        System.out.println("1. View Requests");
+        System.out.println("2. Update User Permission");
+        String choice = scanner.nextLine().trim();
+        try {
+            switch (choice) {
+                case "1" -> viewRequests();
+                case "2" -> updatePermission();
+                default -> throw new IllegalArgumentException("Invalid input, please try again");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+    }
+
+    private void updatePermission() {
+        System.out.println("*****************************");
+        System.out.println("Updating User Permission");
+        System.out.println("*****************************");
+        System.out.println("Please enter the username of the user you want to update: ");
+        String username = scanner.nextLine().trim();
+        System.out.println("Please enter the new permission of the user: ");
+        System.out.println("1. Admin");
+        System.out.println("2. Seller");
+        System.out.println("3. Customer");
+        String accountType = scanner.nextLine().trim();
+        try {
+            switch (accountType) {
+                case "1" -> {
+                    alphaController.updateUserPermission(username, "admin");
+                    System.out.println("User permission updated successfully");
+                    adminMenu();
+                }
+                case "2" -> {
+                    alphaController.updateUserPermission(username, "seller");
+                    System.out.println("User permission updated successfully");
+                    adminMenu();
+                }
+                case "3" -> {
+                    alphaController.updateUserPermission(username, "customer");
+                    System.out.println("User permission updated successfully");
+                    adminMenu();
+                }
+                default -> throw new IllegalArgumentException("Invalid input, please try again");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+    }
+
+    private void viewRequests() {
+        Map<String, Request> allRequests;
+        System.out.println("*****************************");
+        System.out.println("Viewing Requests");
+        System.out.println("*****************************");
+        try {
+            allRequests = alphaController.viewRequests();
+            if (allRequests.isEmpty()) {
+                System.out.println("There are no requests at the moment.");
+                adminMenu();
+            } else {
+                for (Map.Entry<String, Request> entry : allRequests.entrySet()) {
+                    System.out.println("Username:" + entry.getKey());
+                    System.out.println("Request Type:" + entry.getValue().getRequestType());
+                    System.out.println("*****************************");
+                }
+                System.out.println("All users are displayed above");
+                allRequests.clear();
+                adminMenu();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+
+        }
+
+    }
+
+    private void deleteUser() {
+        System.out.println("*****************************");
+        System.out.println("Deleting a User");
+        System.out.println("*****************************");
+        System.out.println("Please enter the username of the user you want to delete: ");
+        String username = scanner.nextLine().trim();
+        try {
+            alphaController.deleteUserViaAdmin(username);
+            System.out.println("User deleted successfully");
+            adminMenu();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            adminMenu();
+        }
+    }
+
+    public void messageDisplay() {
+        System.out.println("*****************************");
+        System.out.println("** Welcome to Alpha System **");
+        System.out.println("*****************************");
+        System.out.println("1. View Products");
+        System.out.println("2. Admin Login");
+        System.out.println("3. User Login");
+        System.out.println("4. Create a new User");
+        System.out.println("5. Save Data");
+        System.out.println("6. Load Data");
+        System.out.println("7. Exit");
+        System.out.println("*****************************");
+        System.out.println("Please enter your choice: ");
+    }
 
 }

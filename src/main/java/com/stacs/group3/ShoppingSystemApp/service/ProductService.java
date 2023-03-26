@@ -11,7 +11,7 @@ public class ProductService implements Serializable {
     public Map<String, Product> product = new HashMap<>();
 
     public void saveData() throws IOException {
-        FileOutputStream f = new FileOutputStream("src/main/resources/productData.ser");
+        FileOutputStream f = new FileOutputStream("src/main/resources/data/productData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(product);
         o.close();
@@ -20,7 +20,7 @@ public class ProductService implements Serializable {
 
     public void loadData()  {
         try{
-            FileInputStream fi = new FileInputStream("src/main/resources/productData.ser");
+            FileInputStream fi = new FileInputStream("src/main/resources/data/productData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
             product = (Map<String, Product>) oi.readObject();
@@ -48,7 +48,7 @@ public class ProductService implements Serializable {
             throw new IllegalArgumentException("Author cannot be empty");
         if (productPrice == null || productPrice.isEmpty())
             throw new IllegalArgumentException("Product Price cannot be empty");
-        if (productQuantity == null || productQuantity.isEmpty())
+        if (productQuantity == null || productQuantity.isEmpty() || productQuantity.equalsIgnoreCase("0"))
             throw new IllegalArgumentException("Product Quantity cannot be empty");
         if (productCategory == null || productCategory.isEmpty())
             throw new IllegalArgumentException("Product Category cannot be empty");

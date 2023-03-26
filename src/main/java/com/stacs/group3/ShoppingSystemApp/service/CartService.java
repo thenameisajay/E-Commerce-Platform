@@ -12,7 +12,7 @@ public class CartService implements Serializable {
     private Map<Integer, Cart> cart = new HashMap<>();
 
     public void saveData() throws IOException {
-        FileOutputStream f = new FileOutputStream("src/main/resources/cartData.ser");
+        FileOutputStream f = new FileOutputStream("src/main/resources/data/cartData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(cart);
         o.close();
@@ -21,7 +21,7 @@ public class CartService implements Serializable {
 
     public void loadData() {
         try {
-            FileInputStream fi = new FileInputStream("src/main/resources/cartData.ser");
+            FileInputStream fi = new FileInputStream("src/main/resources/data/cartData.ser");
             ObjectInputStream oi = new ObjectInputStream(fi);
             // read object from file
             cart = (Map<Integer, Cart>) oi.readObject();
@@ -61,7 +61,11 @@ public class CartService implements Serializable {
         if (productID.isEmpty() | productID == null) {
             throw new IllegalArgumentException("Product ID cannot be empty.");
         } else {
-            cart.put(cartID, new Cart(cartID, productID, userName, productName, productPrice, productQuantity, productTotal, sellerName));
+            if (productQuantity <= 0) {
+                throw new IllegalArgumentException("Product quantity cannot be less than or equal to 0.");
+            } else {
+                cart.put(cartID, new Cart(cartID, productID, userName, productName, productPrice, productQuantity, productTotal, sellerName));
+            }
         }
     }
 
@@ -70,13 +74,16 @@ public class CartService implements Serializable {
         if (cartID.isEmpty() | cartID == null) {
             throw new IllegalArgumentException("Cart ID cannot be empty.");
         }
-        int cartIDInt = Integer.parseInt(cartID);
-        if (cart.containsKey(cartIDInt)) {
-            cart.remove(cartIDInt);
-        } else {
-            throw new IllegalArgumentException("Product does not exist.");
+        try {
+            int cartIDInt = Integer.parseInt(cartID);
+            if (cart.containsKey(cartIDInt)) {
+                cart.remove(cartIDInt);
+            } else {
+                throw new IllegalArgumentException("Product does not exist.");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Cart ID not valid.");
         }
-
     }
 
     public void clearCart(String userName) {
