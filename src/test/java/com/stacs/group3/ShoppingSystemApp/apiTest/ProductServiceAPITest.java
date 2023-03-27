@@ -165,6 +165,12 @@ public class ProductServiceAPITest {
         assertNotNull(response1.getBody());
         Boolean res1 = response1.getBody();
         assertTrue(res1);
+
+        ResponseEntity<Boolean> response2 = restTemplate.getForEntity(productServiceURI + "/check?seller=jj789&id=1", Boolean.class);
+        assertEquals(response2.getStatusCode(), HttpStatus.OK);
+        assertNotNull(response2.getBody());
+        Boolean res2 = response2.getBody();
+        assertFalse(res2);
     }
 
     @Test

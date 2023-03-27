@@ -310,12 +310,9 @@ public class ProductServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> productService.checkValidationToUpdate("mj456", "100"),
-                "Product ID does not exist or you do not have the permission to delete this product.");
+                "Product ID does not exist");
 
-        assertThrows(IllegalArgumentException.class,
-                () -> productService.checkValidationToUpdate("jj456", "1"),
-                "Product ID does not exist or you do not have the permission to delete this product.");
-
+        assertFalse(productService.checkValidationToUpdate("jj456", "1"));
 
         assertTrue(productService.checkValidationToUpdate("mj456", "1"));
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class restfulAPI {
+public class AlphaAPI {
     AlphaController alphaController = new AlphaController();
 
     @PostMapping("/userService/add")
@@ -112,7 +112,7 @@ public class restfulAPI {
         return alphaController.viewAllProducts();
     }
 
-    @DeleteMapping("/productService/delete")
+    @PostMapping("/productService/delete")
     public void deleteProduct(
             @RequestParam(name = "id") String productID,
             @RequestParam(name = "seller") String sellerUsername) {
@@ -142,7 +142,7 @@ public class restfulAPI {
     @PostMapping("/productService/updateDescription")
     public void updateProductDescription(
             @RequestParam(name = "id") String productID,
-            @RequestParam(name = "name") String productDescription) {
+            @RequestParam(name = "description") String productDescription) {
         alphaController.updateProductDescription(productID, productDescription);
     }
 
@@ -181,8 +181,8 @@ public class restfulAPI {
     }
 
     @PostMapping("/cartService/add")
-    public void addToCart(@RequestBody Map<Integer, String> cart) {
-        int cartID = Integer.parseInt(cart.get("cartID"));
+    public void addToCart(@RequestBody Map<String, String> cart) {
+        int cartID = Integer.valueOf(cart.get("cartID"));
         String productID = cart.get("productID");
         String userName = cart.get("userName");
         String productName = cart.get("productName");
@@ -193,15 +193,15 @@ public class restfulAPI {
         alphaController.addToCart(cartID, productID, userName, productName, productPrice, productQuantity, productTotal, sellerName);
     }
 
-    @DeleteMapping("/cartService/delete/{cartID}")
-    public void deleteItemFromCart(@PathVariable int cartID) {
-        alphaController.deleteItemFromCart(String.valueOf(cartID));
+    @PostMapping("/cartService/delete/{cartID}")
+    public void deleteItemFromCart(@PathVariable String cartID) {
+        alphaController.deleteItemFromCart(cartID);
     }
 
 
     @PostMapping("/orderService/add")
-    public void addOrder(@RequestBody Map<Integer, String> order) {
-        int orderID = Integer.parseInt(order.get("orderID"));
+    public void addOrder(@RequestBody Map<String, String> order) {
+        int orderID = Integer.valueOf(order.get("orderID"));
         String productID = order.get("productID");
         String userName = order.get("userName");
         String productName = order.get("productName");

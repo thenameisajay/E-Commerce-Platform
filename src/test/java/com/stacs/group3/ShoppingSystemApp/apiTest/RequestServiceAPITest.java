@@ -1,6 +1,6 @@
 package com.stacs.group3.ShoppingSystemApp.apiTest;
 
-import com.example.demo.model.util.User;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ public class RequestServiceAPITest {
     public void clear() {
         ResponseEntity<Map> response =
                 restTemplate.getForEntity(userServiceURI + "/viewAll", Map.class);
-        Map<String, User> users = response.getBody();
+        Map<String, Map<String, String>> users = response.getBody();
 
         Iterator<String> iterator = users.keySet().iterator();
 

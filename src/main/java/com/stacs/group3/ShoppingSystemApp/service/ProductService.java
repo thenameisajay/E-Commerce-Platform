@@ -205,8 +205,10 @@ public class ProductService implements Serializable {
             // Third Check : Check if Product ID exists in the Map.
             if (product.containsKey(productID) && product.get(productID).getSellerUsername().equalsIgnoreCase(sellerUsername)) {
                 check = true;
+            } else if (!product.containsKey(productID)) {
+                throw new IllegalArgumentException("Product ID does not exist");
             } else {
-                throw new IllegalArgumentException("Product ID does not exist or you do not have the permission to update the product info.");
+                check = false;
             }
         }
         return check;
