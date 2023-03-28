@@ -343,7 +343,7 @@ public class ProductServiceTest {
                 "Product Description cannot be empty");
 
         productService.updateProductDescription("1", "The first novel in the Harry Potter series");
-        assertEquals(productService.viewAllProducts().get("1").getDescription(),
+        assertEquals(productService.viewAllProducts().get("1").getProductDescription(),
                 "The first novel in the Harry Potter series");
     }
 
@@ -358,7 +358,7 @@ public class ProductServiceTest {
                 "Product Price can only contain numbers");
 
         productService.updateProductPrice("1", "15");
-        assertEquals(productService.viewAllProducts().get("1").getPrice(), "15");
+        assertEquals(productService.viewAllProducts().get("1").getProductPrice(), "15");
     }
 
     @Test
@@ -372,7 +372,7 @@ public class ProductServiceTest {
                 "Product Quantity can only contain numbers");
 
         productService.updateProductQuantity("1", "600");
-        assertEquals(productService.viewAllProducts().get("1").getQuantity(), "600");
+        assertEquals(productService.viewAllProducts().get("1").getProductQuantity(), "600");
     }
 
     @Test
@@ -386,7 +386,7 @@ public class ProductServiceTest {
                 "Product Category cannot contain numbers");
 
         productService.updateProductCategory("1", "fiction");
-        assertEquals(productService.viewAllProducts().get("1").getCategory(), "fiction");
+        assertEquals(productService.viewAllProducts().get("1").getProductCategory(), "fiction");
     }
 
     @Test
@@ -418,7 +418,7 @@ public class ProductServiceTest {
                 "Product ID does not exist");
 
         productService.updateProductAfterOrder("1", 10);
-        assertEquals(productService.viewAllProducts().get("1").getQuantity(), "90");
+        assertEquals(productService.viewAllProducts().get("1").getProductQuantity(), "90");
 
         productService.wipeAll();
         assertThrows(IllegalArgumentException.class,

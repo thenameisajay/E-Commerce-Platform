@@ -10,7 +10,7 @@ public class Cart implements Serializable {
     private String productName;
     private float productPrice;
     private int productQuantity;
-    private float ProductTotal;
+    private float productTotal;
     private String sellerName;
 
     public Cart(int cartId, String ProductId, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
@@ -20,7 +20,7 @@ public class Cart implements Serializable {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
-        this.ProductTotal = productTotal;
+        this.productTotal = productTotal;
         this.sellerName = sellerName;
     }
 
@@ -73,11 +73,11 @@ public class Cart implements Serializable {
     }
 
     public float getProductTotal() {
-        return ProductTotal;
+        return productTotal;
     }
 
     public void setProductTotal(float productTotal) {
-        ProductTotal = productTotal;
+        this.productTotal = productTotal;
     }
 
 

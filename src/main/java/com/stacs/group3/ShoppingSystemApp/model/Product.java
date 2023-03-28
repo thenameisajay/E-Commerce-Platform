@@ -3,50 +3,50 @@ package com.stacs.group3.ShoppingSystemApp.model;
 import java.io.Serializable;
 
 public class Product implements Serializable {
-    private String id;
-    private String name;
-    private String description;
+    private String productID;
+    private String productName;
+    private String productDescription;
 
     private String author;
-    private String price;
-    private String quantity;
-    private String category;
+    private String productPrice;
+    private String productQuantity;
+    private String productCategory;
 
     private String sellerUsername;
 
-    public Product(String id, String name, String description, String author, String price, String quantity, String category, String sellerUsername) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    public Product(String productID, String productName, String productDescription, String author, String productPrice, String productQuantity, String productCategory, String sellerUsername) {
+        this.productID = productID;
+        this.productName = productName;
+        this.productDescription = productDescription;
         this.author = author;
-        this.price = price;
-        this.quantity = quantity;
-        this.category = category;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+        this.productCategory = productCategory;
         this.sellerUsername = sellerUsername;
     }
 
-    public String getId() {
-        return id;
+    public String getProductID() {
+        return productID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
     public String getAuthor() {
@@ -57,28 +57,28 @@ public class Product implements Serializable {
         this.author = author;
     }
 
-    public String getPrice() {
-        return price;
+    public String getProductPrice() {
+        return productPrice;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setProductPrice(String productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getProductQuantity() {
+        return productQuantity;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setProductQuantity(String productQuantity) {
+        this.productQuantity = productQuantity;
     }
 
-    public String getCategory() {
-        return category;
+    public String getProductCategory() {
+        return productCategory;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
     }
 
     public String getSellerUsername() {

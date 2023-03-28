@@ -31,57 +31,57 @@ public class ProductTest {
 
     @Test
     public void testGet() {
-        assertEquals(product1.getId(), "1");
-        assertEquals(product1.getName(), "Harry Potter: Philosopher's Stone");
-        assertEquals(product1.getDescription(), "The first novel in the Harry Potter series and Rowling's debut novel, " +
+        assertEquals(product1.getProductID(), "1");
+        assertEquals(product1.getProductName(), "Harry Potter: Philosopher's Stone");
+        assertEquals(product1.getProductDescription(), "The first novel in the Harry Potter series and Rowling's debut novel, " +
                 "it follows Harry Potter, a young wizard who discovers his magical heritage on his eleventh birthday, " +
                 "when he receives a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. " +
                 "Harry makes close friends and a few enemies during his first year at the school and with the help of his friends, " +
                 "Ron Weasley and Hermione Granger, he faces an attempted comeback by the dark wizard Lord Voldemort, " +
                 "who killed Harry's parents, but failed to kill Harry when he was just 15 months old.");
         assertEquals(product1.getAuthor(), "J.K. Rowling");
-        assertEquals(product1.getPrice(), "12.99");
-        assertEquals(product1.getQuantity(), "100");
-        assertEquals(product1.getCategory(), "Fantasy");
+        assertEquals(product1.getProductPrice(), "12.99");
+        assertEquals(product1.getProductQuantity(), "100");
+        assertEquals(product1.getProductCategory(), "Fantasy");
         assertEquals(product1.getSellerUsername(), "mj456");
 
-        assertEquals(product2.getId(), "2");
-        assertEquals(product2.getName(), "A Man Called Ove");
-        assertEquals(product2.getDescription(), "");
+        assertEquals(product2.getProductID(), "2");
+        assertEquals(product2.getProductName(), "A Man Called Ove");
+        assertEquals(product2.getProductDescription(), "");
         assertEquals(product2.getAuthor(), "Fredrik Backman");
-        assertEquals(product2.getPrice(), "6.99");
-        assertEquals(product2.getQuantity(), "200");
-        assertEquals(product2.getCategory(), "Novel");
+        assertEquals(product2.getProductPrice(), "6.99");
+        assertEquals(product2.getProductQuantity(), "200");
+        assertEquals(product2.getProductCategory(), "Novel");
         assertEquals(product2.getSellerUsername(), "mj456");
 
-        assertEquals(product3.getId(), "3");
-        assertEquals(product3.getName(), "Educated");
-        assertEquals(product3.getDescription(), "");
+        assertEquals(product3.getProductID(), "3");
+        assertEquals(product3.getProductName(), "Educated");
+        assertEquals(product3.getProductDescription(), "");
         assertEquals(product3.getAuthor(), "Tara Westover");
-        assertEquals(product3.getPrice(), "9.99");
-        assertEquals(product3.getQuantity(), "50");
-        assertEquals(product3.getCategory(), "Nonfiction");
+        assertEquals(product3.getProductPrice(), "9.99");
+        assertEquals(product3.getProductQuantity(), "50");
+        assertEquals(product3.getProductCategory(), "Nonfiction");
         assertEquals(product3.getSellerUsername(), "jj789");
     }
 
     @Test
     public void testSet() {
-        product1.setId("4");
-        product1.setName("Harry Potter: Chamber of Secrets");
-        product1.setDescription("The second novel in the Harry Potter series");
+        product1.setProductID("4");
+        product1.setProductName("Harry Potter: Chamber of Secrets");
+        product1.setProductDescription("The second novel in the Harry Potter series");
         product1.setAuthor("Joanne Rowling");
-        product1.setPrice("11.99");
-        product1.setQuantity("150");
-        product1.setCategory("Novel");
+        product1.setProductPrice("11.99");
+        product1.setProductQuantity("150");
+        product1.setProductCategory("Novel");
         product1.setSellerUsername("jj789");
 
-        assertEquals(product1.getId(), "4");
-        assertEquals(product1.getName(), "Harry Potter: Chamber of Secrets");
-        assertEquals(product1.getDescription(), "The second novel in the Harry Potter series");
+        assertEquals(product1.getProductID(), "4");
+        assertEquals(product1.getProductName(), "Harry Potter: Chamber of Secrets");
+        assertEquals(product1.getProductDescription(), "The second novel in the Harry Potter series");
         assertEquals(product1.getAuthor(), "Joanne Rowling");
-        assertEquals(product1.getPrice(), "11.99");
-        assertEquals(product1.getQuantity(), "150");
-        assertEquals(product1.getCategory(), "Novel");
+        assertEquals(product1.getProductPrice(), "11.99");
+        assertEquals(product1.getProductQuantity(), "150");
+        assertEquals(product1.getProductCategory(), "Novel");
         assertEquals(product1.getSellerUsername(), "jj789");
     }
 

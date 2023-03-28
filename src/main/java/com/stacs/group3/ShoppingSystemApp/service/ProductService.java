@@ -86,7 +86,7 @@ public class ProductService implements Serializable {
             throw new IllegalArgumentException("No products available");
         } else {
             for (Map.Entry<String, Product> entry : product.entrySet()) {
-                String productSearch = entry.getValue().getName();
+                String productSearch = entry.getValue().getProductName();
                 if (productSearch.equalsIgnoreCase(productName)) {
                     // Retrieve the product details from the Map.
                     returnProduct.put(entry.getKey(), entry.getValue());
@@ -108,7 +108,7 @@ public class ProductService implements Serializable {
             throw new IllegalArgumentException("Product Category cannot contain numbers");
         } else {
             for (Map.Entry<String, Product> entry : product.entrySet()) {
-                String productSearch = entry.getValue().getCategory();
+                String productSearch = entry.getValue().getProductCategory();
                 if (productSearch.equalsIgnoreCase(productCategory)) {
                     // Retrieve the product details from the Map.
                     returnProduct.put(entry.getKey(), entry.getValue());
@@ -221,7 +221,7 @@ public class ProductService implements Serializable {
         } else if (productName.matches(".*\\d.*")) {
             throw new IllegalArgumentException("Product Name cannot contain numbers");
         } else {
-            product.get(productID).setName(productName);
+            product.get(productID).setProductName(productName);
         }
     }
 
@@ -230,7 +230,7 @@ public class ProductService implements Serializable {
         if (productDescription == null || productDescription.isEmpty()) {
             throw new IllegalArgumentException("Product Description cannot be empty");
         } else {
-            product.get(productID).setDescription(productDescription);
+            product.get(productID).setProductDescription(productDescription);
         }
     }
 
@@ -241,7 +241,7 @@ public class ProductService implements Serializable {
         } else if (!productPrice.matches("^[0-9]*\\.?[0-9]*$")) {
             throw new IllegalArgumentException("Product Price can only contain numbers");
         } else {
-            product.get(productID).setPrice(productPrice);
+            product.get(productID).setProductPrice(productPrice);
         }
     }
 
@@ -252,7 +252,7 @@ public class ProductService implements Serializable {
         } else if (!productQuantity.matches("^[0-9]*$")) {
             throw new IllegalArgumentException("Product Quantity can only contain numbers");
         } else {
-            product.get(productID).setQuantity(productQuantity);
+            product.get(productID).setProductQuantity(productQuantity);
         }
     }
 
@@ -263,7 +263,7 @@ public class ProductService implements Serializable {
         } else if (productCategory.matches(".*\\d.*")) {
             throw new IllegalArgumentException("Product Category cannot contain numbers");
         } else {
-            product.get(productID).setCategory(productCategory);
+            product.get(productID).setProductCategory(productCategory);
         }
     }
 
@@ -291,9 +291,9 @@ public class ProductService implements Serializable {
         } else {
             // Third Check : Check if Product ID exists in the Map.
             if (product.containsKey(productID)) {
-                int quantity = Integer.parseInt(product.get(productID).getQuantity());
+                int quantity = Integer.parseInt(product.get(productID).getProductQuantity());
                 int newQuantity = quantity - productQuantity;
-                product.get(productID).setQuantity(String.valueOf(newQuantity));
+                product.get(productID).setProductQuantity(String.valueOf(newQuantity));
             } else {
                 throw new IllegalArgumentException("Product ID does not exist");
             }

@@ -1,8 +1,5 @@
 package com.stacs.group3.ShoppingSystemApp.view;
 
-import com.stacs.group3.ShoppingSystemApp.controller.AlphaController;
-import com.stacs.group3.ShoppingSystemApp.model.*;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -11,22 +8,22 @@ public class CommandLine implements Serializable {
 
     // For testing purpose ONLY.
 
-    AlphaController alphaController;
+    APICall apiCall;
 
     private Scanner scanner;
 
     private boolean setLoginStatus = false;
-    private Map<String, User> adminInfo = new HashMap<>();
+    private Map<String, Map<String, String>> adminInfo = new HashMap<>();
 
 
     // Saving the data as local cache for the app , for referencing purpose ONLY.
-    private Map<String, User> userInfo = new HashMap<>();
-    private Map<String, User> sellerInfo = new HashMap<>();
-    private Map<String, Product> productInfo = new HashMap<>();
-    private Map<Integer, Cart> cartInfo = new HashMap<>();
+    private Map<String, Map<String, String>> userInfo = new HashMap<>();
+    private Map<String, Map<String, String>> sellerInfo = new HashMap<>();
+    private Map<String, Map<String, String>> productInfo = new HashMap<>();
+    private Map<Integer, Map<String, String>> cartInfo = new HashMap<>();
 
-    public CommandLine(AlphaController alphaController) {
-        this.alphaController = alphaController;
+    public CommandLine(String baseURI) {
+        this.apiCall = new APICall(baseURI);
     }
 
     public void main(String[] args) {
@@ -35,7 +32,7 @@ public class CommandLine implements Serializable {
 
     public void start() {
         // Generate the admin account if it doesn't exist.
-        alphaController.adminGenerate();
+        apiCall.callAdminGenerate();
         messageDisplay();
         String line;
         scanner = new Scanner(System.in);
@@ -52,7 +49,7 @@ public class CommandLine implements Serializable {
                             System.out.println("*****************************");
                             System.out.println("*** Saving App Data ***");
                             try {
-                                alphaController.saveData();
+                                apiCall.callSave();
                                 System.out.println("Data saved successfully");
                                 start();
                             } catch (Exception e) {
@@ -64,7 +61,7 @@ public class CommandLine implements Serializable {
                             System.out.println("*********************");
                             System.out.println("*** Loading the App Data ***");
                             try {
-                                alphaController.loadData();
+                                apiCall.callLoad();
                                 System.out.println("Data loaded successfully");
                                 start();
                             } catch (Exception e) {
@@ -114,7 +111,7 @@ public class CommandLine implements Serializable {
                 case '1' -> {
                     // Register as a Seller
                     try {
-                        alphaController.addUser(firstName, lastName, username, email, password, "Seller");
+                        apiCall.callAddUser(firstName, lastName, username, email, password, "Seller");
                         System.out.println("Registration Successful");
                         start();
                     } catch (IllegalArgumentException e) {
@@ -126,7 +123,7 @@ public class CommandLine implements Serializable {
                 case '2' -> {
                     // Register as a Customer
                     try {
-                        alphaController.addUser(firstName, lastName, username, email, password, "Customer");
+                        apiCall.callAddUser(firstName, lastName, username, email, password, "Customer");
                         System.out.println("Registration Successful");
                         start();
                     } catch (IllegalArgumentException e) {
@@ -152,19 +149,19 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter your password: ");
         String password = scanner.nextLine().trim();
         try {
-            Map<String, User> userMap;
-            userMap = alphaController.userLogin(username, password);
+            Map<String, Map<String, String>> userMap;
+            userMap = apiCall.callUserLogin(username, password);
             setLoginStatus = true;
 
             // TO: Display the appropriate menu based on the account type
             // To check the user type, use the following code:
             if (!userMap.isEmpty()) {
-                if (userMap.get(username).getAccountType().equalsIgnoreCase("Seller")) {
+                if (userMap.get(username).get("accountType").equalsIgnoreCase("Seller")) {
                     sellerInfo.putAll(userMap);
                     System.out.println("Login Successful");
                     userMap.clear();
                     sellerMenu();
-                } else if (userMap.get(username).getAccountType().equalsIgnoreCase("Customer")) {
+                } else if (userMap.get(username).get("accountType").equalsIgnoreCase("Customer")) {
                     userInfo.putAll(userMap);
                     System.out.println("Login Successful");
                     userMap.clear();
@@ -187,7 +184,7 @@ public class CommandLine implements Serializable {
         System.out.println("*****************************");
         System.out.println("Customer Menu");
         System.out.println("*****************************");
-        System.out.println("Welcome " + userInfo.get(userInfo.keySet().toArray()[0]).getFirstName() + " " + userInfo.get(userInfo.keySet().toArray()[0]).getLastName() + "!");
+        System.out.println("Welcome " + userInfo.get(userInfo.keySet().toArray()[0]).get("firstName") + " " + userInfo.get(userInfo.keySet().toArray()[0]).get("lastName") + "!");
         System.out.println("1. View Products");
         System.out.println("2. Cart Menu and Checkout");
         System.out.println("3. View Orders");
@@ -257,9 +254,9 @@ public class CommandLine implements Serializable {
         System.out.println("*****************************");
         System.out.println("Checkout");
         System.out.println("*****************************");
-        String userName = userInfo.get(userInfo.keySet().toArray()[0]).getUsername();
+        String userName = userInfo.get(userInfo.keySet().toArray()[0]).get("username");
         try {
-            cartInfo = alphaController.viewCart(userName);
+            cartInfo = apiCall.callViewCart(userName);
             if (cartInfo.isEmpty()) {
                 throw new IllegalArgumentException("Your cart is empty");
             } else {
@@ -268,18 +265,18 @@ public class CommandLine implements Serializable {
                 System.out.println("*****************************");
                 System.out.println("Your Cart");
                 System.out.println("*****************************");
-                for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+                for (Map.Entry<Integer, Map<String, String>> entry : cartInfo.entrySet()) {
                     System.out.println("*****************************");
                     System.out.println(" Cart ID: " + entry.getKey());
-                    System.out.println(" Product ID: " + entry.getValue().getProductId());
-                    System.out.println(" Product Name: " + entry.getValue().getProductName());
-                    System.out.println(" Product Price: " + "£" + entry.getValue().getProductPrice());
-                    System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
-                    System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
-                    System.out.println(" Seller Name: " + entry.getValue().getSellerName());
+                    System.out.println(" Product ID: " + entry.getValue().get("productId"));
+                    System.out.println(" Product Name: " + entry.getValue().get("productName"));
+                    System.out.println(" Product Price: " + "£" + entry.getValue().get("productPrice"));
+                    System.out.println(" Product Quantity: " + entry.getValue().get("productQuantity"));
+                    System.out.println(" Product Total: " + "£" + entry.getValue().get("productTotal"));
+                    System.out.println(" Seller Name: " + entry.getValue().get("sellerName"));
                     System.out.println("*****************************");
-                    totalQuantity += entry.getValue().getProductQuantity();
-                    totalCost += entry.getValue().getProductTotal();
+                    totalQuantity += Integer.valueOf(entry.getValue().get("productQuantity"));
+                    totalCost += Float.valueOf(entry.getValue().get("productTotal"));
                 }
                 System.out.println("Total number of items in your cart: " + totalQuantity);
                 System.out.println("Total cost of your cart: " + "£" + totalCost);
@@ -328,20 +325,20 @@ public class CommandLine implements Serializable {
         float productTotal = 0;
         String sellerName = "";
         int cartID = 0;
-        for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+        for (Map.Entry<Integer, Map<String, String>> entry : cartInfo.entrySet()) {
             cartID = entry.getKey();
-            productID = entry.getValue().getProductId();
-            productName = entry.getValue().getProductName();
-            productPrice = entry.getValue().getProductPrice();
-            productQuantity = entry.getValue().getProductQuantity();
-            productTotal = entry.getValue().getProductTotal();
-            sellerName = entry.getValue().getSellerName();
-            userName = entry.getValue().getCustomerName();
+            productID = entry.getValue().get("productId");
+            productName = entry.getValue().get("productName");
+            productPrice = Float.valueOf(entry.getValue().get("productPrice"));
+            productQuantity = Integer.valueOf(entry.getValue().get("productQuantity"));
+            productTotal = Float.valueOf(entry.getValue().get("productTotal"));
+            sellerName = entry.getValue().get("sellerName");
+            userName = entry.getValue().get("customerName");
             try {
                 orderID++;
-                alphaController.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
-                alphaController.updateProductAfterOrder(productID, productQuantity);
-                alphaController.deleteItemFromCart(String.valueOf(cartID));
+                apiCall.callAddOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
+                apiCall.callUpdateProductAfterOrder(productID, productQuantity);
+                apiCall.callDeleteItemFromCart(String.valueOf(cartID));
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage() + "\n");
                 cartMenu();
@@ -363,7 +360,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the cart ID (can be seen from View cart) of the item you want to delete: ");
         String cartID = scanner.nextLine().trim();
         try {
-            alphaController.deleteItemFromCart(cartID);
+            apiCall.callDeleteItemFromCart(cartID);
             System.out.println("Item deleted from cart");
             cartMenu();
         } catch (IllegalArgumentException e) {
@@ -374,26 +371,26 @@ public class CommandLine implements Serializable {
 
     private void viewOrders() {
         String sellerUsername = "";
-        Map<Integer, Order> orderInfo = new HashMap<>();
+        Map<Integer, Map<String, String>> orderInfo = new HashMap<>();
         System.out.println("*****************************");
         System.out.println("Orders Placed by Customer");
         System.out.println("*****************************");
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey();
         }
         try {
-            orderInfo = alphaController.getOrderBySeller(sellerUsername);
+            orderInfo = apiCall.callGetOrderBySeller(sellerUsername);
             if (orderInfo.isEmpty()) {
                 throw new IllegalArgumentException("No orders placed by customers");
             }
-            for (Map.Entry<Integer, Order> entry : orderInfo.entrySet()) {
+            for (Map.Entry<Integer, Map<String, String>> entry : orderInfo.entrySet()) {
                 System.out.println("*****************************");
-                System.out.println(" Customer Name: " + entry.getValue().getCustomerName());
+                System.out.println(" Customer Name: " + entry.getValue().get("customerName"));
                 System.out.println(" Order ID: " + entry.getKey());
-                System.out.println(" Product ID: " + entry.getValue().getProductID());
-                System.out.println(" Product Name: " + entry.getValue().getProductName());
-                System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
-                System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
+                System.out.println(" Product ID: " + entry.getValue().get("productID"));
+                System.out.println(" Product Name: " + entry.getValue().get("productName"));
+                System.out.println(" Product Quantity: " + entry.getValue().get("productQuantity"));
+                System.out.println(" Product Total: " + "£" + entry.getValue().get("productTotal"));
                 System.out.println("*****************************");
             }
             sellerMenu();
@@ -406,7 +403,7 @@ public class CommandLine implements Serializable {
 
     private void submitRequestCustomer() {
         String customerUsername = "";
-        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
             customerUsername = entry.getKey();
         }
         System.out.println("*****************************");
@@ -422,7 +419,7 @@ public class CommandLine implements Serializable {
             switch (line.charAt(0)) {
                 case '1' -> {
                     try {
-                        alphaController.storeRequest(customerUsername, "seller");
+                        apiCall.callStoreRequest(customerUsername, "seller");
                         System.out.println("Request submitted successfully.");
                         customerMenu();
                     } catch (IllegalArgumentException e) {
@@ -432,7 +429,7 @@ public class CommandLine implements Serializable {
                 }
                 case '2' -> {
                     try {
-                        alphaController.storeRequest(customerUsername, "admin");
+                        apiCall.callStoreRequest(customerUsername, "admin");
                         System.out.println("Request submitted successfully.");
                         customerMenu();
                     } catch (IllegalArgumentException e) {
@@ -451,7 +448,7 @@ public class CommandLine implements Serializable {
 
     private void submitRequestSeller() {
         String sellerUsername = "";
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey();
         }
         System.out.println("*****************************");
@@ -467,7 +464,7 @@ public class CommandLine implements Serializable {
             switch (line.charAt(0)) {
                 case '1' -> {
                     try {
-                        alphaController.storeRequest(sellerUsername, "customer");
+                        apiCall.callStoreRequest(sellerUsername, "customer");
                         System.out.println("Request submitted successfully.");
                         sellerMenu();
                     } catch (IllegalArgumentException e) {
@@ -477,7 +474,7 @@ public class CommandLine implements Serializable {
                 }
                 case '2' -> {
                     try {
-                        alphaController.storeRequest(sellerUsername, "admin");
+                        apiCall.callStoreRequest(sellerUsername, "admin");
                         System.out.println("Request submitted successfully.");
                         sellerMenu();
                     } catch (IllegalArgumentException e) {
@@ -498,7 +495,7 @@ public class CommandLine implements Serializable {
         System.out.println("*****************************");
         System.out.println("Seller Menu");
         System.out.println("*****************************");
-        System.out.println("Welcome " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).getFirstName() + " " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).getLastName() + "!");
+        System.out.println("Welcome " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).get("firstName") + " " + sellerInfo.get(sellerInfo.keySet().toArray()[0]).get("lastName") + "!");
         System.out.println("1. Add Product");
         System.out.println("2. Update Product");
         System.out.println("3. Delete Product");
@@ -536,25 +533,25 @@ public class CommandLine implements Serializable {
 
     private void viewMyOrders() {
         String username = "";
-        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
             username = entry.getKey();
         }
         try {
-            Map<Integer, Order> orders = alphaController.getOrderByCustomer(username);
+            Map<Integer, Map<String, String>> orders = apiCall.callGetOrderByCustomer(username);
             if (orders.isEmpty()) {
                 throw new IllegalArgumentException("You have not placed any orders yet.");
             } else {
                 float totalCost = 0;
                 int totalQuantity = 0;
-                for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
+                for (Map.Entry<Integer, Map<String, String>> entry : orders.entrySet()) {
                     System.out.println("*****************************");
                     System.out.println("Order ID: " + entry.getKey());
-                    System.out.println("Product Name: " + entry.getValue().getProductName());
-                    System.out.println("Product Price: " + "£" + entry.getValue().getProductPrice());
-                    System.out.println("Product Quantity: " + entry.getValue().getProductQuantity());
-                    System.out.println("Product Total Price: " + "£" + entry.getValue().getProductTotal());
-                    totalCost += entry.getValue().getProductTotal();
-                    totalQuantity += entry.getValue().getProductQuantity();
+                    System.out.println("Product Name: " + entry.getValue().get("productName"));
+                    System.out.println("Product Price: " + "£" + entry.getValue().get("productPrice"));
+                    System.out.println("Product Quantity: " + entry.getValue().get("productQuantity"));
+                    System.out.println("Product Total Price: " + "£" + entry.getValue().get("productTotal"));
+                    totalCost += Float.valueOf(entry.getValue().get("productTotal"));
+                    totalQuantity += Integer.valueOf(entry.getValue().get("productQuantity"));
                     System.out.println("*****************************");
                 }
                 System.out.println("Total Quantity: " + totalQuantity);
@@ -575,23 +572,23 @@ public class CommandLine implements Serializable {
         System.out.println("View My Products");
         System.out.println("*****************************");
         String sellerUsername = "";
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey();
         }
         try {
-            Map<String, Product> sellerProducts = alphaController.viewSellerProducts(sellerUsername);
+            Map<String, Map<String, String>> sellerProducts = apiCall.callViewSellerProducts(sellerUsername);
             if (sellerProducts.isEmpty()) {
                 throw new IllegalArgumentException("You have not added any products yet.");
             } else {
-                for (Map.Entry<String, Product> entry : sellerProducts.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> entry : sellerProducts.entrySet()) {
                     System.out.println("*****************************");
                     System.out.println("Product ID: " + entry.getKey());
-                    System.out.println("Product Name: " + entry.getValue().getName());
-                    System.out.println("Product Price: " + entry.getValue().getPrice());
-                    System.out.println("Product Quantity: " + entry.getValue().getQuantity());
-                    System.out.println("Product Description: " + entry.getValue().getDescription());
-                    System.out.println("Product Category: " + entry.getValue().getCategory());
-                    System.out.println("Product Author: " + entry.getValue().getAuthor());
+                    System.out.println("Product Name: " + entry.getValue().get("productName"));
+                    System.out.println("Product Price: " + entry.getValue().get("productPrice"));
+                    System.out.println("Product Quantity: " + entry.getValue().get("productQuantity"));
+                    System.out.println("Product Description: " + entry.getValue().get("productDescription"));
+                    System.out.println("Product Category: " + entry.getValue().get("productCategory"));
+                    System.out.println("Product Author: " + entry.getValue().get("author"));
                     System.out.println("*****************************");
                 }
                 System.out.println("Search has returned " + sellerProducts.size() + " results.");
@@ -613,8 +610,8 @@ public class CommandLine implements Serializable {
         System.out.println("Are you sure you want to delete this product? (Y/N)");
         String line = scanner.nextLine().trim();
         String sellerUsername = "";
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
-            if (entry.getValue().getUsername().equals(sellerUsername)) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
+            if (entry.getValue().get("username").equals(sellerUsername)) {
                 sellerUsername = entry.getKey();
             }
         }
@@ -622,7 +619,7 @@ public class CommandLine implements Serializable {
             switch (line.charAt(0)) {
                 case 'Y' | 'y' -> {
                     try {
-                        alphaController.deleteProduct(productID, sellerUsername);
+                        apiCall.callDeleteProduct(productID, sellerUsername);
                         System.out.println("Product deleted successfully.");
                         sellerMenu();
                     } catch (IllegalArgumentException e) {
@@ -641,7 +638,7 @@ public class CommandLine implements Serializable {
 
     private void updateProduct() {
         String sellerUsername = "";
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey();
         }
         System.out.println("*****************************");
@@ -650,7 +647,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the Product ID:");
         String productID = scanner.nextLine().trim();
         try {
-            if (alphaController.checkValidationToUpdate(sellerUsername, productID)) {
+            if (apiCall.callCheckValidationToUpdate(sellerUsername, productID)) {
                 System.out.println("*************************");
                 System.out.println("Which field would you like to update?");
                 System.out.println("Note : To update the Product-ID , Delete the product and add it again.");
@@ -694,7 +691,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Author:");
         String productAuthor = scanner.nextLine().trim();
         try {
-            alphaController.updateProductAuthor(productID, productAuthor);
+            apiCall.callUpdateProductAuthor(productID, productAuthor);
             System.out.println("Product Author updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -710,7 +707,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Category:");
         String productCategory = scanner.nextLine().trim();
         try {
-            alphaController.updateProductCategory(productID, productCategory);
+            apiCall.callUpdateProductCategory(productID, productCategory);
             System.out.println("Product Category updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -726,7 +723,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Quantity:");
         String productQuantity = scanner.nextLine().trim();
         try {
-            alphaController.updateProductQuantity(productID, productQuantity);
+            apiCall.callUpdateProductQuantity(productID, productQuantity);
             System.out.println("Product Quantity updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -742,7 +739,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Price:");
         String productPrice = scanner.nextLine().trim();
         try {
-            alphaController.updateProductPrice(productID, productPrice);
+            apiCall.callUpdateProductPrice(productID, productPrice);
             System.out.println("Product Price updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -758,7 +755,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Description:");
         String productDescription = scanner.nextLine().trim();
         try {
-            alphaController.updateProductDescription(productID, productDescription);
+            apiCall.callUpdateProductDescription(productID, productDescription);
             System.out.println("Product Description updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -774,7 +771,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the new Product Name:");
         String productName = scanner.nextLine().trim();
         try {
-            alphaController.updateProductName(productID, productName);
+            apiCall.callUpdateProductName(productID, productName);
             System.out.println("Product Name updated successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -802,11 +799,11 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the Product Category:");
         String productCategory = scanner.nextLine().trim();
         String sellerUsername = "";
-        for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String ,String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey().trim();
         }
         try {
-            alphaController.addProduct(productID, productName, productDescription, author, productPrice, productQuantity, productCategory, sellerUsername);
+            apiCall.callAddProduct(productID, productName, productDescription, author, productPrice, productQuantity, productCategory, sellerUsername);
             System.out.println("Product added successfully.");
             sellerMenu();
         } catch (IllegalArgumentException e) {
@@ -866,23 +863,23 @@ public class CommandLine implements Serializable {
         System.out.println("Viewing the Entire Collection..");
         System.out.println("*****************************");
         try {
-            productInfo = alphaController.viewAllProducts();
-            for (Map.Entry<String, Product> Entry : productInfo.entrySet()) {
+            productInfo = apiCall.callViewAllProducts();
+            for (Map.Entry<String, Map<String, String>> Entry : productInfo.entrySet()) {
                 System.out.println("*****************************");
                 System.out.println(" Product ID: " + Entry.getKey());
-                System.out.println(" The Product:" + Entry.getValue().getName());
-                System.out.println(" The Product Description:" + Entry.getValue().getDescription());
-                System.out.println(" The Product Price:" + "£" + Entry.getValue().getPrice());
-                System.out.println(" The Product Quantity:" + Entry.getValue().getQuantity());
-                System.out.println(" The Product Category:" + Entry.getValue().getCategory());
-                System.out.println(" The Product Author:" + Entry.getValue().getAuthor());
-                System.out.println(" The Product Seller:" + Entry.getValue().getSellerUsername());
+                System.out.println(" The Product:" + Entry.getValue().get("productName"));
+                System.out.println(" The Product Description:" + Entry.getValue().get("productDescription"));
+                System.out.println(" The Product Price:" + "£" + Entry.getValue().get("productPrice"));
+                System.out.println(" The Product Quantity:" + Entry.getValue().get("productQuantity"));
+                System.out.println(" The Product Category:" + Entry.getValue().get("productCategory"));
+                System.out.println(" The Product Author:" + Entry.getValue().get("author"));
+                System.out.println(" The Product Seller:" + Entry.getValue().get("sellerUsername"));
                 System.out.println("*****************************");
             }
             if (setLoginStatus) {
                 String accountType = "";
-                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-                    accountType = entry.getValue().getAccountType();
+                for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().get("accountType");
                 }
                 if (accountType.equalsIgnoreCase("customer")) {
                     System.out.println("1. Enter the Product ID of the product you want to buy");
@@ -933,26 +930,26 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the Author's Name:");
         String productAuthor = scanner.nextLine().trim();
         try {
-            productInfo = alphaController.searchProductByAuthor(productAuthor);
+            productInfo = apiCall.callSearchProductByAuthor(productAuthor);
             if (productInfo.isEmpty()) {
                 throw new IllegalArgumentException("No Product found with the author " + productAuthor);
             } else {
-                for (Map.Entry<String, Product> Entry : productInfo.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> Entry : productInfo.entrySet()) {
                     System.out.println("*****************************");
                     System.out.println(" Product ID: " + Entry.getKey());
-                    System.out.println(" The Product:" + Entry.getValue().getName());
-                    System.out.println(" The Product Description:" + Entry.getValue().getDescription());
-                    System.out.println(" The Product Price:" + "£" + Entry.getValue().getPrice());
-                    System.out.println(" The Product Quantity:" + Entry.getValue().getQuantity());
-                    System.out.println(" The Product Category:" + Entry.getValue().getCategory());
-                    System.out.println(" The Product Seller:" + Entry.getValue().getSellerUsername());
+                    System.out.println(" The Product:" + Entry.getValue().get("productName"));
+                    System.out.println(" The Product Description:" + Entry.getValue().get("productDescription"));
+                    System.out.println(" The Product Price:" + "£" + Entry.getValue().get("productPrice"));
+                    System.out.println(" The Product Quantity:" + Entry.getValue().get("productQuantity"));
+                    System.out.println(" The Product Category:" + Entry.getValue().get("productCategory"));
+                    System.out.println(" The Product Seller:" + Entry.getValue().get("sellerUsername"));
                     System.out.println("*****************************");
                 }
                 System.out.println("Search has returned " + productInfo.size() + " results");
                 if (setLoginStatus) {
                     String accountType = "";
-                    for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-                        accountType = entry.getValue().getAccountType();
+                    for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+                        accountType = entry.getValue().get("accountType");
                     }
                     if (accountType.equalsIgnoreCase("customer")) {
                         System.out.println("1. Enter the Product ID of the product you want to buy");
@@ -1001,25 +998,25 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the Product Category:");
         String productCategory = scanner.nextLine().trim();
         try {
-            productInfo = alphaController.searchProductByCategory(productCategory);
+            productInfo = apiCall.callSearchProductByCategory(productCategory);
             if (productInfo.isEmpty()) {
                 throw new IllegalArgumentException("No Product found with the category " + productCategory);
             }
-            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+            for (Map.Entry<String, Map<String, String>> entry : productInfo.entrySet()) {
                 System.out.println("*****************************");
                 System.out.println(" Product ID: " + entry.getKey());
-                System.out.println(" The Product:" + entry.getValue().getName());
-                System.out.println(" Category: " + entry.getValue().getCategory());
-                System.out.println(" Price: " + "£" + entry.getValue().getPrice());
-                System.out.println(" Quantity: " + entry.getValue().getQuantity());
-                System.out.println(" Seller: " + entry.getValue().getSellerUsername());
+                System.out.println(" The Product:" + entry.getValue().get("productName"));
+                System.out.println(" Category: " + entry.getValue().get("productCategory"));
+                System.out.println(" Price: " + "£" + entry.getValue().get("productPrice"));
+                System.out.println(" Quantity: " + entry.getValue().get("productQuantity"));
+                System.out.println(" Seller: " + entry.getValue().get("sellerUsername"));
                 System.out.println("*****************************");
             }
             System.out.println("Search has returned " + productInfo.size() + " results\n");
             if (setLoginStatus) {
                 String accountType = "";
-                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-                    accountType = entry.getValue().getAccountType();
+                for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().get("accountType");
                 }
                 if (accountType.equalsIgnoreCase("customer")) {
                     System.out.println("1. Enter the Product ID of the product you want to buy");
@@ -1070,27 +1067,27 @@ public class CommandLine implements Serializable {
         String productName = scanner.nextLine().trim();
         String quantity = String.valueOf(0);
         try {
-            productInfo = alphaController.searchProductByName(productName);
+            productInfo = apiCall.callSearchProductByName(productName);
             if (productInfo.isEmpty()) {
                 throw new IllegalArgumentException("No Product found with the name " + productName);
             }
-            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+            for (Map.Entry<String, Map<String, String>> entry : productInfo.entrySet()) {
                 System.out.println("*****************************");
                 System.out.println(" Product ID: " + entry.getKey());
-                System.out.println(" The Product:" + entry.getValue().getName());
-                System.out.println(" Category: " + entry.getValue().getCategory());
-                System.out.println(" Price: " + "£" + entry.getValue().getPrice());
-                System.out.println(" Quantity: " + entry.getValue().getQuantity());
-                System.out.println(" Description: " + entry.getValue().getDescription());
-                System.out.println(" Author: " + entry.getValue().getAuthor());
-                System.out.println(" Seller: " + entry.getValue().getSellerUsername());
+                System.out.println(" The Product:" + entry.getValue().get("productName"));
+                System.out.println(" Category: " + entry.getValue().get("productCategory"));
+                System.out.println(" Price: " + "£" + entry.getValue().get("productPrice"));
+                System.out.println(" Quantity: " + entry.getValue().get("productQuantity"));
+                System.out.println(" Description: " + entry.getValue().get("productDescription"));
+                System.out.println(" Author: " + entry.getValue().get("author"));
+                System.out.println(" Seller: " + entry.getValue().get("sellerUsername"));
                 System.out.println("*****************************");
             }
             System.out.println("Search returned with " + productInfo.size() + " results");
             if (setLoginStatus) {
                 String accountType = "";
-                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-                    accountType = entry.getValue().getAccountType();
+                for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+                    accountType = entry.getValue().get("accountType");
                 }
                 if (accountType.equalsIgnoreCase("customer")) {
                     System.out.println("1. Enter the Product ID of the product you want to buy");
@@ -1164,8 +1161,8 @@ public class CommandLine implements Serializable {
         String userName = "";
         System.out.println("How much quantity do you want to add to cart?");
         quantity = scanner.nextLine().trim();
-        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-            userName = entry.getValue().getUsername();
+        for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+            userName = entry.getValue().get("username");
         }
         try {
             String productName = "";
@@ -1174,12 +1171,12 @@ public class CommandLine implements Serializable {
             int productQuantity = 0;
             String sellerName = "";
 
-            for (Map.Entry<String, Product> entry : productInfo.entrySet()) {
+            for (Map.Entry<String, Map<String, String>> entry : productInfo.entrySet()) {
                 if (entry.getKey().equalsIgnoreCase(productID)) {
-                    productName = entry.getValue().getName();
-                    productPrice = Float.parseFloat(entry.getValue().getPrice());
-                    sellerName = entry.getValue().getSellerUsername();
-                    productQuantity = Integer.parseInt(entry.getValue().getQuantity());
+                    productName = entry.getValue().get("productName");
+                    productPrice = Float.parseFloat(entry.getValue().get("productPrice"));
+                    sellerName = entry.getValue().get("sellerUsername");
+                    productQuantity = Integer.parseInt(entry.getValue().get("productQuantity"));
                 }
             }
             if (productQuantity < Integer.parseInt(quantity)) {
@@ -1188,7 +1185,7 @@ public class CommandLine implements Serializable {
             productTotal = productPrice * Integer.parseInt(quantity);
             cartID++;
 
-            alphaController.addToCart(cartID, productID, userName, productName, productPrice, Integer.parseInt(quantity), productTotal, sellerName);
+            apiCall.callAddToCart(cartID, productID, userName, productName, productPrice, Integer.parseInt(quantity), productTotal, sellerName);
             System.out.println("Product added to cart successfully");
             customerMenu();
         } catch (IllegalArgumentException e) {
@@ -1199,14 +1196,14 @@ public class CommandLine implements Serializable {
 
     private void viewMyCart() {
         String userName = "";
-        for (Map.Entry<String, User> entry : userInfo.entrySet()) {
-            userName = entry.getValue().getUsername();
+        for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
+            userName = entry.getValue().get("username");
         }
         System.out.println("*****************************");
         System.out.println("Viewing Your Cart");
         System.out.println("*****************************");
         try {
-            cartInfo = alphaController.viewCart(userName);
+            cartInfo = apiCall.callViewCart(userName);
             if (cartInfo.isEmpty()) {
                 throw new IllegalArgumentException("Your cart is empty");
             } else {
@@ -1215,18 +1212,18 @@ public class CommandLine implements Serializable {
                 System.out.println("*****************************");
                 System.out.println("Your Cart");
                 System.out.println("*****************************");
-                for (Map.Entry<Integer, Cart> entry : cartInfo.entrySet()) {
+                for (Map.Entry<Integer, Map<String, String>> entry : cartInfo.entrySet()) {
                     System.out.println("*****************************");
                     System.out.println(" Cart ID: " + entry.getKey());
-                    System.out.println(" Product ID: " + entry.getValue().getProductId());
-                    System.out.println(" Product Name: " + entry.getValue().getProductName());
-                    System.out.println(" Product Price: " + "£" + entry.getValue().getProductPrice());
-                    System.out.println(" Product Quantity: " + entry.getValue().getProductQuantity());
-                    System.out.println(" Product Total: " + "£" + entry.getValue().getProductTotal());
-                    System.out.println(" Seller Name: " + entry.getValue().getSellerName());
+                    System.out.println(" Product ID: " + entry.getValue().get("productId"));
+                    System.out.println(" Product Name: " + entry.getValue().get("productName"));
+                    System.out.println(" Product Price: " + "£" + entry.getValue().get("productPrice"));
+                    System.out.println(" Product Quantity: " + entry.getValue().get("productQuantity"));
+                    System.out.println(" Product Total: " + "£" + entry.getValue().get("productTotal"));
+                    System.out.println(" Seller Name: " + entry.getValue().get("sellerName"));
                     System.out.println("*****************************");
-                    totalQuantity += entry.getValue().getProductQuantity();
-                    totalCost += entry.getValue().getProductTotal();
+                    totalQuantity += Integer.valueOf(entry.getValue().get("productQuantity"));
+                    totalCost += Float.valueOf(entry.getValue().get("productTotal"));
                 }
                 System.out.println("Total number of items in your cart: " + totalQuantity);
                 System.out.println("Total cost of your cart: " + "£" + totalCost);
@@ -1247,10 +1244,10 @@ public class CommandLine implements Serializable {
         String username = scanner.nextLine().trim();
         System.out.println("Please enter your password: ");
         String password = scanner.nextLine().trim();
-        Map<String, User> adminMap;
+        Map<String, Map<String, String>> adminMap;
 
         try {
-            adminMap = alphaController.adminLogin(username, password);
+            adminMap = apiCall.callAdminLogin(username, password);
             adminInfo.putAll(adminMap);
             setLoginStatus = true;
             System.out.println("Login Successful");
@@ -1266,7 +1263,7 @@ public class CommandLine implements Serializable {
         System.out.println("*****************************");
         System.out.println("Admin Menu");
         System.out.println("*****************************");
-        for (String s : Arrays.asList("Welcome " + adminInfo.get("admin").getUsername(), "1. View All Users", "2. Add a new User", "3. Delete a User", "4. Update permission of User", "5. View my Account Details", "6. Delete my Account", "7. Logout", "*****************************", "Please enter your choice: ")) {
+        for (String s : Arrays.asList("Welcome " + adminInfo.get("admin").get("username"), "1. View All Users", "2. Add a new User", "3. Delete a User", "4. Update permission of User", "5. View my Account Details", "6. Delete my Account", "7. Logout", "*****************************", "Please enter your choice: ")) {
             System.out.println(s);
         }
         Scanner scanner = new Scanner(System.in);
@@ -1306,7 +1303,7 @@ public class CommandLine implements Serializable {
         String answer = scanner.nextLine().trim();
         if (answer.equalsIgnoreCase("Y")) {
             try {
-                alphaController.deleteSelfAccount(username, password);
+                apiCall.callDeleteSelfAccount(username, password);
                 System.out.println("Your account has been deleted");
                 adminInfo.clear();
                 setLoginStatus = false;
@@ -1334,12 +1331,12 @@ public class CommandLine implements Serializable {
             if (adminInfo.isEmpty()) {
                 throw new IllegalArgumentException("No admin is logged in");
             } else {
-                for (Map.Entry<String, User> entry : adminInfo.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> entry : adminInfo.entrySet()) {
                     System.out.println("Username:" + entry.getKey());
-                    System.out.println("First Name:" + entry.getValue().getFirstName());
-                    System.out.println("Last Name:" + entry.getValue().getLastName());
-                    System.out.println("Email:" + entry.getValue().getEmail());
-                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("First Name:" + entry.getValue().get("firstName"));
+                    System.out.println("Last Name:" + entry.getValue().get("lastName"));
+                    System.out.println("Email:" + entry.getValue().get("email"));
+                    System.out.println("Account Type:" + entry.getValue().get("accountType"));
                     System.out.println("*****************************");
                     adminMenu();
                 }
@@ -1366,14 +1363,14 @@ public class CommandLine implements Serializable {
             if (userInfo.isEmpty()) {
                 throw new IllegalArgumentException("No user is logged in");
             } else {
-                for (Map.Entry<String, User> entry : userInfo.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
                     System.out.println("Username:" + entry.getKey());
-                    System.out.println("First Name:" + entry.getValue().getFirstName());
-                    System.out.println("Last Name:" + entry.getValue().getLastName());
-                    System.out.println("Email:" + entry.getValue().getEmail());
-                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("First Name:" + entry.getValue().get("firstName"));
+                    System.out.println("Last Name:" + entry.getValue().get("lastName"));
+                    System.out.println("Email:" + entry.getValue().get("email"));
+                    System.out.println("Account Type:" + entry.getValue().get("accountType"));
                     System.out.println("*****************************");
-                    accountType = entry.getValue().getAccountType();
+                    accountType = entry.getValue().get("accountType");
                 }
                 if (accountType.equalsIgnoreCase("customer")) {
                     customerMenu();
@@ -1402,14 +1399,14 @@ public class CommandLine implements Serializable {
             if (sellerInfo.isEmpty()) {
                 throw new IllegalArgumentException("No user is logged in");
             } else {
-                for (Map.Entry<String, User> entry : sellerInfo.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
                     System.out.println("Username:" + entry.getKey());
-                    System.out.println("First Name:" + entry.getValue().getFirstName());
-                    System.out.println("Last Name:" + entry.getValue().getLastName());
-                    System.out.println("Email:" + entry.getValue().getEmail());
-                    System.out.println("Account Type:" + entry.getValue().getAccountType());
+                    System.out.println("First Name:" + entry.getValue().get("firstName"));
+                    System.out.println("Last Name:" + entry.getValue().get("lastName"));
+                    System.out.println("Email:" + entry.getValue().get("email"));
+                    System.out.println("Account Type:" + entry.getValue().get("accountType"));
                     System.out.println("*****************************");
-                    accountType = entry.getValue().getAccountType();
+                    accountType = entry.getValue().get("accountType");
                 }
                 if (accountType.equalsIgnoreCase("customer")) {
                     customerMenu();
@@ -1434,13 +1431,13 @@ public class CommandLine implements Serializable {
         System.out.println("Viewing All Users");
         System.out.println("*****************************");
         try {
-            Map<String, User> allUsers = alphaController.viewAllUsers();
-            for (Map.Entry<String, User> entry : allUsers.entrySet()) {
+            Map<String, Map<String, String>> allUsers = apiCall.callViewAllUsers();
+            for (Map.Entry<String, Map<String, String>> entry : allUsers.entrySet()) {
                 System.out.println("Username:" + entry.getKey());
-                System.out.println("First Name:" + entry.getValue().getFirstName());
-                System.out.println("Last Name:" + entry.getValue().getLastName());
-                System.out.println("Email:" + entry.getValue().getEmail());
-                System.out.println("Account Type:" + entry.getValue().getAccountType());
+                System.out.println("First Name:" + entry.getValue().get("firstName"));
+                System.out.println("Last Name:" + entry.getValue().get("lastName"));
+                System.out.println("Email:" + entry.getValue().get("email"));
+                System.out.println("Account Type:" + entry.getValue().get("accountType"));
                 System.out.println("*****************************");
             }
             System.out.println("All users are displayed above");
@@ -1473,17 +1470,17 @@ public class CommandLine implements Serializable {
         try {
             switch (accountType) {
                 case "1" -> {
-                    alphaController.addUser(firstName, lastName, username, email, password, "admin");
+                    apiCall.callAddUser(firstName, lastName, username, email, password, "admin");
                     System.out.println("Admin added successfully");
                     adminMenu();
                 }
                 case "2" -> {
-                    alphaController.addUser(firstName, lastName, username, email, password, "seller");
+                    apiCall.callAddUser(firstName, lastName, username, email, password, "seller");
                     System.out.println("Seller Account added successfully");
                     adminMenu();
                 }
                 case "3" -> {
-                    alphaController.addUser(firstName, lastName, username, email, password, "customer");
+                    apiCall.callAddUser(firstName, lastName, username, email, password, "customer");
                     System.out.println("Customer Account added successfully");
                     adminMenu();
                 }
@@ -1528,17 +1525,17 @@ public class CommandLine implements Serializable {
         try {
             switch (accountType) {
                 case "1" -> {
-                    alphaController.updateUserPermission(username, "admin");
+                    apiCall.callUpdateUserPermission(username, "admin");
                     System.out.println("User permission updated successfully");
                     adminMenu();
                 }
                 case "2" -> {
-                    alphaController.updateUserPermission(username, "seller");
+                    apiCall.callUpdateUserPermission(username, "seller");
                     System.out.println("User permission updated successfully");
                     adminMenu();
                 }
                 case "3" -> {
-                    alphaController.updateUserPermission(username, "customer");
+                    apiCall.callUpdateUserPermission(username, "customer");
                     System.out.println("User permission updated successfully");
                     adminMenu();
                 }
@@ -1551,19 +1548,19 @@ public class CommandLine implements Serializable {
     }
 
     private void viewRequests() {
-        Map<String, Request> allRequests;
+        Map<String, Map<String, String>> allRequests;
         System.out.println("*****************************");
         System.out.println("Viewing Requests");
         System.out.println("*****************************");
         try {
-            allRequests = alphaController.viewRequests();
+            allRequests = apiCall.callViewRequests();
             if (allRequests.isEmpty()) {
                 System.out.println("There are no requests at the moment.");
                 adminMenu();
             } else {
-                for (Map.Entry<String, Request> entry : allRequests.entrySet()) {
+                for (Map.Entry<String, Map<String, String>> entry : allRequests.entrySet()) {
                     System.out.println("Username:" + entry.getKey());
-                    System.out.println("Request Type:" + entry.getValue().getRequestType());
+                    System.out.println("Request Type:" + entry.getValue().get("requestType"));
                     System.out.println("*****************************");
                 }
                 System.out.println("All users are displayed above");
@@ -1585,7 +1582,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the username of the user you want to delete: ");
         String username = scanner.nextLine().trim();
         try {
-            alphaController.deleteUserViaAdmin(username);
+            apiCall.callDeleteUserViaAdmin(username);
             System.out.println("User deleted successfully");
             adminMenu();
         } catch (IllegalArgumentException e) {
