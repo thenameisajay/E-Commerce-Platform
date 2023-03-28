@@ -105,7 +105,7 @@ public class OrderServiceAPITest {
         assertEquals(responseUpdate.getStatusCode(), HttpStatus.OK);
         ResponseEntity<Map> responseProduct = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = responseProduct.getBody();
-        assertEquals(products.get("1").get("quantity"), "149");
+        assertEquals(products.get("1").get("productQuantity"), "149");
 
     }
 

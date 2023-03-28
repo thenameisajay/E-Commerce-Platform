@@ -184,7 +184,7 @@ public class AlphaAPI {
     public void addToCart(@RequestBody Map<String, String> cart) {
         int cartID = Integer.valueOf(cart.get("cartID"));
         String productID = cart.get("productID");
-        String userName = cart.get("userName");
+        String userName = cart.get("customerName");
         String productName = cart.get("productName");
         float productPrice = Float.parseFloat(cart.get("productPrice"));
         int productQuantity = Integer.parseInt(cart.get("productQuantity"));
@@ -203,7 +203,7 @@ public class AlphaAPI {
     public void addOrder(@RequestBody Map<String, String> order) {
         int orderID = Integer.valueOf(order.get("orderID"));
         String productID = order.get("productID");
-        String userName = order.get("userName");
+        String userName = order.get("customerName");
         String productName = order.get("productName");
         float productPrice = Float.parseFloat(order.get("productPrice"));
         int productQuantity = Integer.parseInt(order.get("productQuantity"));

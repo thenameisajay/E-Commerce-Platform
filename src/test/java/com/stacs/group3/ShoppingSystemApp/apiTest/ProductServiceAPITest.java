@@ -181,7 +181,7 @@ public class ProductServiceAPITest {
 
         ResponseEntity<Map> response1 = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = response1.getBody();
-        assertEquals(products.get("1").get("name"), "Educated");
+        assertEquals(products.get("1").get("productName"), "Educated");
     }
 
     @Test
@@ -192,7 +192,7 @@ public class ProductServiceAPITest {
 
         ResponseEntity<Map> response1 = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = response1.getBody();
-        assertEquals(products.get("1").get("description"), "Amazing version");
+        assertEquals(products.get("1").get("productDescription"), "Amazing version");
     }
 
     @Test
@@ -203,7 +203,7 @@ public class ProductServiceAPITest {
 
         ResponseEntity<Map> response1 = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = response1.getBody();
-        assertEquals(products.get("1").get("price"), "12.99");
+        assertEquals(products.get("1").get("productPrice"), "12.99");
     }
 
     @Test
@@ -214,7 +214,7 @@ public class ProductServiceAPITest {
 
         ResponseEntity<Map> response1 = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = response1.getBody();
-        assertEquals(products.get("1").get("quantity"), "500");
+        assertEquals(products.get("1").get("productQuantity"), "500");
     }
 
     @Test
@@ -225,7 +225,7 @@ public class ProductServiceAPITest {
 
         ResponseEntity<Map> response1 = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
         Map<String, Map<String, String>> products = response1.getBody();
-        assertEquals(products.get("1").get("category"), "novel");
+        assertEquals(products.get("1").get("productCategory"), "novel");
     }
 
     @Test
