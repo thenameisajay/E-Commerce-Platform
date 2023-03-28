@@ -1,5 +1,7 @@
 package com.stacs.group3.ShoppingSystemApp.view;
 
+import org.springframework.web.reactive.function.client.WebClientException;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -114,7 +116,7 @@ public class CommandLine implements Serializable {
                         apiCall.callAddUser(firstName, lastName, username, email, password, "Seller");
                         System.out.println("Registration Successful");
                         start();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         start();
                     }
@@ -126,7 +128,7 @@ public class CommandLine implements Serializable {
                         apiCall.callAddUser(firstName, lastName, username, email, password, "Customer");
                         System.out.println("Registration Successful");
                         start();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         start();
                     }
@@ -174,7 +176,7 @@ public class CommandLine implements Serializable {
                 System.out.println("Please register as a user first");
                 start();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             start();
         }
@@ -301,7 +303,7 @@ public class CommandLine implements Serializable {
                     throw new IllegalArgumentException("Invalid input, please try again");
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             cartMenu();
         }
@@ -339,7 +341,7 @@ public class CommandLine implements Serializable {
                 apiCall.callAddOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
                 apiCall.callUpdateProductAfterOrder(productID, productQuantity);
                 apiCall.callDeleteItemFromCart(String.valueOf(cartID));
-            } catch (IllegalArgumentException e) {
+            } catch (WebClientException e) {
                 System.out.println(e.getMessage() + "\n");
                 cartMenu();
             }
@@ -363,7 +365,7 @@ public class CommandLine implements Serializable {
             apiCall.callDeleteItemFromCart(cartID);
             System.out.println("Item deleted from cart");
             cartMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             cartMenu();
         }
@@ -394,7 +396,7 @@ public class CommandLine implements Serializable {
                 System.out.println("*****************************");
             }
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -422,7 +424,7 @@ public class CommandLine implements Serializable {
                         apiCall.callStoreRequest(customerUsername, "seller");
                         System.out.println("Request submitted successfully.");
                         customerMenu();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         customerMenu();
                     }
@@ -432,7 +434,7 @@ public class CommandLine implements Serializable {
                         apiCall.callStoreRequest(customerUsername, "admin");
                         System.out.println("Request submitted successfully.");
                         customerMenu();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         customerMenu();
                     }
@@ -467,7 +469,7 @@ public class CommandLine implements Serializable {
                         apiCall.callStoreRequest(sellerUsername, "customer");
                         System.out.println("Request submitted successfully.");
                         sellerMenu();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         sellerMenu();
                     }
@@ -477,7 +479,7 @@ public class CommandLine implements Serializable {
                         apiCall.callStoreRequest(sellerUsername, "admin");
                         System.out.println("Request submitted successfully.");
                         sellerMenu();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         sellerMenu();
                     }
@@ -560,7 +562,7 @@ public class CommandLine implements Serializable {
                 orders.clear();
                 customerMenu();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             customerMenu();
         }
@@ -594,7 +596,7 @@ public class CommandLine implements Serializable {
                 System.out.println("Search has returned " + sellerProducts.size() + " results.");
                 sellerMenu();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -622,7 +624,7 @@ public class CommandLine implements Serializable {
                         apiCall.callDeleteProduct(productID, sellerUsername);
                         System.out.println("Product deleted successfully.");
                         sellerMenu();
-                    } catch (IllegalArgumentException e) {
+                    } catch (WebClientException e) {
                         System.out.println(e.getMessage() + "\n");
                         sellerMenu();
                     }
@@ -677,7 +679,7 @@ public class CommandLine implements Serializable {
                 }
 
             }
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -694,7 +696,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductAuthor(productID, productAuthor);
             System.out.println("Product Author updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -710,7 +712,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductCategory(productID, productCategory);
             System.out.println("Product Category updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -726,7 +728,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductQuantity(productID, productQuantity);
             System.out.println("Product Quantity updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -742,7 +744,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductPrice(productID, productPrice);
             System.out.println("Product Price updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -758,7 +760,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductDescription(productID, productDescription);
             System.out.println("Product Description updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -774,7 +776,7 @@ public class CommandLine implements Serializable {
             apiCall.callUpdateProductName(productID, productName);
             System.out.println("Product Name updated successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -806,7 +808,7 @@ public class CommandLine implements Serializable {
             apiCall.callAddProduct(productID, productName, productDescription, author, productPrice, productQuantity, productCategory, sellerUsername);
             System.out.println("Product added successfully.");
             sellerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             sellerMenu();
         }
@@ -915,7 +917,7 @@ public class CommandLine implements Serializable {
             } else {
                 start();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             if (setLoginStatus) customerMenu();
             else start();
@@ -984,7 +986,7 @@ public class CommandLine implements Serializable {
                     start();
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             if (setLoginStatus) customerMenu();
             else start();
@@ -1052,7 +1054,7 @@ public class CommandLine implements Serializable {
             } else {
                 start();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             if (setLoginStatus) customerMenu();
             else start();
@@ -1124,7 +1126,7 @@ public class CommandLine implements Serializable {
             } else {
                 start();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             if (setLoginStatus) {
                 customerMenu();
@@ -1188,7 +1190,7 @@ public class CommandLine implements Serializable {
             apiCall.callAddToCart(cartID, productID, userName, productName, productPrice, Integer.parseInt(quantity), productTotal, sellerName);
             System.out.println("Product added to cart successfully");
             customerMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             customerMenu();
         }
@@ -1230,7 +1232,7 @@ public class CommandLine implements Serializable {
                 System.out.println("*****************************");
                 cartMenu();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             customerMenu();
         }
@@ -1253,7 +1255,7 @@ public class CommandLine implements Serializable {
             System.out.println("Login Successful");
             adminMap.clear();
             adminMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage() + "\n");
             start();
         }
@@ -1308,7 +1310,7 @@ public class CommandLine implements Serializable {
                 adminInfo.clear();
                 setLoginStatus = false;
                 start();
-            } catch (IllegalArgumentException e) {
+            } catch (WebClientException e) {
                 System.out.println(e.getMessage());
                 adminMenu();
             }
@@ -1341,7 +1343,7 @@ public class CommandLine implements Serializable {
                     adminMenu();
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
@@ -1378,7 +1380,7 @@ public class CommandLine implements Serializable {
                     sellerMenu();
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             if (accountType.equalsIgnoreCase("customer")) {
                 customerMenu();
@@ -1414,7 +1416,7 @@ public class CommandLine implements Serializable {
                     sellerMenu();
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             if (accountType.equalsIgnoreCase("customer")) {
                 customerMenu();
@@ -1442,7 +1444,7 @@ public class CommandLine implements Serializable {
             }
             System.out.println("All users are displayed above");
             adminMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
@@ -1486,7 +1488,7 @@ public class CommandLine implements Serializable {
                 }
                 default -> throw new IllegalArgumentException("Invalid input, please try again");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
@@ -1505,7 +1507,7 @@ public class CommandLine implements Serializable {
                 case "2" -> updatePermission();
                 default -> throw new IllegalArgumentException("Invalid input, please try again");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
@@ -1541,7 +1543,7 @@ public class CommandLine implements Serializable {
                 }
                 default -> throw new IllegalArgumentException("Invalid input, please try again");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
@@ -1567,7 +1569,7 @@ public class CommandLine implements Serializable {
                 allRequests.clear();
                 adminMenu();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
 
@@ -1585,7 +1587,7 @@ public class CommandLine implements Serializable {
             apiCall.callDeleteUserViaAdmin(username);
             System.out.println("User deleted successfully");
             adminMenu();
-        } catch (IllegalArgumentException e) {
+        } catch (WebClientException e) {
             System.out.println(e.getMessage());
             adminMenu();
         }
