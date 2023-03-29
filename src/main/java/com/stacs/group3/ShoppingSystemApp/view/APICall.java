@@ -78,9 +78,9 @@ public class APICall {
                 .block();
     }
 
-    public void callUpdateUserPermission(String username, String customer) {
+    public void callUpdateUserPermission(String username, String requestType) {
         webClient.post()
-                .uri("/requestService/updatePermission/" + username + "/" + customer)
+                .uri("/requestService/updatePermission/" + username + "/" + requestType)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();

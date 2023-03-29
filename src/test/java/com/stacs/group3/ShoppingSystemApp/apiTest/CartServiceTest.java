@@ -31,7 +31,7 @@ public class CartServiceTest {
         Map<String, String> cart1 = new HashMap<>();
         cart1.put("cartID", "100");
         cart1.put("productID", "1");
-        cart1.put("userName", "jj789");
+        cart1.put("customerName", "jj789");
         cart1.put("productName", "Harry Potter: Chamber of Secrets");
         cart1.put("productPrice", "11.99");
         cart1.put("productQuantity", "1");
@@ -43,7 +43,7 @@ public class CartServiceTest {
         Map<String, String> cart2 = new HashMap<>();
         cart2.put("cartID", "101");
         cart2.put("productID", "2");
-        cart2.put("userName", "jj789");
+        cart2.put("customerName", "jj789");
         cart2.put("productName", "A Man Called Ove");
         cart2.put("productPrice", "6.99");
         cart2.put("productQuantity", "2");
@@ -83,7 +83,7 @@ public class CartServiceTest {
         Map<String, String> cart = new HashMap<>();
         cart.put("cartID", "102");
         cart.put("productID", "3");
-        cart.put("userName", "js123");
+        cart.put("customerName", "js123");
         cart.put("productName", "Educated");
         cart.put("productPrice", "9.99");
         cart.put("productQuantity", "10");

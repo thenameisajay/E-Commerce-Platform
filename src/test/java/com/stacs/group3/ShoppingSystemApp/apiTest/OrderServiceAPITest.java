@@ -61,7 +61,7 @@ public class OrderServiceAPITest {
         Map<String, String> order1 = new HashMap<>();
         order1.put("orderID", "100");
         order1.put("productID", "1");
-        order1.put("userName", "jj789");
+        order1.put("customerName", "jj789");
         order1.put("productName", "Harry Potter: Chamber of Secrets");
         order1.put("productPrice", "11.99");
         order1.put("productQuantity", "1");
@@ -74,7 +74,7 @@ public class OrderServiceAPITest {
         Map<String, String> order2 = new HashMap<>();
         order2.put("orderID", "101");
         order2.put("productID", "2");
-        order2.put("userName", "jj789");
+        order2.put("customerName", "jj789");
         order2.put("productName", "A Man Called Ove");
         order2.put("productPrice", "6.99");
         order2.put("productQuantity", "2");

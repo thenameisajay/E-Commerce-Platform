@@ -63,8 +63,8 @@ public class AlphaController implements Serializable {
         userService.deleteSelfAccount(username, password);
     }
 
-    public void updateUserPermission(String username, String customer) {
-        userService.updateUserPermission(username, customer);
+    public void updateUserPermission(String username, String requestType) {
+        userService.updateUserPermission(username, requestType);
     }
 
     public void storeRequest(String username, String requestType) {
@@ -135,13 +135,13 @@ public class AlphaController implements Serializable {
     }
 
 
-    public Map<Integer, Cart> viewCart(String userName) {
-        return cartService.viewCart(userName);
+    public Map<Integer, Cart> viewCart(String customerName) {
+        return cartService.viewCart(customerName);
     }
 
 
-    public void addToCart(int cartID, String productID, String userName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
-        cartService.addToCart(cartID, productID, userName, productName, productPrice, productQuantity, productTotal, sellerName);
+    public void addToCart(int cartID, String productID, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
+        cartService.addToCart(cartID, productID, customerName, productName, productPrice, productQuantity, productTotal, sellerName);
     }
 
     public void deleteItemFromCart(String cartID) {
@@ -149,12 +149,12 @@ public class AlphaController implements Serializable {
     }
 
 
-    public void addOrder(int orderID, String productID, String productName, float productPrice, int productQuantity, float productTotal, String sellerName, String userName) {
-        orderService.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
+    public void addOrder(int orderID, String productID, String productName, float productPrice, int productQuantity, float productTotal, String sellerName, String customerName) {
+        orderService.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, customerName);
     }
 
-    public Map<Integer, Order> getOrderByCustomer(String username) {
-        return orderService.getOrderByCustomer(username);
+    public Map<Integer, Order> getOrderByCustomer(String customerName) {
+        return orderService.getOrderByCustomer(customerName);
     }
 
 

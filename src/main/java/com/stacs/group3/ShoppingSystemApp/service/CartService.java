@@ -49,12 +49,12 @@ public class CartService implements Serializable {
     }
 
 
-    public void addToCart(int cartID, String productID, String userName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
+    public void addToCart(int cartID, String productID, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
         // If product ID already exists in cart, throw argument to delete the old one and add the new one
         for (Map.Entry<Integer, Cart> entry : cart.entrySet()) {
             String storedProductID = entry.getValue().getProductId();
             String storedUserName = entry.getValue().getCustomerName();
-            if (storedProductID.equalsIgnoreCase(productID) && storedUserName.equalsIgnoreCase(userName)) {
+            if (storedProductID.equalsIgnoreCase(productID) && storedUserName.equalsIgnoreCase(customerName)) {
                 throw new IllegalArgumentException("Product already exists in cart. Please delete the old entry and add the new changes.");
             }
         }
@@ -64,7 +64,7 @@ public class CartService implements Serializable {
             if (productQuantity <= 0) {
                 throw new IllegalArgumentException("Product quantity cannot be less than or equal to 0.");
             } else {
-                cart.put(cartID, new Cart(cartID, productID, userName, productName, productPrice, productQuantity, productTotal, sellerName));
+                cart.put(cartID, new Cart(cartID, productID, customerName, productName, productPrice, productQuantity, productTotal, sellerName));
             }
         }
     }
@@ -86,14 +86,14 @@ public class CartService implements Serializable {
         }
     }
 
-    public void clearCart(String userName) {
+    public void clearCart(String customerName) {
         // First check if cartID is not empty
-        if (userName.isEmpty() | userName == null) {
+        if (customerName.isEmpty() | customerName == null) {
             throw new IllegalArgumentException("User name cannot be empty.");
         }
         for (Map.Entry<Integer, Cart> entry : cart.entrySet()) {
             String storedUserName = entry.getValue().getCustomerName();
-            if (storedUserName.equalsIgnoreCase(userName)) {
+            if (storedUserName.equalsIgnoreCase(customerName)) {
                 cart.remove(entry.getKey());
             }
         }
