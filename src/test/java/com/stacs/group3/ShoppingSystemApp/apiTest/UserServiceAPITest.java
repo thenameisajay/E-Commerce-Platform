@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserServiceAPITest {
-    @Value(value="http://localhost:${local.server.port}/userService")
+    @Value(value = "http://localhost:${local.server.port}/userService")
     private String userServiceURI;
 
     @Autowired
@@ -66,13 +66,13 @@ public class UserServiceAPITest {
 
         Iterator<String> iterator = users.keySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             restTemplate.postForEntity(userServiceURI + "/deleteViaAdmin/" + iterator.next(), null, Void.class);
         }
     }
 
     @Test
-    public void testAddUser(){
+    public void testAddUser() {
         Map<String, String> user1 = new HashMap<>();
         user1.put("firstName", "John");
         user1.put("lastName", "Doe");

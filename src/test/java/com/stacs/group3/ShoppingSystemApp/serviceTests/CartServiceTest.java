@@ -50,7 +50,7 @@ public class CartServiceTest {
     /**
      * Tests the addToCart method of CartService class.
      * Ensures that the addToCart method throws an exception if the product already exists in the cart
-     *      or if the productID is null of if the product quantity is 0
+     * or if the productID is null of if the product quantity is 0
      * Ensures that the addToCart method adds the product to the cart successfully if it does not already exist.
      */
     @Test
@@ -83,7 +83,7 @@ public class CartServiceTest {
     /**
      * Tests the deleteItemFromCart method of the CartService class.
      * Ensures that the deleteItemFromCart method throws an exception if the cart ID is empty
-     *      or if the product does not exist in the cart.
+     * or if the product does not exist in the cart.
      * Ensures that the deleteItemFromCart method removes the product from the cart successfully if it exists.
      */
     @Test

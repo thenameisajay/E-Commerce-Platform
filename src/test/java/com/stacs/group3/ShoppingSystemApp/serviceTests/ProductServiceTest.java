@@ -36,13 +36,13 @@ public class ProductServiceTest {
     /**
      * Tests the addProduct method of ProductService class.
      * Ensures that the addProduct method throw an exception if productID is empty
-     *      or if product name is empty
-     *      or if product description is empty
-     *      or if author is empty or author name is invalid
-     *      or if product price is empty
-     *      or if quantity is empty or 0
-     *      or if category is empty
-     *      or if seller name is empty
+     * or if product name is empty
+     * or if product description is empty
+     * or if author is empty or author name is invalid
+     * or if product price is empty
+     * or if quantity is empty or 0
+     * or if category is empty
+     * or if seller name is empty
      * Ensures that the addProduct method adds the product successfully if the input is valid
      */
     @Test
@@ -210,7 +210,7 @@ public class ProductServiceTest {
     /**
      * Tests the searchProductByName method of ProductService class.
      * Ensures that the searchProductByName method throw an exception if the product name is empty
-     *      or if no product is available in the system
+     * or if no product is available in the system
      * Ensures that the searchProductByName method return the correct number of given product name
      */
     @Test
@@ -230,8 +230,8 @@ public class ProductServiceTest {
     /**
      * Tests the searchProductByCategory method of ProductService class.
      * Ensures that the searchProductByCategory method throw an exception if the product category is empty
-     *      or if the product category is invalid
-     *      or if no product is available in the system
+     * or if the product category is invalid
+     * or if no product is available in the system
      * Ensures that the searchProductByCategory method return the correct number of given product name
      */
     @Test
@@ -255,8 +255,8 @@ public class ProductServiceTest {
     /**
      * Tests the searchProductByAuthor method of ProductService class.
      * Ensures that the searchProductByCategory method throw an exception if the product category is empty
-     *      or if the product category is invalid
-     *      or if no product is available in the system
+     * or if the product category is invalid
+     * or if no product is available in the system
      * Ensures that the searchProductByCategory method return the correct number of given product name
      */
     @Test

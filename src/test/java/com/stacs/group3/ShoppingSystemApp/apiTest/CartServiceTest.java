@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CartServiceTest {
-    @Value(value="http://localhost:${local.server.port}/cartService")
+    @Value(value = "http://localhost:${local.server.port}/cartService")
     private String cartServiceURI;
 
     @Autowired
@@ -61,7 +61,7 @@ public class CartServiceTest {
 
         Iterator<String> iterator = carts.keySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             restTemplate.postForEntity(cartServiceURI + "/delete/" + iterator.next(), null, Void.class);
         }
     }
