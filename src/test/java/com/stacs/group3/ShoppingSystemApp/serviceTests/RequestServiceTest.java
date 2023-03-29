@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class
 RequestServiceTest {
-    RequestService requestService = new RequestService();
+    private RequestService requestService = new RequestService();
 
     @BeforeEach
     public void setup() {

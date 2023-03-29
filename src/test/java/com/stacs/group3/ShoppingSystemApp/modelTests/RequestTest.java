@@ -6,11 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The unit test for the Request class.
+ */
 public class RequestTest {
-    Request request1;
-    Request request2;
-    Request request3;
+    private Request request1;
+    private Request request2;
+    private Request request3;
 
+    /**
+     * Initialise the requests before each test.
+     */
     @BeforeEach
     public void setup() {
         request1 = new Request("js123", "customer");
@@ -18,6 +24,10 @@ public class RequestTest {
         request3 = new Request("jj789", "seller");
     }
 
+    /**
+     * Test for the Get method.
+     * Verifies that the data returned by the get method is the same as the data that was inserted
+     */
     @Test
     public void testGet() {
         assertEquals(request1.getUsername(), "js123");
@@ -29,6 +39,10 @@ public class RequestTest {
         assertEquals(request3.getRequestType(), "seller");
     }
 
+    /**
+     * Test for the Set method.
+     * Verifies that the data in the object is changed to the expected values after calling the set method
+     */
     @Test
     public void testSet() {
         request1.setUsername("mj456");

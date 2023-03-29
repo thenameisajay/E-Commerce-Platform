@@ -6,12 +6,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The unit test for the Cart class.
+ */
 public class CartTest {
-    Cart cart1;
-    Cart cart2;
-    Cart cart3;
-    Cart cart4;
+    private Cart cart1;
+    private Cart cart2;
+    private Cart cart3;
+    private Cart cart4;
 
+    /**
+     * Initialise the carts before each test case.
+     */
     @BeforeEach
     public void setup() {
         cart1 = new Cart(1, "1", "js123",
@@ -31,6 +37,10 @@ public class CartTest {
                 10, 129.9f, "mj456");
     }
 
+    /**
+     * Test for the Get method.
+     * Verifies that the data returned by the get method is the same as the data that was inserted
+     */
     @Test
     public void testGet() {
         assertEquals(cart1.getCartId(), 1);
@@ -70,6 +80,10 @@ public class CartTest {
         assertEquals(cart4.getSellerName(), "mj456");
     }
 
+    /**
+     * Test for the Set method.
+     * Verifies that the data in the object is changed to the expected values after calling the set method
+     */
     @Test
     public void testSet() {
         cart4.setCartId(2);

@@ -6,13 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the ProductService class.
+ */
 public class ProductServiceTest {
-    ProductService productService = new ProductService();
+    private ProductService productService = new ProductService();
 
+    /**
+     * Initialise the productService before each test.
+     */
     @BeforeEach
     public void setup() {
-
-
         productService.addProduct("1", "Harry Potter: Philosopher's Stone",
                 "The first novel in the Harry Potter series and Rowling's debut novel, " +
                         "it follows Harry Potter, a young wizard who discovers his magical heritage on his eleventh birthday, " +
@@ -29,6 +33,18 @@ public class ProductServiceTest {
                 "Fredrik Backman", "6.99", "200", "Novel", "mj456");
     }
 
+    /**
+     * Tests the addProduct method of ProductService class.
+     * Ensures that the addProduct method throw an exception if productID is empty
+     *      or if product name is empty
+     *      or if product description is empty
+     *      or if author is empty or author name is invalid
+     *      or if product price is empty
+     *      or if quantity is empty or 0
+     *      or if category is empty
+     *      or if seller name is empty
+     * Ensures that the addProduct method adds the product successfully if the input is valid
+     */
     @Test
     public void testAddProduct() {
         assertThrows(IllegalArgumentException.class,
@@ -191,6 +207,12 @@ public class ProductServiceTest {
         assertEquals(productService.viewAllProducts().size(), 3);
     }
 
+    /**
+     * Tests the searchProductByName method of ProductService class.
+     * Ensures that the searchProductByName method throw an exception if the product name is empty
+     *      or if no product is available in the system
+     * Ensures that the searchProductByName method return the correct number of given product name
+     */
     @Test
     public void testSearchProductByName() {
         assertThrows(IllegalArgumentException.class,
@@ -205,6 +227,13 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the searchProductByCategory method of ProductService class.
+     * Ensures that the searchProductByCategory method throw an exception if the product category is empty
+     *      or if the product category is invalid
+     *      or if no product is available in the system
+     * Ensures that the searchProductByCategory method return the correct number of given product name
+     */
     @Test
     public void testSearchProductByCategory() {
         assertThrows(IllegalArgumentException.class,
@@ -213,7 +242,7 @@ public class ProductServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> productService.searchProductByCategory("123"),
-                "Product Category cannot be empty");
+                "Product Category cannot contain numbers");
 
         assertEquals(productService.searchProductByCategory("Fantasy").size(), 1);
 
@@ -223,6 +252,13 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the searchProductByAuthor method of ProductService class.
+     * Ensures that the searchProductByCategory method throw an exception if the product category is empty
+     *      or if the product category is invalid
+     *      or if no product is available in the system
+     * Ensures that the searchProductByCategory method return the correct number of given product name
+     */
     @Test
     public void testSearchProductByAuthor() {
         assertThrows(IllegalArgumentException.class,

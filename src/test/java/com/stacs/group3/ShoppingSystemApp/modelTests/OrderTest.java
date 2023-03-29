@@ -6,11 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The unit test for the Order class.
+ */
 public class OrderTest {
-    Order order1;
-    Order order2;
-    Order order3;
+    private Order order1;
+    private Order order2;
+    private Order order3;
 
+    /**
+     * Initialise the orders before each test.
+     */
     @BeforeEach
     public void setup() {
         order1 = new Order(1, "1", "Harry Potter: Philosopher's Stone",
@@ -21,6 +27,10 @@ public class OrderTest {
                 9.99f, 10, 99.9f, "jj789", "js123");
     }
 
+    /**
+     * Test for the Get method.
+     * Verifies that the data returned by the get method is the same as the data that was inserted
+     */
     @Test
     public void testGet() {
         assertEquals(order1.getOrderID(), 1);
@@ -51,6 +61,10 @@ public class OrderTest {
         assertEquals(order3.getCustomerName(), "js123");
     }
 
+    /**
+     * Test for the Set method.
+     * Verifies that the data in the object is changed to the expected values after calling the set method
+     */
     @Test
     public void testSet() {
         order1.setOrderID(3);

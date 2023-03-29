@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest {
-    UserService userService = new UserService();
+    private UserService userService = new UserService();
 
     @BeforeEach
     public void setup() {

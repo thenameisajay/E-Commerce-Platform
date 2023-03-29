@@ -6,11 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The unit test for the Product class.
+ */
 public class ProductTest {
-    Product product1;
-    Product product2;
-    Product product3;
+    private Product product1;
+    private Product product2;
+    private Product product3;
 
+    /**
+     * Initialise the products before each test.
+     */
     @BeforeEach
     public void setup() {
         product1 = new Product("1", "Harry Potter: Philosopher's Stone",
@@ -29,6 +35,10 @@ public class ProductTest {
                 "Tara Westover", "9.99", "50", "Nonfiction", "jj789");
     }
 
+    /**
+     * Test for the Get method.
+     * Verifies that the data returned by the get method is the same as the data that was inserted
+     */
     @Test
     public void testGet() {
         assertEquals(product1.getProductID(), "1");
@@ -64,6 +74,10 @@ public class ProductTest {
         assertEquals(product3.getSellerUsername(), "jj789");
     }
 
+    /**
+     * Test for the Set method.
+     * Verifies that the data in the object is changed to the expected values after calling the set method
+     */
     @Test
     public void testSet() {
         product1.setProductID("4");
