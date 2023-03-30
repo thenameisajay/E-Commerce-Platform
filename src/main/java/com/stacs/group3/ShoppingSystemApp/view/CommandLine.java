@@ -5,6 +5,9 @@ import org.springframework.web.reactive.function.client.WebClientException;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * This is the terminal view
+ */
 public class CommandLine implements Serializable {
 
     APICall apiCall;
@@ -75,7 +78,9 @@ public class CommandLine implements Serializable {
                             System.out.println("**** Exiting the program ****");
                             System.out.println("Thank you for using Alpha System, Goodbye!");
                             System.out.println("*****************************");
+                            clearCache();
                             System.exit(0);
+
                         }
                         default -> System.out.println("Invalid input, please try again");
                     }
@@ -88,6 +93,14 @@ public class CommandLine implements Serializable {
             System.out.println("Empty input, Exiting the program.");
             System.exit(0);
         }
+    }
+
+    private void clearCache() {
+        adminInfo.clear();
+        sellerInfo.clear();
+        userInfo.clear();
+        productInfo.clear();
+        cartInfo.clear();
     }
 
     private void registerUser() {

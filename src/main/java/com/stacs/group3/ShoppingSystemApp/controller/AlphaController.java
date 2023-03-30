@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * This is the controller class for the Alpha application.
+ */
 public class AlphaController implements Serializable {
     UserService userService = new UserService();
     RequestService requestService = new RequestService();
