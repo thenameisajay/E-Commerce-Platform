@@ -87,7 +87,7 @@ public class CartService implements Serializable {
     public void addToCart(int cartID, String productID, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
         // If product ID already exists in cart, throw argument to delete the old one and add the new one
         for (Map.Entry<Integer, Cart> entry : cart.entrySet()) {
-            String storedProductID = entry.getValue().getProductId();
+            String storedProductID = entry.getValue().getProductID();
             String storedUserName = entry.getValue().getCustomerName();
             if (storedProductID.equalsIgnoreCase(productID) && storedUserName.equalsIgnoreCase(customerName)) {
                 throw new IllegalArgumentException("Product already exists in cart. Please delete the old entry and add the new changes.");

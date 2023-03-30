@@ -44,7 +44,7 @@ public class CartTest {
     @Test
     public void testGet() {
         assertEquals(cart1.getCartID(), 1);
-        assertEquals(cart1.getProductId(), "1");
+        assertEquals(cart1.getProductID(), "1");
         assertEquals(cart1.getCustomerName(), "js123");
         assertEquals(cart1.getProductName(), "Harry Potter: Philosopher's Stone");
         assertEquals(cart1.getProductPrice(), 12.99f);
@@ -53,7 +53,7 @@ public class CartTest {
         assertEquals(cart1.getSellerName(), "mj456");
 
         assertEquals(cart2.getCartID(), 2);
-        assertEquals(cart2.getProductId(), "2");
+        assertEquals(cart2.getProductID(), "2");
         assertEquals(cart2.getCustomerName(), "js123");
         assertEquals(cart2.getProductName(), "A Man Called Ove");
         assertEquals(cart2.getProductPrice(), 6.99f);
@@ -62,7 +62,7 @@ public class CartTest {
         assertEquals(cart2.getSellerName(), "mj456");
 
         assertEquals(cart3.getCartID(), 3);
-        assertEquals(cart3.getProductId(), "3");
+        assertEquals(cart3.getProductID(), "3");
         assertEquals(cart3.getCustomerName(), "js123");
         assertEquals(cart3.getProductName(), "Educated");
         assertEquals(cart3.getProductPrice(), 9.99f);
@@ -71,7 +71,7 @@ public class CartTest {
         assertEquals(cart3.getSellerName(), "jj789");
 
         assertEquals(cart4.getCartID(), 1);
-        assertEquals(cart4.getProductId(), "1");
+        assertEquals(cart4.getProductID(), "1");
         assertEquals(cart4.getCustomerName(), "jh111");
         assertEquals(cart4.getProductName(), "Harry Potter: Philosopher's Stone");
         assertEquals(cart4.getProductPrice(), 12.99f);
@@ -87,7 +87,7 @@ public class CartTest {
     @Test
     public void testSet() {
         cart4.setCartID(2);
-        cart4.setProductId("2");
+        cart4.setProductID("2");
         cart4.setCustomerName("js123");
         cart4.setProductName("A Man Called Ove");
         cart4.setProductPrice(6.99f);
@@ -96,7 +96,7 @@ public class CartTest {
         cart4.setSellerName("jj789");
 
         assertEquals(cart4.getCartID(), 2);
-        assertEquals(cart4.getProductId(), "2");
+        assertEquals(cart4.getProductID(), "2");
         assertEquals(cart4.getCustomerName(), "js123");
         assertEquals(cart4.getProductName(), "A Man Called Ove");
         assertEquals(cart4.getProductPrice(), 6.99f);

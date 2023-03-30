@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Cart implements Serializable {
 
     private int cartID;
-    private String productId;
+    private String productID;
     private String customerName;
     private String productName;
     private float productPrice;
@@ -20,9 +20,9 @@ public class Cart implements Serializable {
     private float productTotal;
     private String sellerName;
 
-    public Cart(int cartID, String ProductId, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
+    public Cart(int cartID, String productID, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
         this.cartID = cartID;
-        this.productId = ProductId;
+        this.productID = productID;
         this.customerName = customerName;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -39,12 +39,12 @@ public class Cart implements Serializable {
         this.cartID = cartID;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getProductID() {
+        return productID;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 
     public String getCustomerName() {
