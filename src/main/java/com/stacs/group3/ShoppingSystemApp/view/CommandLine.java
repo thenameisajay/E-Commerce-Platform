@@ -28,10 +28,19 @@ public class CommandLine implements Serializable {
         this.apiCall = new APICall(baseURI);
     }
 
+    /**
+     * Calls the starts method.
+     *
+     * @param args
+     */
     public void main(String[] args) {
         start();
     }
 
+    /**
+     * This is the entry method of the program
+     * Admin is generated for the system.
+     */
     public void start() {
         // Generate the admin account if it doesn't exist.
         apiCall.callAdminGenerate();
@@ -95,6 +104,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * Before the system is exited , the local cache is cleared from view.
+     */
     private void clearCache() {
         adminInfo.clear();
         sellerInfo.clear();
@@ -103,6 +115,9 @@ public class CommandLine implements Serializable {
         cartInfo.clear();
     }
 
+    /**
+     * This method is used to display the menu of User Registration.
+     */
     private void registerUser() {
         System.out.println("*****************************");
         System.out.println("User Registration Page");
@@ -155,6 +170,9 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used to display the menu of User Login.
+     */
     private void userLogin() {
         System.out.println("*****************************");
         System.out.println("User Login Page");
@@ -167,9 +185,6 @@ public class CommandLine implements Serializable {
             Map<String, Map<String, String>> userMap;
             userMap = apiCall.callUserLogin(username, password);
             setLoginStatus = true;
-
-            // TO: Display the appropriate menu based on the account type
-            // To check the user type, use the following code:
             if (!userMap.isEmpty()) {
                 if (userMap.get(username).get("accountType").equalsIgnoreCase("Seller")) {
                     sellerInfo.putAll(userMap);
@@ -195,6 +210,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for the Customer to view the customer menu.
+     */
     private void customerMenu() {
         System.out.println("*****************************");
         System.out.println("Customer Menu");
@@ -237,6 +255,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for displaying the cartMenu and calling the resepective methods.
+     */
     private void cartMenu() {
         System.out.println("*****************************");
         System.out.println("Cart Menu");
@@ -265,6 +286,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for checkout of the cart.
+     */
     private void checkout() {
         System.out.println("*****************************");
         System.out.println("Checkout");
@@ -326,6 +350,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for placing the order.
+     */
     private void orderPlaced() {
         // To be called after checkout
         // Create Random Order ID
@@ -384,6 +411,9 @@ public class CommandLine implements Serializable {
         customerMenu();
     }
 
+    /**
+     * This method is used for deleting an item from the cart using Cart ID.
+     */
     private void deleteItemFromCart() {
 
         System.out.println("*****************************");
@@ -401,6 +431,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing the orders placed by the customer.
+     */
     private void viewOrders() {
         String sellerUsername = "";
         Map<Integer, Map<String, String>> orderInfo = new HashMap<>();
@@ -437,6 +470,9 @@ public class CommandLine implements Serializable {
     }
 
 
+    /**
+     * This method is used for submitting a request (via Customer) to change the account type to Seller or Admin.
+     */
     private void submitRequestCustomer() {
         String customerUsername = "";
         for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
@@ -482,6 +518,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for submitting a request (via Seller) to change the account type to Customer or Admin.
+     */
     private void submitRequestSeller() {
         String sellerUsername = "";
         for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
@@ -527,6 +566,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing the sellerMenu.
+     */
     private void sellerMenu() {
         System.out.println("*****************************");
         System.out.println("Seller Menu");
@@ -567,6 +609,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing the customer's orders.
+     */
     private void viewMyOrders() {
         String username = "";
         for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
@@ -609,6 +654,9 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used for view the seller's products.
+     */
     private void viewMyProducts() {
         System.out.println("*****************************");
         System.out.println("View My Products");
@@ -642,6 +690,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for deleting a product.
+     */
     private void deleteProduct() {
 
         System.out.println("*****************************");
@@ -678,6 +729,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating a product.
+     */
     private void updateProduct() {
         String sellerUsername = "";
         for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
@@ -726,6 +780,11 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used for updating the product Author.
+     *
+     * @param productID
+     */
     private void updateProductAuthor(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Author");
@@ -742,6 +801,11 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product category.
+     *
+     * @param productID Used to update the product category.
+     */
     private void updateProductCategory(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Category");
@@ -758,6 +822,11 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product Quantity.
+     *
+     * @param productID Used to update the product quantity.
+     */
     private void updateProductQuantity(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Quantity");
@@ -774,6 +843,11 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product price.
+     *
+     * @param productID Used to update the product price.
+     */
     private void updateProductPrice(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Price");
@@ -790,6 +864,11 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product description.
+     *
+     * @param productID Used to update the product description
+     */
     private void updateProductDescription(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Description");
@@ -806,6 +885,11 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product name.
+     *
+     * @param productID Used to update the product name.
+     */
     private void updateProductName(String productID) {
         System.out.println("*****************************");
         System.out.println("Update Product Name");
@@ -822,6 +906,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for adding a new product.
+     */
     private void addProduct() {
         System.out.println("*****************************");
         System.out.println("Add Product");
@@ -854,6 +941,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing products.
+     */
     private void viewProducts() {
         if (!setLoginStatus) {
             System.out.println("*****************************");
@@ -900,6 +990,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing all products.
+     */
     private void viewAllProducts() {
         System.out.println("*****************************");
         System.out.println("Viewing the Entire Collection..");
@@ -965,6 +1058,9 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used for searching products by Author's name.
+     */
     private void searchProductByAuthor() {
         System.out.println("*****************************");
         System.out.println("Search Product by Author");
@@ -1033,6 +1129,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for searching products by Categories' name
+     */
     private void searchProductByCategory() {
         System.out.println("*****************************");
         System.out.println("Search Product by Category");
@@ -1101,6 +1200,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for searching products by name
+     */
     private void searchProductByName() {
         System.out.println("*****************************");
         System.out.println("Search Product by Name");
@@ -1176,6 +1278,9 @@ public class CommandLine implements Serializable {
     }
 
 
+    /**
+     * This method is used for adding products to cart
+     */
     private void addToCart() {
         // Generate a random number for the cart ID
         Random random = new Random();
@@ -1234,6 +1339,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for viewing the cart of a customer.
+     */
     private void viewMyCart() {
         String userName = "";
         for (Map.Entry<String, Map<String, String>> entry : userInfo.entrySet()) {
@@ -1280,6 +1388,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for admin login purposes.
+     */
     private void adminLogin() {
         System.out.println("*****************************");
         System.out.println("Admin Login Page");
@@ -1303,6 +1414,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for admin menu purposes after successful login.
+     */
     private void adminMenu() {
         System.out.println("*****************************");
         System.out.println("Admin Menu");
@@ -1334,6 +1448,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used for self-deleting a user (Admin, Customer or Seller).
+     */
     private void deleteMyAccount() {
         // This method can be used by both admin, customer and seller.
         System.out.println("*****************************");
@@ -1433,8 +1550,11 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used for viewing account info of sellers.
+     */
     private void viewMySellerDetails() {
-        // This method can be used now only by customer.
+
         System.out.println("*****************************");
         System.out.println("Viewing my Account Details");
         System.out.println("*****************************");
@@ -1470,6 +1590,9 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used to view all users.
+     */
     private void viewAllUsers() {
         System.out.println("*****************************");
         System.out.println("Viewing All Users");
@@ -1492,6 +1615,10 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used to add a new user via admin.
+     * The difference is admin can only add another admin.
+     */
     private void addUserViaAdmin() {
         System.out.println("*****************************");
         System.out.println("Adding a new User");
@@ -1536,6 +1663,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used to for viewing the options to update user permission from seller to admin,customer or vice versa.
+     */
     private void updateUserPermission() {
         System.out.println("*****************************");
         System.out.println("Updating User Permission");
@@ -1555,6 +1685,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used to update user permission from seller to admin,customer or vice versa.
+     */
     private void updatePermission() {
         System.out.println("*****************************");
         System.out.println("Updating User Permission");
@@ -1591,6 +1724,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used to view all the requests from the users.
+     */
     private void viewRequests() {
         Map<String, Map<String, String>> allRequests;
         System.out.println("*****************************");
@@ -1619,6 +1755,9 @@ public class CommandLine implements Serializable {
 
     }
 
+    /**
+     * This method is used to delete a user which is only accessible by admin.
+     */
     private void deleteUser() {
         System.out.println("*****************************");
         System.out.println("Deleting a User");
@@ -1635,6 +1774,9 @@ public class CommandLine implements Serializable {
         }
     }
 
+    /**
+     * This method is used to display the menu for the user.
+     */
     public void messageDisplay() {
         System.out.println("*****************************");
         System.out.println("** Welcome to Alpha System **");
