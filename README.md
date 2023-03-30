@@ -74,16 +74,15 @@
 <ol>
 <li> Save to file.
 <li> Load to file.
-<li> View All routes.
-<li> View All schedules and stops.
-<li> Get from user <strong> DATE (FORMAT : dd-mm-yyyy) </strong> only and generate and store <strong>DAY </strong> automatically. 
-<li> Route ID & ScheduleIdentifier : Accepts alphanumeric characters 
-<li> Route Name & Stop Name : Accepts only alphabets.
+<li> Usage of Window Shopping ( Can view products without logging in. )
+<li> There is always a starting admin account with the following credentials :
+<ul> username : admin </ul>
+<ul> password : admin </ul>
 </ol>
 
 ---
 
-### NO OF TESTS WRITTEN : 
+### NO OF TESTS WRITTEN :  73
 
 ---
 

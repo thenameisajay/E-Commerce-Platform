@@ -16,7 +16,10 @@ public class AlphaController implements Serializable {
 
     OrderService orderService = new OrderService();
 
-    // User creation to the database is handled here (for both Admin and Customer).
+    /**
+     * User creation to the database is handled here (for both Admin and Customer).
+     */
+
     public void addUser(String firstName, String lastName, String username, String email, String password, String accountType) {
         userService.addUser(firstName, lastName, username, email, password, accountType);
     }

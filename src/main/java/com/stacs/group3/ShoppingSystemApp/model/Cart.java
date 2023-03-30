@@ -2,6 +2,13 @@ package com.stacs.group3.ShoppingSystemApp.model;
 
 import java.io.Serializable;
 
+/**
+ * This class is used to create a Cart object.
+ * It contains the following attributes:
+ * cartID, productId, customerName, productName, productPrice, productQuantity, productTotal, sellerName
+ * It also contains the following methods:
+ * getCartID, setCartID, getProductId, setProductId, getCustomerName, setCustomerName, getProductName, setProductName, getProductPrice, setProductPrice, getProductQuantity, setProductQuantity, getProductTotal, setProductTotal, getSellerName, setSellerName
+ */
 public class Cart implements Serializable {
 
     private int cartID;
