@@ -583,8 +583,8 @@ public class CommandLine implements Serializable {
                     totalQuantity += Double.parseDouble(productQuantity);
                     totalCost += Double.parseDouble(productTotal);
                 }
-                System.out.println("Total number of items in your cart: " + totalQuantity);
-                System.out.println("Total cost of your cart: " + "£ " + totalCost);
+                System.out.println("Total number of items you have purchased: " + totalQuantity);
+                System.out.println("Total cost of your Orders: " + "£ " + totalCost);
                 System.out.println("*****************************");
                 orders.clear();
                 customerMenu();
