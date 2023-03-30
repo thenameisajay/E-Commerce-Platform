@@ -211,7 +211,7 @@ public class ProductServiceTest {
      * Tests the searchProductByName method of ProductService class.
      * Ensures that the searchProductByName method throw an exception if the product name is empty
      *      or if no product is available in the system
-     * Ensures that the searchProductByName method return the correct number of given product name
+     * Ensures that the searchProductByName method return the correct number of products by given product name
      */
     @Test
     public void testSearchProductByName() {
@@ -232,7 +232,7 @@ public class ProductServiceTest {
      * Ensures that the searchProductByCategory method throw an exception if the product category is empty
      *      or if the product category is invalid
      *      or if no product is available in the system
-     * Ensures that the searchProductByCategory method return the correct number of given product name
+     * Ensures that the searchProductByCategory method return the correct number of products by given product name
      */
     @Test
     public void testSearchProductByCategory() {
@@ -254,10 +254,10 @@ public class ProductServiceTest {
 
     /**
      * Tests the searchProductByAuthor method of ProductService class.
-     * Ensures that the searchProductByCategory method throw an exception if the product category is empty
-     *      or if the product category is invalid
+     * Ensures that the searchProductByAuthor method throw an exception if the product author is empty
+     *      or if the product author is invalid
      *      or if no product is available in the system
-     * Ensures that the searchProductByCategory method return the correct number of given product name
+     * Ensures that the searchProductByAuthor method return the correct number of product by given product name
      */
     @Test
     public void testSearchProductByAuthor() {
@@ -277,6 +277,11 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the viewAllProducts method of ProductService class.
+     * Ensures that the viewAllProducts method throw an exception if no product is available in the system
+     * Ensures that the viewAllProducts method return the correct number of products
+     */
     @Test
     public void testViewAllProducts() {
         assertEquals(productService.viewAllProducts().size(), 2);
@@ -287,6 +292,13 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the deleteProduct method of ProductService class.
+     * Ensures that the deleteProduct method throw an exception if the product id is empty or invalid
+     *      or if product id does not exist or do not have permission to delete
+     *      or if there is no product in the system
+     * Ensures that deleteProduct method delete the product
+     */
     @Test
     public void testDeleteProduct() {
         assertThrows(IllegalArgumentException.class,
@@ -314,6 +326,11 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the viewSellerProducts method of ProductService class.
+     * Ensures that the viewSellerProducts throws an exception if there is no product available
+     * Ensures that the viewSellerProducts return the correct number of products of the seller
+     */
     @Test
     public void testViewSellerProducts() {
         productService.addProduct("3", "Educated",
@@ -334,6 +351,13 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the checkValidationToUpdate method of ProductService class.
+     * Ensures the checkValidationToUpdate throws an exception if product id is empty
+     *      or if product id is invalid
+     *      or if there is no product available
+     * Ensures the checkValidationToUpdate return the correct permission of updating this product
+     */
     @Test
     public void testCheckValidationToUpdate() {
         assertThrows(IllegalArgumentException.class,
@@ -358,6 +382,12 @@ public class ProductServiceTest {
                 "No products available");
     }
 
+    /**
+     * Tests the updateProductName method of ProductService class.
+     * Ensures the updateProductName method throws an exception if the product name is empty
+     *      or if product name is invalid
+     * Ensures the updateProductName method changed the product name to expected value
+     */
     @Test
     public void testUpdateProductName() {
         assertThrows(IllegalArgumentException.class,
@@ -372,6 +402,11 @@ public class ProductServiceTest {
         assertEquals(productService.searchProductByName("Educated").size(), 1);
     }
 
+    /**
+     * Tests the updateProductDescription method of ProductService class.
+     * Ensures the updateProductDescription method throws an exception if the product description is empty
+     * Ensures the updateProductDescription method changed the product description to expected value
+     */
     @Test
     public void testUpdateProductDescription() {
         assertThrows(IllegalArgumentException.class,
@@ -383,6 +418,12 @@ public class ProductServiceTest {
                 "The first novel in the Harry Potter series");
     }
 
+    /**
+     * Tests the updatePrice method of ProductService class.
+     * Ensures the updatePrice method throws an exception if the product price is empty
+     *      or if product price is invalid
+     * Ensures the updatePrice method changed the product price to expected value
+     */
     @Test
     public void testUpdatePrice() {
         assertThrows(IllegalArgumentException.class,
@@ -397,6 +438,12 @@ public class ProductServiceTest {
         assertEquals(productService.viewAllProducts().get("1").getProductPrice(), "15");
     }
 
+    /**
+     * Tests the updateProductQuantity method of ProductService class.
+     * Ensures the updateProductQuantity method throws an exception if the product quantity is empty
+     *      or if product quantity is invalid
+     * Ensures the updateProductQuantity method changed the product quantity to expected value
+     */
     @Test
     public void testUpdateProductQuantity() {
         assertThrows(IllegalArgumentException.class,
@@ -411,6 +458,12 @@ public class ProductServiceTest {
         assertEquals(productService.viewAllProducts().get("1").getProductQuantity(), "600");
     }
 
+    /**
+     * Tests the updateProductCategory method of ProductService class.
+     * Ensures the updateProductCategory method throws an exception if the product category is empty
+     *      or if product category is invalid
+     * Ensures the updateProductCategory method changed the product category to expected value
+     */
     @Test
     public void testUpdateProductCategory() {
         assertThrows(IllegalArgumentException.class,
@@ -425,6 +478,12 @@ public class ProductServiceTest {
         assertEquals(productService.viewAllProducts().get("1").getProductCategory(), "fiction");
     }
 
+    /**
+     * Tests the updateProductAuthor method of ProductService class.
+     * Ensures the updateProductAuthor method throws an exception if the product author is empty
+     *      or if product author is invalid
+     * Ensures the updateProductAuthor method changed the product author to expected value
+     */
     @Test
     public void testUpdateProductAuthor() {
         assertThrows(IllegalArgumentException.class,
@@ -439,6 +498,13 @@ public class ProductServiceTest {
         assertEquals(productService.viewAllProducts().get("1").getAuthor(), "Tara");
     }
 
+    /**
+     * Tests the updateProductAfterOrder method of ProductService class.
+     * Ensures the updateProductAfterOrder method throws an exception if the product id is empty
+     *      or if product id is invalid or does not exist
+     *      or if there is no product available
+     * Ensures the updateProductAfterOrder method changed the product quantity to expected value
+     */
     @Test
     public void testUpdateProductAfterOrder() {
         assertThrows(IllegalArgumentException.class,

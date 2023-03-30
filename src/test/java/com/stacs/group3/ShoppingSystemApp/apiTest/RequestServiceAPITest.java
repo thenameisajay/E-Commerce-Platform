@@ -19,6 +19,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Tests for API related to RequestService.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RequestServiceAPITest {
     @Value(value="http://localhost:${local.server.port}/userService")
@@ -30,6 +33,9 @@ public class RequestServiceAPITest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    /**
+     * Initialises the server with the necessary users before each test.
+     */
     @BeforeEach
     public void setup() {
         Map<String, String> user1 = new HashMap<>();
@@ -53,6 +59,10 @@ public class RequestServiceAPITest {
         restTemplate.postForEntity(userServiceURI + "/add", request2, Void.class);
     }
 
+    /**
+     * Clear up the server after each test.
+     * Avoid the influence on other tests
+     */
     @AfterEach
     public void clear() {
         ResponseEntity<Map> response =
@@ -66,6 +76,11 @@ public class RequestServiceAPITest {
         }
     }
 
+    /**
+     * Tests the API of updateUserPermission.
+     * Ensures the HTTP response status code is 200
+     * Ensures the permission is changed to the expected value
+     */
     @Test
     public void testUpdateUserPermission() {
         ResponseEntity<Void> response1 =
@@ -87,6 +102,12 @@ public class RequestServiceAPITest {
         assertEquals(user2.get("ml123").get("accountType"), "customer");
     }
 
+    /**
+     * Tests API of storeRequest and viewRequest.
+     * Ensures the HTTP response status code is 200
+     * Ensures the Requests are stored by the server
+     * Ensures the returned requests are the inserted request
+     */
     @Test
     public void testStoreAndViewRequest() {
         ResponseEntity<Void> response1 =

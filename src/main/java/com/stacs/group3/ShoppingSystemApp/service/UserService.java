@@ -64,12 +64,11 @@ public class UserService implements Serializable {
 
         // Third Check : If username and password matches
         if (user.containsKey(username.toLowerCase())) {
-
             if (user.get(username).getPassword().equals(password.toLowerCase())) {
                 if (user.get(username).getAccountType().equals("admin")) {
                     adminLoggedIn.put(username, user.get(username));
                 } else {
-                    throw new IllegalArgumentException("Invalid username or password");
+                    throw new IllegalArgumentException("User is not admin");
                 }
 
             } else {
@@ -184,19 +183,19 @@ public class UserService implements Serializable {
         }
     }
 
-    public void updateUserPermission(String username, String customer) {
+    public void updateUserPermission(String username, String requestType) {
         // First Check : For empty fields
         if (username == null || username.isEmpty())
             throw new IllegalArgumentException("Username cannot be empty");
-        if (customer == null || customer.isEmpty())
-            throw new IllegalArgumentException("Customer cannot be empty");
+        if (requestType == null || requestType.isEmpty())
+            throw new IllegalArgumentException("requestType cannot be empty");
         // Second Check : If userdata is empty
         if (user.isEmpty()) {
             throw new IllegalArgumentException("No users in the system");
         }
         // Third Check : If username exists in the system
         if (user.containsKey(username.toLowerCase())) {
-            user.get(username).setAccountType(customer.toLowerCase());
+            user.get(username).setAccountType(requestType.toLowerCase());
         } else {
             throw new IllegalArgumentException("Username does not exist");
         }

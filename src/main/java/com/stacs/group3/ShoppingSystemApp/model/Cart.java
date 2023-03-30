@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Cart implements Serializable {
 
-    private int cartId;
+    private int cartID;
     private String productId;
     private String customerName;
     private String productName;
@@ -13,8 +13,8 @@ public class Cart implements Serializable {
     private float productTotal;
     private String sellerName;
 
-    public Cart(int cartId, String ProductId, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
-        this.cartId = cartId;
+    public Cart(int cartID, String ProductId, String customerName, String productName, float productPrice, int productQuantity, float productTotal, String sellerName) {
+        this.cartID = cartID;
         this.productId = ProductId;
         this.customerName = customerName;
         this.productName = productName;
@@ -24,12 +24,12 @@ public class Cart implements Serializable {
         this.sellerName = sellerName;
     }
 
-    public int getCartId() {
-        return cartId;
+    public int getCartID() {
+        return cartID;
     }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setCartID(int cartID) {
+        this.cartID = cartID;
     }
 
     public String getProductId() {

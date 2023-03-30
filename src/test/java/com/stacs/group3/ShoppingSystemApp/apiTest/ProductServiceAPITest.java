@@ -17,6 +17,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the API related to the ProductService.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductServiceAPITest {
     @Value(value="http://localhost:${local.server.port}/productService")
@@ -25,6 +28,9 @@ public class ProductServiceAPITest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    /**
+     * Initialises the server with necessary product before each test.
+     */
     @BeforeEach
     public void setup() {
         Map<String, String> product1 = new HashMap<>();
@@ -54,6 +60,10 @@ public class ProductServiceAPITest {
         restTemplate.postForEntity(productServiceURI + "/add", request2, Void.class);
     }
 
+    /**
+     * Clear up the server after each test.
+     * Avoid the influence on other test
+     */
     @AfterEach
     public void clear() {
         ResponseEntity<Map> response =
@@ -69,6 +79,11 @@ public class ProductServiceAPITest {
         }
     }
 
+    /**
+     * Tests the API of addProduct.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product has been added successfully in the server
+     */
     @Test
     public void testAddProduct() {
         Map<String, String> product = new HashMap<>();
@@ -95,6 +110,11 @@ public class ProductServiceAPITest {
         assertEquals(products.size(), 3);
     }
 
+    /**
+     * Tests the API of searchProductName.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned Map contains all the product named the given name
+     */
     @Test
     public void testSearchName() {
         ResponseEntity<Map> response = restTemplate.getForEntity(productServiceURI + "/searchName/A Man Called Ove", Map.class);
@@ -105,6 +125,11 @@ public class ProductServiceAPITest {
         assertTrue(products.containsKey("2"));
     }
 
+    /**
+     * Tests the API of searchProductCategory.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned Map contains all the product with the given category
+     */
     @Test
     public void testSearchCategory() {
         ResponseEntity<Map> response = restTemplate.getForEntity(productServiceURI + "/searchCategory/Fantasy", Map.class);
@@ -115,6 +140,11 @@ public class ProductServiceAPITest {
         assertTrue(products.containsKey("1"));
     }
 
+    /**
+     * Tests the API of searchProductAuthor.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned Map contains all the product with the given author
+     */
     @Test
     public void testSearchAuthor() {
         ResponseEntity<Map> response = restTemplate.getForEntity(productServiceURI + "/searchAuthor/Joanne Rowling", Map.class);
@@ -125,6 +155,11 @@ public class ProductServiceAPITest {
         assertTrue(products.containsKey("1"));
     }
 
+    /**
+     * Tests the API of viewALLProduct.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned Map contains all product
+     */
     @Test
     public void testViewAll() {
         ResponseEntity<Map> response = restTemplate.getForEntity(productServiceURI + "/viewAll", Map.class);
@@ -136,6 +171,11 @@ public class ProductServiceAPITest {
         assertTrue(products.containsKey("2"));
     }
 
+    /**
+     * Tests the API of deleteProduct.
+     * Ensures the HTTP response status code is 200
+     * Ensures the server delete the product given product id and seller
+     */
     @Test
     public void testDelete() {
         ResponseEntity<Void> response =
@@ -148,6 +188,11 @@ public class ProductServiceAPITest {
         assertFalse(products.containsKey("1"));
     }
 
+    /**
+     * Tests the API of viewSellerProduct.
+     * Ensures the HTTP response status code is 200
+     * Ensures the server return all the product which the seller is given seller id
+     */
     @Test
     public void testViewSellerProducts() {
         ResponseEntity<Map> response = restTemplate.getForEntity(productServiceURI + "/view/ml123", Map.class);
@@ -158,6 +203,12 @@ public class ProductServiceAPITest {
         assertTrue(products.containsKey("1"));
     }
 
+    /**
+     * Tests the API of checkValidationToUpdate.
+     * Ensures the HTTP response status code is 200
+     * Ensures server return true if the user has the permission
+     *          return false if not
+     */
     @Test
     public void testCheck() {
         ResponseEntity<Boolean> response1 = restTemplate.getForEntity(productServiceURI + "/check?seller=ml123&id=1", Boolean.class);
@@ -173,6 +224,11 @@ public class ProductServiceAPITest {
         assertFalse(res2);
     }
 
+    /**
+     * Tests the API of updateProductName.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product name is changed to the expected value
+     */
     @Test
     public void testUpdateName() {
         ResponseEntity<Void> response =
@@ -184,6 +240,11 @@ public class ProductServiceAPITest {
         assertEquals(products.get("1").get("productName"), "Educated");
     }
 
+    /**
+     * Tests the API of updateProductDescription.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product description is changed to the expected value
+     */
     @Test
     public void testUpdateDescription() {
         ResponseEntity<Void> response =
@@ -195,6 +256,11 @@ public class ProductServiceAPITest {
         assertEquals(products.get("1").get("productDescription"), "Amazing version");
     }
 
+    /**
+     * Tests the API of updateProductPrice.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product price is changed to the expected value
+     */
     @Test
     public void testUpdatePrice() {
         ResponseEntity<Void> response =
@@ -206,6 +272,11 @@ public class ProductServiceAPITest {
         assertEquals(products.get("1").get("productPrice"), "12.99");
     }
 
+    /**
+     * Tests the API of updateProductQuantity.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product quantity is changed to the expected value
+     */
     @Test
     public void testUpdateQuantity() {
         ResponseEntity<Void> response =
@@ -217,6 +288,11 @@ public class ProductServiceAPITest {
         assertEquals(products.get("1").get("productQuantity"), "500");
     }
 
+    /**
+     * Tests the API of updateProductCategory.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product category is changed to the expected value
+     */
     @Test
     public void testUpdateCategory() {
         ResponseEntity<Void> response =
@@ -228,6 +304,11 @@ public class ProductServiceAPITest {
         assertEquals(products.get("1").get("productCategory"), "novel");
     }
 
+    /**
+     * Tests the API of updateProductAuthor.
+     * Ensures the HTTP response status code is 200
+     * Ensures the product author is changed to the expected value
+     */
     @Test
     public void testUpdateProductAuthor() {
         ResponseEntity<Void> response =

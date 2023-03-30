@@ -15,6 +15,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests the API related to OrderService.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrderServiceAPITest {
 
@@ -27,6 +30,9 @@ public class OrderServiceAPITest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    /**
+     * Initialise the server with the necessary products before test.
+     */
     @BeforeEach
     public void setup() {
         Map<String, String> product1 = new HashMap<>();
@@ -56,6 +62,13 @@ public class OrderServiceAPITest {
         restTemplate.postForEntity(productServiceURI + "/add", request2, Void.class);
     }
 
+    /**
+     * Test the API supplied by the OrderService.
+     * Ensures the HTTP response status code is 200
+     * Ensures the order is stored by the server
+     * Ensures customers and sellers can view their own order
+     * Ensures the product quantity after making an order
+     */
     @Test
     public void testOrderService() {
         Map<String, String> order1 = new HashMap<>();

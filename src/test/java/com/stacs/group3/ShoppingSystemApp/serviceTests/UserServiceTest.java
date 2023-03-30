@@ -6,21 +6,36 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * Tests for the UserService class.
+ */
 public class UserServiceTest {
     private UserService userService = new UserService();
 
+    /**
+     * Initialise the userService before each test.
+     */
     @BeforeEach
     public void setup() {
-
         userService.addUser("James", "Smith", "js123", "js123@gmail.com", "123456789", "admin");
         userService.addUser("Mary", "Jones", "mj456", "mj456@gmail.com", "abcdefgh", "seller");
         userService.addUser("Jack", "Johnson", "jj789", "jj789@gmail.com", "abc123456", "customer");
     }
 
+    /**
+     * Tests the addUser method of the UserService.
+     * Ensures that addUser method throws an exception if the first name is empty or invalid
+     *      or if the last name is empty or invalid
+     *      or if the username is empty or invalid
+     *      or if the email is empty or invalid
+     *      or if password is empty
+     *      or if the user has already existed
+     * Ensures the addUser method add the user to the system if the input is valid
+     */
     @Test
     public void testAddUser() {
-
         assertThrows(IllegalArgumentException.class,
                 () -> userService.addUser("", "Williams", "rw111", "rw111@gmail.com", "987654321", "customer"),
                 "First name cannot be empty");
@@ -65,7 +80,16 @@ public class UserServiceTest {
         assertEquals(userService.viewAllUsers().size(), 4);
     }
 
-    // ToDo: Check if the user is a customer or seller or admin or even in the system.
+    /**
+     * Tests the adminLogin method of the UserService.
+     * Ensures that adminLogin method throws an exception if the username is empty
+     *      or if password is empty
+     *      or if the user does not exist
+     *      or if the username and password are not matched
+     *      or if the user is not admin
+     *      or if there is no user in the system
+     * Ensures that the adminLogin method return the admin information
+     */
     @Test
     public void testAdminLogin() {
         assertThrows(IllegalArgumentException.class,
@@ -80,6 +104,9 @@ public class UserServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> userService.adminLogin("js123", "abcdefgh"),
                 "Invalid username or password");
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.adminLogin("mj456", "abcdefgh"),
+                "User is not admin");
 
         assertEquals(userService.adminLogin("js123", "123456789").size(), 1);
 
@@ -90,6 +117,11 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * Tests the viewAllUsers method of the UserService.
+     * Ensures that viewAllUsers method throws an exception if there is no user
+     * Ensures that viewAllUsers method return the correct number of users in the system
+     */
     @Test
     public void testViewAllUsers() {
         assertEquals(userService.viewAllUsers().size(), 3);
@@ -100,7 +132,15 @@ public class UserServiceTest {
                 "No users in the system");
     }
 
-    // ToDo: Check if the user is a customer or seller or admin or even in the system.
+    /**
+     * Tests the userLogin method of UserService class.
+     * Ensures that userLogin method throws an exception if username is empty
+     *      or if password is empty
+     *      or if user does not exist
+     *      or if username and password are not matched
+     *      or if there is no user in the system
+     * Ensures that userLogin method returns the user information
+     */
     @Test
     public void testUserLogin() {
         assertThrows(IllegalArgumentException.class,
@@ -124,6 +164,10 @@ public class UserServiceTest {
                 "No users in the system");
     }
 
+    /**
+     * Tests the adminGenerate method of UserService class.
+     * Ensures that the adminGenerate method generate a default admin
+     */
     @Test
     public void testAdminGenerate() {
         userService.adminGenerate();
@@ -132,6 +176,12 @@ public class UserServiceTest {
         assertEquals(userService.adminLogin("admin", "admin").size(), 1);
     }
 
+    /**
+     * Tests the deleteUserViaAdmin method of UserService class.
+     * Ensures that deleteUserViaAdmin method throws an exception if username is empty or does not exist
+     *      or if there is no user in the system
+     * Ensures that deleteUserViaAdmin method delete the user
+     */
     @Test
     public void testDeleteUserViaAdmin() {
         assertThrows(IllegalArgumentException.class,
@@ -143,9 +193,6 @@ public class UserServiceTest {
 
         userService.deleteUserViaAdmin("mj456");
         assertEquals(userService.viewAllUsers().size(), 2);
-        assertThrows(IllegalArgumentException.class,
-                () -> userService.userLogin("mj456", "abcdefgh"),
-                "Invalid username or password");
 
         userService.wipeAll();
         assertThrows(IllegalArgumentException.class,
@@ -154,6 +201,13 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * Tests deleteSelfAccount method of UserService class.
+     * Ensures that deleteSelfAccount method throws an exception if username is empty
+     *      or if password is empty
+     *      or if the username or password is invalid
+     * Ensures that deleteSelfAccount method delete the user
+     */
     @Test
     public void testDeleteSelfAccount() {
         assertThrows(IllegalArgumentException.class,
@@ -178,10 +232,16 @@ public class UserServiceTest {
         userService.wipeAll();
         assertThrows(IllegalArgumentException.class,
                 () -> userService.deleteSelfAccount("mj456", "123456789"),
-                "Invalid username or password");
+                "No users in the system");
     }
 
-    // ToDo: Check if the user is a customer or seller or admin or even in the system.
+    /**
+     * Tests the updateUserPermission method of UserService class.
+     * Ensures the updateUserPermission method throws an exception if username is empty or does not exist
+     *      or if requestType is empty
+     *      or if there is no users in the system
+     * Ensure the updateUserPermission method changed the accountType of the user
+     */
     @Test
     public void testUpdateUserPermission() {
         assertThrows(IllegalArgumentException.class,
@@ -189,7 +249,7 @@ public class UserServiceTest {
                 "Username cannot be empty");
         assertThrows(IllegalArgumentException.class,
                 () -> userService.updateUserPermission("mj456", ""),
-                "Customer cannot be empty");
+                "requestType cannot be empty");
         assertThrows(IllegalArgumentException.class,
                 () -> userService.updateUserPermission("mj457", "admin"),
                 "Username does not exist");

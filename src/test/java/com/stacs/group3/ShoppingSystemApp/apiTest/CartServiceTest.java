@@ -18,6 +18,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests for API related to CartService.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CartServiceTest {
     @Value(value="http://localhost:${local.server.port}/cartService")
@@ -26,6 +29,9 @@ public class CartServiceTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    /**
+     * Initialises the server with the necessary carts before each test.
+     */
     @BeforeEach
     public void setup() {
         Map<String, String> cart1 = new HashMap<>();
@@ -53,6 +59,10 @@ public class CartServiceTest {
         restTemplate.postForEntity(cartServiceURI + "/add", request2, Void.class);
     }
 
+    /**
+     * Clear up the server after each test.
+     * Avoid the influence on other tests
+     */
     @AfterEach
     public void clear() {
         ResponseEntity<Map> response =
@@ -66,6 +76,11 @@ public class CartServiceTest {
         }
     }
 
+    /**
+     * Tests the API of viewCart.
+     * Ensures the HTTP response status code is 200
+     * Ensures the return Map contains the carts which belonged to given customer
+     */
     @Test
     public void testView() {
         ResponseEntity<Map> response =
@@ -78,6 +93,11 @@ public class CartServiceTest {
         assertTrue(carts.containsKey("101"));
     }
 
+    /**
+     * Tests the API of addCart.
+     * Ensures the HTTP response status code is 200
+     * Ensures the cart is successfully added in the server
+     */
     @Test
     public void testAdd() {
         Map<String, String> cart = new HashMap<>();
@@ -100,6 +120,11 @@ public class CartServiceTest {
         assertEquals(carts.size(), 1);
     }
 
+    /**
+     * Test the API of deleteCart.
+     * Ensures the HTTP response status code is 200
+     * Ensures the server delete the cart successfully
+     */
     @Test
     public void testDelete() {
         ResponseEntity<Void> response =

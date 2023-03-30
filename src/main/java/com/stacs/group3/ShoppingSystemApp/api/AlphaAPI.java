@@ -414,13 +414,13 @@ public class AlphaAPI {
     public void addOrder(@RequestBody Map<String, String> order) {
         int orderID = Integer.valueOf(order.get("orderID"));
         String productID = order.get("productID");
-        String userName = order.get("customerName");
+        String customerName = order.get("customerName");
         String productName = order.get("productName");
         float productPrice = Float.parseFloat(order.get("productPrice"));
         int productQuantity = Integer.parseInt(order.get("productQuantity"));
         float productTotal = Float.parseFloat(order.get("productTotal"));
         String sellerName = order.get("sellerName");
-        alphaController.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName);
+        alphaController.addOrder(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, customerName);
     }
 
     /**

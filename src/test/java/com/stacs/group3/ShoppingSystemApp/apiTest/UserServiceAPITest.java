@@ -17,14 +17,20 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the api related to the UserService.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserServiceAPITest {
-    @Value(value="http://localhost:${local.server.port}/userService")
+    @Value(value = "http://localhost:${local.server.port}/userService")
     private String userServiceURI;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
+    /**
+     * Initialises the server with necessary users for test before each test.
+     */
     @BeforeEach
     public void setup() {
         Map<String, String> user1 = new HashMap<>();
@@ -58,6 +64,10 @@ public class UserServiceAPITest {
         restTemplate.postForEntity(userServiceURI + "/add", request3, Void.class);
     }
 
+    /**
+     * Clears up the users in the server after execute each test.
+     * This avoids data influenced other test
+     */
     @AfterEach
     public void clear() {
         ResponseEntity<Map> response =
@@ -66,13 +76,18 @@ public class UserServiceAPITest {
 
         Iterator<String> iterator = users.keySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             restTemplate.postForEntity(userServiceURI + "/deleteViaAdmin/" + iterator.next(), null, Void.class);
         }
     }
 
+    /**
+     * Tests for the API of addUser.
+     * Ensures the HTTP response status code is 200
+     * Ensure the added users can be found in the returned Map by calling viewUsers API
+     */
     @Test
-    public void testAddUser(){
+    public void testAddUser() {
         Map<String, String> user1 = new HashMap<>();
         user1.put("firstName", "John");
         user1.put("lastName", "Doe");
@@ -120,6 +135,11 @@ public class UserServiceAPITest {
         assertTrue(users.containsKey("bd123"));
     }
 
+    /**
+     * Tests for the API of adminLogin.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned information is the input admin
+     */
     @Test
     public void testAdminLogin() {
         ResponseEntity<Map> response =
@@ -133,6 +153,11 @@ public class UserServiceAPITest {
         assertTrue(admin.containsKey("js123"));
     }
 
+    /**
+     * Tests for the API of viewAllUsers.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned Map contains the inserted user
+     */
     @Test
     public void testViewAllUsers() {
         ResponseEntity<Map> response =
@@ -147,6 +172,11 @@ public class UserServiceAPITest {
         assertTrue(users.containsKey("js123"));
     }
 
+    /**
+     * Tests for the API of userLogin.
+     * Ensures the HTTP response status code is 200
+     * Ensures the returned information is the input user
+     */
     @Test
     public void testLogin() {
         ResponseEntity<Map> response1 =
@@ -170,6 +200,11 @@ public class UserServiceAPITest {
         assertTrue(user2.containsKey("ml123"));
     }
 
+    /**
+     * Tests for the API of adminGenerate.
+     * Ensures the HTTP response status code is 200
+     * Ensures the admin is generated successfully in the server
+     */
     @Test
     public void testAdminGenerate() {
         HttpEntity<Void> request = new HttpEntity<>(null);
@@ -186,6 +221,11 @@ public class UserServiceAPITest {
         assertTrue(users.containsKey("admin"));
     }
 
+    /**
+     * Tests for the API of deleteUserViaAdmin.
+     * Ensures the HTTP response status code is 200
+     * Ensures the user is deleted by the admin
+     */
     @Test
     public void testDeleteUserViaAdmin() {
         ResponseEntity<Void> response = restTemplate.postForEntity(userServiceURI + "/deleteViaAdmin/jj789", null, Void.class);
@@ -199,6 +239,11 @@ public class UserServiceAPITest {
         assertFalse(users.containsKey("jj789"));
     }
 
+    /**
+     * Tests for the API of deleteSelfAccount.
+     * Ensures the HTTP response status code is 200
+     * Ensures the user is deleted successfully
+     */
     @Test
     public void testDeleteSelfAccount() {
         ResponseEntity<Void> response1 = restTemplate.postForEntity(userServiceURI + "/delete?user=ml123&password=123456789", null, Void.class);

@@ -801,7 +801,7 @@ public class CommandLine implements Serializable {
         System.out.println("Please enter the Product Category:");
         String productCategory = scanner.nextLine().trim();
         String sellerUsername = "";
-        for (Map.Entry<String, Map<String ,String>> entry : sellerInfo.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : sellerInfo.entrySet()) {
             sellerUsername = entry.getKey().trim();
         }
         try {
