@@ -485,7 +485,7 @@ public class APICall {
      */
     public void callUpdateProductAfterOrder(String productID, int productQuantity) {
         webClient.post()
-                .uri("/cartService/update/" + productID + "/" + productQuantity)
+                .uri("/orderService/update/" + productID + "/" + productQuantity)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();

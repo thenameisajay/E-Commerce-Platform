@@ -335,14 +335,11 @@ public class CommandLine implements Serializable {
         int cartID = 0;
         for (Map.Entry<Integer, Map<String, String>> entry : cartInfo.entrySet()) {
             cartID = Integer.parseInt(String.valueOf(entry.getKey()));
-            productID = entry.getValue().get("productId");
+            productID = entry.getValue().get("productID");
             productName = entry.getValue().get("productName");
             sellerName = entry.getValue().get("sellerName");
             userName = entry.getValue().get("customerName");
-            productPrice = entry.getValue().get("productPrice");
-
-            // Change from String to Double
-            // productPrice = String.valueOf(entry.getValue().get("productPrice"));
+            productPrice = String.valueOf(entry.getValue().get("productPrice"));
             productQuantity = String.valueOf(entry.getValue().get("productQuantity"));
             productTotal = String.valueOf(entry.getValue().get("productTotal"));
 
@@ -406,13 +403,17 @@ public class CommandLine implements Serializable {
                 throw new IllegalArgumentException("No orders placed by customers");
             }
             for (Map.Entry<Integer, Map<String, String>> entry : orderInfo.entrySet()) {
+                // Change from Double to String
+                String productPrice = String.valueOf(entry.getValue().get("productPrice"));
+                String productQuantity = String.valueOf(entry.getValue().get("productQuantity"));
+                String productTotal = String.valueOf(entry.getValue().get("productTotal"));
                 System.out.println("*****************************");
-                System.out.println(" Customer Name: " + entry.getValue().get("customerName"));
+                System.out.println(" Customer User-Name: " + entry.getValue().get("customerName"));
                 System.out.println(" Order ID: " + entry.getKey());
                 System.out.println(" Product ID: " + entry.getValue().get("productID"));
                 System.out.println(" Product Name: " + entry.getValue().get("productName"));
-                System.out.println(" Product Quantity: " + entry.getValue().get("productQuantity"));
-                System.out.println(" Product Total: " + "£" + entry.getValue().get("productTotal"));
+                System.out.println(" Quantity: " + productQuantity);
+                System.out.println(" Total: " + "£ " + productTotal);
                 System.out.println("*****************************");
             }
             sellerMenu();
@@ -565,19 +566,25 @@ public class CommandLine implements Serializable {
             } else {
                 float totalCost = 0;
                 int totalQuantity = 0;
+
                 for (Map.Entry<Integer, Map<String, String>> entry : orders.entrySet()) {
-                    System.out.println("*****************************");
+                    // Change from Double to String
+                    String productPrice = String.valueOf(entry.getValue().get("productPrice"));
+                    String productQuantity = String.valueOf(entry.getValue().get("productQuantity"));
+                    String productTotal = String.valueOf(entry.getValue().get("productTotal"));
                     System.out.println("Order ID: " + entry.getKey());
-                    System.out.println("Product Name: " + entry.getValue().get("productName"));
-                    System.out.println("Product Price: " + "£" + entry.getValue().get("productPrice"));
-                    System.out.println("Product Quantity: " + entry.getValue().get("productQuantity"));
-                    System.out.println("Product Total Price: " + "£" + entry.getValue().get("productTotal"));
-                    totalCost += Float.valueOf(entry.getValue().get("productTotal"));
-                    totalQuantity += Integer.valueOf(entry.getValue().get("productQuantity"));
+                    System.out.println("Product ID: " + entry.getValue().get("productID"));
+                    System.out.println(" Product Name: " + entry.getValue().get("productName"));
+                    System.out.println(" Product Price: " + "£ " + productPrice);
+                    System.out.println(" Quantity: " + productQuantity);
+                    System.out.println(" Total: " + "£ " + productTotal);
+                    System.out.println(" Seller: " + entry.getValue().get("sellerName"));
                     System.out.println("*****************************");
+                    totalQuantity += Double.parseDouble(productQuantity);
+                    totalCost += Double.parseDouble(productTotal);
                 }
-                System.out.println("Total Quantity: " + totalQuantity);
-                System.out.println("Total Cost: " + "£" + totalCost);
+                System.out.println("Total number of items in your cart: " + totalQuantity);
+                System.out.println("Total cost of your cart: " + "£ " + totalCost);
                 System.out.println("*****************************");
                 orders.clear();
                 customerMenu();
