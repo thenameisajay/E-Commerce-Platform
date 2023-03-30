@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * This class is used to create an order service.
- *
+ * The service is for the order object.
  */
 public class OrderService implements Serializable {
 

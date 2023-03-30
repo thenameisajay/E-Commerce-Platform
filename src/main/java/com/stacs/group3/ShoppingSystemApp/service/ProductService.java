@@ -7,9 +7,18 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to create a product service.
+ * The service is for the product object.
+ */
 public class ProductService implements Serializable {
     public Map<String, Product> product = new HashMap<>();
 
+    /**
+     * This method is used to save the product data.
+     *
+     * @throws IOException - if an I/O error occurs
+     */
     public void saveData() throws IOException {
         FileOutputStream f = new FileOutputStream("src/main/resources/data/productData.ser");
         ObjectOutputStream o = new ObjectOutputStream(f);
@@ -18,6 +27,12 @@ public class ProductService implements Serializable {
         f.close();
     }
 
+    /**
+     * This method is used to load the product data.
+     *
+     * @throws ClassNotFoundException - if the class of a serialized object cannot be found
+     * @throws IOException            - if an I/O error occurs
+     */
     public void loadData() {
         try {
             FileInputStream fi = new FileInputStream("src/main/resources/data/productData.ser");
@@ -32,10 +47,25 @@ public class ProductService implements Serializable {
     }
 
 
+    /**
+     * This method is used to wipe all the product data.
+     */
     public void wipeAll() {
         product.clear();
     }
 
+    /**
+     * This method is used to add a product to the map.
+     *
+     * @param productID          - The product ID
+     * @param productName        - The product name
+     * @param productDescription - The product description
+     * @param author             - The author of the product
+     * @param productPrice       - The product price
+     * @param productQuantity    - The product quantity
+     * @param productCategory    - The product category
+     * @param sellerUsername     - The seller userName
+     */
     public void addProduct(String productID, String productName, String productDescription, String author, String productPrice, String productQuantity, String productCategory, String sellerUsername) {
         // First Check : For empty fields
         if (productID == null || productID.isEmpty())
@@ -76,6 +106,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for searching a Product by Name.
+     *
+     * @param productName - The product name
+     * @return - The product details
+     */
     public Map<String, Product> searchProductByName(String productName) {
         Map<String, Product> returnProduct = new HashMap<>();
         // First Check : For empty fields
@@ -96,6 +132,12 @@ public class ProductService implements Serializable {
         return returnProduct;
     }
 
+    /**
+     * This method is used for searching a Product by Category.
+     *
+     * @param productCategory - The product category
+     * @return - The product details
+     */
     public Map<String, Product> searchProductByCategory(String productCategory) {
         Map<String, Product> returnProduct = new HashMap<>();
         // First Check : For empty fields
@@ -118,6 +160,12 @@ public class ProductService implements Serializable {
         return returnProduct;
     }
 
+    /**
+     * This method is used for searching a Product by Author.
+     *
+     * @param productAuthor - The product author
+     * @return - The product details
+     */
     public Map<String, Product> searchProductByAuthor(String productAuthor) {
         Map<String, Product> returnProduct = new HashMap<>();
         // First Check : For empty fields
@@ -140,6 +188,11 @@ public class ProductService implements Serializable {
         return returnProduct;
     }
 
+    /**
+     * This method is for the user to view all the products all at once.
+     *
+     * @return - The product details
+     */
     public Map<String, Product> viewAllProducts() {
         Map<String, Product> returnProduct = new HashMap<>();
         if (product.isEmpty()) {
@@ -152,6 +205,12 @@ public class ProductService implements Serializable {
         return returnProduct;
     }
 
+    /**
+     * This method is used for deleting a product.
+     *
+     * @param productID      - The product ID
+     * @param sellerUsername - The seller username
+     */
     public void deleteProduct(String productID, String sellerUsername) {
         // First Check : For empty fields
         if (productID == null || productID.isEmpty()) {
@@ -172,6 +231,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is for the seller to view their products.
+     *
+     * @param sellerUsername - The seller userName
+     * @return - The product details
+     */
     public Map<String, Product> viewSellerProducts(String sellerUsername) {
         Map<String, Product> returnProduct = new HashMap<>();
         if (product.isEmpty()) {
@@ -190,6 +255,13 @@ public class ProductService implements Serializable {
     }
 
 
+    /**
+     * This method is used validate the product details before updating.
+     *
+     * @param sellerUsername - The seller username
+     * @param productID      - The product ID
+     * @return - The product details
+     */
     public boolean checkValidationToUpdate(String sellerUsername, String productID) {
         boolean check = false;
         // First Check : For empty fields
@@ -214,6 +286,12 @@ public class ProductService implements Serializable {
         return check;
     }
 
+    /**
+     * This method is used for updating the product name.
+     *
+     * @param productID   - The product ID
+     * @param productName - The product name
+     */
     public void updateProductName(String productID, String productName) {
         // First Check : For empty fields
         if (productName == null || productName.isEmpty()) {
@@ -225,6 +303,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product description.
+     *
+     * @param productID          - The product ID
+     * @param productDescription - The product description
+     */
     public void updateProductDescription(String productID, String productDescription) {
         // First Check : For empty fields
         if (productDescription == null || productDescription.isEmpty()) {
@@ -234,6 +318,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product price.
+     *
+     * @param productID    - The product ID
+     * @param productPrice - The product price
+     */
     public void updateProductPrice(String productID, String productPrice) {
         // First Check : For empty fields and check if price is a float or integer but not a string
         if (productPrice == null || productPrice.isEmpty()) {
@@ -245,6 +335,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product quantity.
+     *
+     * @param productID       - The product ID
+     * @param productQuantity - The product quantity
+     */
     public void updateProductQuantity(String productID, String productQuantity) {
         // First Check : For empty fields and check if quantity is a number
         if (productQuantity == null || productQuantity.isEmpty()) {
@@ -256,6 +352,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product category.
+     *
+     * @param productID       - The product ID
+     * @param productCategory - The product category
+     */
     public void updateProductCategory(String productID, String productCategory) {
         // First Check : For empty fields
         if (productCategory == null || productCategory.isEmpty()) {
@@ -267,6 +369,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product author.
+     *
+     * @param productID     - The product ID
+     * @param productAuthor - The product author
+     */
     public void updateProductAuthor(String productID, String productAuthor) {
         // First Check : For empty fields
         if (productAuthor == null || productAuthor.isEmpty()) {
@@ -278,6 +386,12 @@ public class ProductService implements Serializable {
         }
     }
 
+    /**
+     * This method is used for updating the product after an order is placed.
+     *
+     * @param productID       - The product ID
+     * @param productQuantity - The product quantity
+     */
     public void updateProductAfterOrder(String productID, int productQuantity) {
         // First Check : For empty fields
         if (productID == null || productID.isEmpty()) {
