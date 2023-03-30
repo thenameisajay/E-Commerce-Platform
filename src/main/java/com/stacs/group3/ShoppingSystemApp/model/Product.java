@@ -2,6 +2,14 @@ package com.stacs.group3.ShoppingSystemApp.model;
 
 import java.io.Serializable;
 
+/**
+ * Product class to store product information.
+ * This class is used to store the details of a product.
+ * It contains the following attributes:
+ * productID, productName, productDescription, author, productPrice, productQuantity, productCategory, sellerUsername
+ * It also contains the following methods:
+ * getProductID, setProductID, getProductName, setProductName, getProductDescription, setProductDescription, getAuthor, setAuthor, getProductPrice, setProductPrice, getProductQuantity, setProductQuantity, getProductCategory, setProductCategory, getSellerUsername, setSellerUsername
+ */
 public class Product implements Serializable {
     private String productID;
     private String productName;
