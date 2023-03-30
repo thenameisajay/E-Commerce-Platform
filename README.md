@@ -34,7 +34,7 @@
 ### FILE STRUCTURE :
 
 <ol>
-
+<li> Terminal folder - Terminal View</li>
 <li> src - <strong> Back end development folder </strong>
 </ol>
 
@@ -56,8 +56,9 @@
 
 <strong> For Frontend : </strong>
 <ol>
-<li> Run <code>java -jar Terminal-0.0.1-SNAPSHOT.jar</code> to access the terminal view of the system.</li>
-<li> 
+<li> Run <code>java -jar Terminal-0.0.1-SNAPSHOT.jar</code> to access the terminal view of the system. The jar file is in the "Terminal" folder</li>
+<li> Run <code>npm i npm start</code> to start the GUI. Please make sure it is in the "frontend" folder </li>
+
 
 </ol>
 <br/>
