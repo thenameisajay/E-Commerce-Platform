@@ -2,20 +2,21 @@
 
 
 ## NAME
-**Online Book Store System USING SPRING FRAMEWORK AND RESTFUL API**
+** Online Shopping (Book Sales) System USING SPRING FRAMEWORK AND RESTFUL API**
 --
 ## DESCRIPTION
 <p> 
-<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. To be continued.</em>
+<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. 
+</em>
 </p>
 
 ## Authors and acknowledgement
 
 ### Team Members :
 
-            1) 220031985 - 
-            2) 220033341 - 
-            3) 220030476 - 
+            1) 220031985 -  Model, Service Layer and Controllers (Back-end), Terminal View, Code- Review, Report.
+            2) 190010714 -  GUI, API , Report, Code -Review.
+            3) 220031545 -  Tests (Front-end & Back-end), Terminal View, API.
 
 
 --- 
@@ -33,13 +34,8 @@
 ### FILE STRUCTURE :
 
 <ol>
-<li>.mvn/wrapper	
-<li>all_test_frontend - <strong> Front-end development folder</strong>
-<li> src - <strong> Back end development folder </strong>     
-<li>README.md
-<li>mvnw	
-<li>mvnw.cmd
-<li>pom.xml
+
+<li> src - <strong> Back end development folder </strong>
 </ol>
 
 
