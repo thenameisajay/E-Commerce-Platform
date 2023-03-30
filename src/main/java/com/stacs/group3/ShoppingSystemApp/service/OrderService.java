@@ -7,11 +7,27 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to create an order service.
+ *
+ */
 public class OrderService implements Serializable {
 
+     // The order map is used to store all the orders of all the customers
     private Map<Integer, Order> order = new HashMap<>();
 
 
+    /**
+     * The method is used to add an order to the map.
+     * @param orderID     The order ID
+     * @param productID  The product ID
+     * @param productName The product name
+     * @param productPrice The product price
+     * @param productQuantity The product quantity
+     * @param productTotal The product total
+     * @param sellerName The seller userName
+     * @param userName The Customer userName
+     */
     public void addOrder(int orderID, String productID, String productName, float productPrice, int productQuantity, float productTotal, String sellerName, String userName) {
         order.put(orderID, new Order(orderID, productID, productName, productPrice, productQuantity, productTotal, sellerName, userName));
     }
