@@ -2,6 +2,13 @@ package com.stacs.group3.ShoppingSystemApp.model;
 
 import java.io.Serializable;
 
+/**
+ * This class is used to create a user object.
+ * It contains the following attributes:
+ * firstName, lastName, username, email, password, accountType
+ * It also contains the following methods:
+ * getFirstName, setFirstName, getLastName, setLastName, getUsername, setUsername, getEmail, setEmail, getPassword, setPassword, getAccountType, setAccountType
+ */
 public class User implements Serializable {
     private String firstName;
     private String lastName;
