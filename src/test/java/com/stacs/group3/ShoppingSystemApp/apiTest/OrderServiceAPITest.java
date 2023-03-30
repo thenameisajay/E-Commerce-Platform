@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrderServiceAPITest {
 
-    @Value(value="http://localhost:${local.server.port}/orderService")
+    @Value(value = "http://localhost:${local.server.port}/orderService")
     private String orderServiceURI;
 
-    @Value(value="http://localhost:${local.server.port}/productService")
+    @Value(value = "http://localhost:${local.server.port}/productService")
     private String productServiceURI;
 
     @Autowired

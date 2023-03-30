@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductServiceAPITest {
-    @Value(value="http://localhost:${local.server.port}/productService")
+    @Value(value = "http://localhost:${local.server.port}/productService")
     private String productServiceURI;
 
     @Autowired
@@ -72,7 +72,7 @@ public class ProductServiceAPITest {
 
         Iterator<Map.Entry<String, Map<String, String>>> iterator = products.entrySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<String, Map<String, String>> entry = iterator.next();
             restTemplate.postForEntity(productServiceURI + "/delete?id=" +
                     entry.getKey() + "&seller=" + entry.getValue().get("sellerUsername"), null, Void.class);

@@ -1,6 +1,9 @@
 package com.stacs.group3.ShoppingSystemApp.view;
 
-import com.stacs.group3.ShoppingSystemApp.model.*;
+import com.stacs.group3.ShoppingSystemApp.model.Cart;
+import com.stacs.group3.ShoppingSystemApp.model.Order;
+import com.stacs.group3.ShoppingSystemApp.model.Product;
+import com.stacs.group3.ShoppingSystemApp.model.User;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;

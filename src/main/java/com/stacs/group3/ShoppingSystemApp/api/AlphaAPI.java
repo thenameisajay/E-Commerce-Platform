@@ -18,11 +18,11 @@ public class AlphaAPI {
     /**
      * Restful API with POST method to create a new user.
      * "/userService/add" with the request body.
-     *
+     * <p>
      * Example
      * curl -X POST https://localhost:8080/userService/add
-     *    -H "Content-Type: application/json"
-     *    -d '{"firstName":Joe,"lastName":Smith,"username":js123,"emial":js123@example.com,"password":123456789,"accountType":seller}'
+     * -H "Content-Type: application/json"
+     * -d '{"firstName":Joe,"lastName":Smith,"username":js123,"emial":js123@example.com,"password":123456789,"accountType":seller}'
      *
      * @param user the user's information
      */
@@ -83,7 +83,7 @@ public class AlphaAPI {
     /**
      * Restful API with POST method to generate an admin.
      * "/userService/adminGenerate"
-     *
+     * <p>
      * The username of default admin is "admin"
      */
     @PostMapping("/userService/adminGenerate")
@@ -121,7 +121,7 @@ public class AlphaAPI {
      * Restful API with POST method to update one user's permission.
      * "/requestService/updatePermission/{username}/{requestType}"
      *
-     * @param username the username of user
+     * @param username    the username of user
      * @param requestType the accountType which user want to be
      */
     @PostMapping("/requestService/updatePermission/{username}/{requestType}")
@@ -133,7 +133,7 @@ public class AlphaAPI {
      * Restful API with POST method to request to change the user's permission.
      * "/requestService/storeRequest/{username}/{requestType}"
      *
-     * @param username the username of user
+     * @param username    the username of user
      * @param requestType the accountType which user wants to be
      */
     @PostMapping("/requestService/storeRequest/{username}/{requestType}")
@@ -155,12 +155,12 @@ public class AlphaAPI {
     /**
      * Restful API with POST method to add a new product.
      * "/productService/add" with the request body
-     *
-     *  Example
-     *  curl -X POST https://localhost:8080/productService/add
-     *  -H "Content-Type: application/json"
-     *  -d '{"productID":example,"productName":example,"productDescription":example,"author":example,
-     *  "productPrice":example,"productQuantity":example,"productCategory":example,"sellerUsername":example}'
+     * <p>
+     * Example
+     * curl -X POST https://localhost:8080/productService/add
+     * -H "Content-Type: application/json"
+     * -d '{"productID":example,"productName":example,"productDescription":example,"author":example,
+     * "productPrice":example,"productQuantity":example,"productCategory":example,"sellerUsername":example}'
      *
      * @param product the information contains all product feature
      */
@@ -228,7 +228,7 @@ public class AlphaAPI {
      * Restful API with POST method to delete the product.
      * "/productService/delete?id=example&seller=example"
      *
-     * @param productID the product id
+     * @param productID      the product id
      * @param sellerUsername the seller username of the product
      */
     @PostMapping("/productService/delete")
@@ -255,7 +255,7 @@ public class AlphaAPI {
      * "/productService/check?seller=example&id=example"
      *
      * @param sellerUsername the username of seller
-     * @param productID the product id
+     * @param productID      the product id
      * @return true if the seller has the permission to modify the product
      */
     @GetMapping("/productService/check")
@@ -270,7 +270,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product name.
      * "/productService/updateName?id=example&name=example"
      *
-     * @param productID the product id
+     * @param productID   the product id
      * @param productName the product name
      */
     @PostMapping("/productService/updateName")
@@ -284,7 +284,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product description.
      * "/productService/updateDescription?id=example&description=example"
      *
-     * @param productID the product id
+     * @param productID          the product id
      * @param productDescription the product description
      */
     @PostMapping("/productService/updateDescription")
@@ -298,7 +298,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product price.
      * "/productService/updatePrice?id=example&price=example"
      *
-     * @param productID the product id
+     * @param productID    the product id
      * @param productPrice the product price
      */
     @PostMapping("/productService/updatePrice")
@@ -312,7 +312,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product quantity.
      * "/productService/updateQuantity?id=example&quantity=example"
      *
-     * @param productID the product id
+     * @param productID       the product id
      * @param productQuantity the product quantity
      */
     @PostMapping("/productService/updateQuantity")
@@ -326,7 +326,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product category.
      * "/productService/updateCategory?id=example&category=example"
      *
-     * @param productID the product id
+     * @param productID       the product id
      * @param productCategory the product category
      */
     @PostMapping("/productService/updateCategory")
@@ -340,7 +340,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product author.
      * "/productService/updateAuthor?id=example&author=example"
      *
-     * @param productID the product id
+     * @param productID     the product id
      * @param productAuthor the product author
      */
     @PostMapping("/productService/updateAuthor")
@@ -365,12 +365,12 @@ public class AlphaAPI {
     /**
      * Restful API with POST method to add product and quantity to the cart.
      * "/cartService/add" with the request body
-     *
+     * <p>
      * Example
      * curl -X POST https://localhost:8080/cartService/add
-     *    -H "Content-Type: application/json"
-     *    -d '{"cartID":example,"productID":example,"customerName":example,"productName":example,
-     *    "productPrice":example,"productQuantity":example,"productTotal":example,"sellerName":example}'
+     * -H "Content-Type: application/json"
+     * -d '{"cartID":example,"productID":example,"customerName":example,"productName":example,
+     * "productPrice":example,"productQuantity":example,"productTotal":example,"sellerName":example}'
      *
      * @param cart the cart item
      */
@@ -401,12 +401,12 @@ public class AlphaAPI {
     /**
      * Restful API with POST method to add an order.
      * "/orderService/add" with the request body
-     *
+     * <p>
      * Example
      * curl -X POST https://localhost:8080/orderService/add
-     *    -H "Content-Type: application/json"
-     *    -d '{"orderID":example,"productID":example,"customerName":example,"productName":example,
-     *    "productPrice":example,"productQuantity":example,"productTotal":example,"sellerName":example}'
+     * -H "Content-Type: application/json"
+     * -d '{"orderID":example,"productID":example,"customerName":example,"productName":example,
+     * "productPrice":example,"productQuantity":example,"productTotal":example,"sellerName":example}'
      *
      * @param order the data contains order information
      */
@@ -451,7 +451,7 @@ public class AlphaAPI {
      * Restful API with POST method to update the product quantity after order.
      * "/orderService/update/{productID}/{productQuantity}"
      *
-     * @param productID the product id
+     * @param productID       the product id
      * @param productQuantity the product quantity in the order
      */
     @PostMapping("/orderService/update/{productID}/{productQuantity}")

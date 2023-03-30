@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RequestServiceAPITest {
-    @Value(value="http://localhost:${local.server.port}/userService")
+    @Value(value = "http://localhost:${local.server.port}/userService")
     private String userServiceURI;
 
-    @Value(value="http://localhost:${local.server.port}/requestService")
+    @Value(value = "http://localhost:${local.server.port}/requestService")
     private String requestServiceURI;
 
     @Autowired
@@ -71,7 +71,7 @@ public class RequestServiceAPITest {
 
         Iterator<String> iterator = users.keySet().iterator();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             restTemplate.postForEntity(userServiceURI + "/deleteViaAdmin/" + iterator.next(), null, Void.class);
         }
     }

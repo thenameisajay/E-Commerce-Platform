@@ -7,9 +7,6 @@ import java.util.*;
 
 public class CommandLine implements Serializable {
 
-
-    // For testing purpose ONLY.
-
     APICall apiCall;
 
     private Scanner scanner;
