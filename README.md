@@ -56,7 +56,7 @@
 
 <strong> For Frontend : </strong>
 <ol>
-<li> Run the MainApp.java to access the terminal view of the system.</li>
+<li> Run <code>java -jar Terminal-0.0.1-SNAPSHOT.jar</code> to access the terminal view of the system.</li>
 <li> 
 
 </ol>
