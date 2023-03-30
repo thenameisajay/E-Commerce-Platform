@@ -2,6 +2,15 @@ package com.stacs.group3.ShoppingSystemApp.model;
 
 import java.io.Serializable;
 
+/**
+ * Order class to store the details of an order.
+ * This class is used to store the details of an order.
+ * It contains the following attributes:
+ * orderID, productID, productName, productPrice, productQuantity, productTotal, customerName, sellerName
+ * It also contains the following methods:
+ * getOrderID, setOrderID, getProductID, setProductID, getProductName, setProductName, getProductPrice, setProductPrice, getProductQuantity, setProductQuantity, getProductTotal, setProductTotal, getCustomerName, setCustomerName, getSellerName, setSellerName
+ *
+ */
 public class Order implements Serializable {
 
     private int orderID;
