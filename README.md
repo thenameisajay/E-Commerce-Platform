@@ -6,7 +6,7 @@
 --
 ## DESCRIPTION
 <p> 
-<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using Vue) </strong> for a Shopping system. 
+<em> This is a <strong>RESTful API</strong> and <strong> web interface (UI using ReactJS) </strong> for a Shopping system. 
 </em>
 </p>
 
