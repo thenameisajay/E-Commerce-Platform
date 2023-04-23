@@ -2,7 +2,7 @@
 
 
 ## NAME
-** Online Shopping (Book Sales) System USING SPRING FRAMEWORK AND RESTFUL API**
+Online Shopping (Book Sales) System USING SPRING FRAMEWORK AND RESTFUL API
 --
 ## DESCRIPTION
 <p> 
